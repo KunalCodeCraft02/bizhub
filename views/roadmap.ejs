@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bizhub Course Roadmap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ===== NAVBAR STYLES (Added) ===== */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: #0a0a0a;
+            z-index: 1000;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        .logo {
+            width: 80px;
+        }
+        .logo img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            background: #1a1a1a;
+            padding: 8px 18px;
+            border-radius: 30px;
+            border: 1px solid #333;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #777;
+            font-size: 14px;
+        }
+        .nav-links a.active, .nav-links a:hover {
+            color: white;
+        }
+        .signin {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* ===== ORIGINAL ROADMAP STYLES (Modified) ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background:
+                radial-gradient(circle at 50% 90%, rgba(180, 60, 20, 0.25), transparent 60%),
+                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.015) 0px, rgba(255, 255, 255, 0.015) 1px, transparent 1px, transparent 40px),
+                repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.015) 0px, rgba(255, 255, 255, 0.015) 1px, transparent 1px, transparent 40px),
+                #0a0a0a;
+            color: white;
+            overflow-x: hidden;
+            padding-top: 80px; /* Added to prevent content from hiding under navbar */
+        }
+        .roadmap-page {
+            width: 100%;
+            position: relative;
+            padding: 160px 0; /* Increased from 120px to account for navbar */
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 140px;
+            padding: 0 20px;
+        }
+        .tag-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 24px;
+            border-radius: 999px;
+            border: 1px solid #3a2a1a;
+            background: #1a0f00;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 12px;
+            margin-bottom: 26px;
+        }
+        .hero h1 {
+            font-size: clamp(20px, 4vw, 92px);
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 22px;
+        }
+        .hero p {
+            color: #8f8f8f;
+            font-size: 18px;
+            max-width: 760px;
+            margin: auto;
+            line-height: 1.8;
+        }
+        .scroll-hint {
+            margin-top: 40px;
+            color: #E8541A;
+            font-size: 15px;
+            animation: bounce 1.6s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(8px); }
+        }
+
+        /* Road SVG */
+        .road-svg {
+            position: absolute;
+            top: 300px;
+            left: 0;
+            width: 100%;
+            height: 2600px;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .road-svg path.road-bg {
+            stroke: #1a1a1a;
+            stroke-width: 120;
+            fill: none;
+            stroke-linecap: round;
+        }
+        .road-svg path.road-line {
+            stroke: #E8541A;
+            stroke-width: 8;
+            fill: none;
+            stroke-dasharray: 20 15;
+            stroke-linecap: round;
+            animation: dashMove 8s linear infinite;
+        }
+        @keyframes dashMove {
+            from { stroke-dashoffset: 0; }
+            to { stroke-dashoffset: -200; }
+        }
+
+        /* Road Dots */
+        .road-dot {
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            background: #E8541A;
+            border-radius: 50%;
+            box-shadow: 0 0 0 rgba(232, 84, 26, 0.8);
+            animation: pulse 2s infinite;
+            z-index: 4;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(232, 84, 26, 0.8); }
+            70% { box-shadow: 0 0 0 22px rgba(232, 84, 26, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(232, 84, 26, 0); }
+        }
+        .dot1 { top: 560px; left: 23%; }
+        .dot2 { top: 1050px; right: 22%; }
+        .dot3 { top: 1550px; left: 24%; }
+        .dot4 { top: 2060px; right: 23%; }
+
+        /* Rocket */
+        .rocket {
+            position: absolute;
+            top: 420px;
+            left: 46%;
+            font-size: 34px;
+            z-index: 5;
+            animation: rocketFloat 4s ease-in-out infinite;
+        }
+        @keyframes rocketFloat {
+            0%, 100% { transform: translateY(0px) rotate(-5deg); }
+            50% { transform: translateY(16px) rotate(6deg); }
+        }
+
+        /* Phase Sections */
+        .phase-section {
+            width: 100%;
+            position: relative;
+            z-index: 2;
+            margin-bottom: 180px;
+        }
+        .phase-container {
+            width: min(1180px, 92%);
+            margin: auto;
+            display: flex;
+        }
+        .phase-section.left .phase-container { justify-content: flex-start; }
+        .phase-section.right .phase-container { justify-content: flex-end; }
+
+        /* Phase Card */
+        .phase-card {
+            width: 500px;
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 34px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease, box-shadow 0.4s ease, border 0.4s ease;
+        }
+        .phase-card.visible {
+            opacity: 1;
+            transform: translateY(0px);
+        }
+        .phase-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(232, 84, 26, 0.45);
+            box-shadow: 0 0 40px rgba(232, 84, 26, 0.15);
+        }
+        .phase-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .phase-accent-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .phase-badge {
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #aaa;
+            font-weight: 700;
+        }
+        .phase-icon {
+            font-size: 70px;
+            margin-bottom: 20px;
+        }
+        .phase-title {
+            font-size: 42px;
+            line-height: 1.1;
+            font-weight: 900;
+            margin-bottom: 28px;
+        }
+        .phase-points {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-bottom: 34px;
+        }
+        .point {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            color: #c8c8c8;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+        .point-check {
+            min-width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(232, 84, 26, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #E8541A;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        /* CTA Chip */
+        .cta-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 22px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 700;
+            color: white;
+            transition: 0.3s ease;
+        }
+        .cta-chip:hover { transform: scale(1.05); }
+
+        /* Phase Colors */
+        .gold .phase-accent-dot { background: #f59e0b; }
+        .gold .cta-chip {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: #111;
+        }
+        .purple .phase-accent-dot { background: #6c63ff; }
+        .purple .cta-chip {
+            background: linear-gradient(135deg, #6c63ff, #8b5cf6);
+        }
+        .cyan .phase-accent-dot { background: #06b6d4; }
+        .cyan .cta-chip {
+            background: linear-gradient(135deg, #06b6d4, #22d3ee);
+        }
+        .green .phase-accent-dot { background: #10b981; }
+        .green .cta-chip {
+            background: linear-gradient(135deg, #10b981, #34d399);
+        }
+
+        /* Mobile Responsiveness */
+        @media(max-width: 900px) {
+            .road-svg { display: none; }
+            .rocket { display: none; }
+            .roadmap-page::before {
+                content: "";
+                position: absolute;
+                left: 32px;
+                top: 360px;
+                width: 4px;
+                height: calc(100% - 460px);
+                background: #E8541A;
+                border-radius: 999px;
+            }
+            .road-dot {
+                left: 22px !important;
+                right: auto !important;
+                width: 22px;
+                height: 22px;
+            }
+            .phase-container { justify-content: flex-start !important; }
+            .phase-card { width: 100%; margin-left: 70px; }
+            .hero h1 { font-size: 52px; }
+            .phase-title { font-size: 32px; }
+        }
+        @media(max-width: 600px) {
+            .navbar { padding: 15px 20px; }
+            .nav-links { display: none; }
+            .hero { margin-bottom: 100px; }
+            .phase-card { padding: 26px; }
+            .phase-icon { font-size: 56px; }
+            .hero h1 { font-size: 40px; }
+            .hero p { font-size: 15px; }
+            .phase-title { font-size: 26px; }
+            .point { font-size: 14px; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ===== NAVBAR (Added) ===== -->
+    <div class="navbar">
+        <div class="logo"><img src="/assets/logo.png" alt="Bizhub Logo"></div>
+        <div class="nav-links">
+            <a href="/index">Home</a>
+            <a href="/roadmap" class="active">Learning Path</a>
+            <a href="/mentorship">Mentorship</a>
+            <a href="/leaderboard">Leaderboard</a>
+            <a href="/mission">Our Mission</a>
+        </div>
+        <a href="/logout" class="signin">Logout</a>
+    </div>
+
+    <!-- ===== ROADMAP CONTENT ===== -->
+    <div class="roadmap-page">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="tag-pill">✦ YOUR JOURNEY</div>
+            <h1>The Road From Idea To Launch</h1>
+            <p>4 phases. AI-powered. Built for school founders aged 13–16.</p>
+            <div class="scroll-hint">Scroll to begin your journey ↓</div>
+        </section>
+
+        <!-- Road SVG -->
+        <svg class="road-svg" viewBox="0 0 1600 2600" preserveAspectRatio="none">
+            <path class="road-bg" d="M 350 200 C 1200 350, 1200 700, 400 850 C 100 1000, 200 1350, 1200 1500 C 1450 1550, 1300 1950, 450 2100 C 250 2150, 300 2350, 1200 2450" />
+            <path class="road-line" d="M 350 200 C 1200 350, 1200 700, 400 850 C 100 1000, 200 1350, 1200 1500 C 1450 1550, 1300 1950, 450 2100 C 250 2150, 300 2350, 1200 2450" />
+        </svg>
+
+        <!-- Rocket -->
+        <div class="rocket">🚀</div>
+
+        <!-- Dots -->
+        <div class="road-dot dot1"></div>
+        <div class="road-dot dot2"></div>
+        <div class="road-dot dot3"></div>
+        <div class="road-dot dot4"></div>
+
+        <!-- PHASE 1 -->
+        <section class="phase-section left gold">
+            <div class="phase-container">
+                <div class="phase-card">
+                    <div class="phase-top">
+                        <div class="phase-accent-dot"></div>
+                        <div class="phase-badge">PHASE 01</div>
+                    </div>
+                    <div class="phase-icon">🧠</div>
+                    <h2 class="phase-title">Discovery & AI Profiling</h2>
+                    <div class="phase-points">
+                        <div class="point">
+                            <div class="point-check">✓</div>
+                            <div>20-min AI Aptitude Test (15 questions)</div>
+                        </div>
+                        <div class="point">
+                            <div class="point-check">✓</div>
+                            <div>Gemini AI places you: Beginner / Intermediate / Advanced</div>
+                        </div>
+                        <div class="point">
+                            <div class="point-check">✓</div>
+                            <div>Tailored entry point based on your level</div>
+                        </div>
+                    </div>
+                    <a href="pretest.html" class="cta-chip">Start Here →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHASE 2 -->
+        <section class="phase-section right purple">
+            <div class="phase-container">
+                <div class="phase-card">
+                    <div class="phase-top">
+                        <div class="phase-accent-dot"></div>
+                        <div class="phase-badge">PHASE 02</div>
+                    </div>
+                    <div class="phase-icon">🎯</div>
+                    <h2 class="phase-title">Mastery Sprint — Modules 1–7</h2>
+                    <div class="phase-points">
+                        <div class="point">
+                            <div class="point-check">✓</div>
+                            <div>10-min videos, skip disabled</div>
+                        </div>
+                        <div class="point">
+                            <div class="point-check">✓</div>
+                            <div>Must score 10/10 to unlock next module</div>
+                        </div>
+                        <div class="point">
+                            <div class="point-check">✓</div>
+                            <div>Wrong answer rewinds to exact moment</div>
+                        </div>
+                        <div class="point">
+                            <div class="point-check">✓</div>
+                            <div>Stars, points, speed bonuses & live leaderboard</div>
+                        </div>
+                    </div>
+                    <a href="courseplayer.html" class="cta-chip">Earn Your Stars →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHASE 3 -->
+        <section class="phase-section left cyan">
+            <div class="phase-container">
+                <div class="phase-card">
+                    <div class="phase-top">
+                        <div class="phase-accent-dot"></div>
+                        <div class="phase-badge">PHASE 03</div>
+                    </div>
+                    <div class="phase-icon">🚀</div>
+                    <h2 class="phase-title">Builder's Phase — Modules 8–10</h2>
+                    <div class="phase-points">
+                        <div class="point">
+                            <div class="point-check">✓</div>
+                            <div>Module 8: Submit Problem Statement</div>
+                        </div>
+                        <div class="point">
+                            <div class="point-check">✓</div>
+                            <div>Module 9: Build Business Model Canvas</div>
+                        </div>
+                        <div class="point">
+                            <div class="point-check">✓</div>
+                            <div>Module 10: Record & submit Pitch Deck Video for Bizhub review</div>
+                        </div>
+                    </div>
+                    <a href="courseplayer.html" class="cta-chip">Build Your Startup →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHASE 4 -->
+        <section class="phase-section right green">
+            <div class="phase-container">
+                <div class="phase-card">
+                    <div class="phase-top">
+                        <div class="phase-accent-dot"></div>
+                        <div class="phase-badge">PHASE 04</div>
+                    </div>
+                    <div class="phase-icon">🏆</div>
+                    <h2 class="phase-title">Launch & Mentorship</h2>
+                    <div class="phase-points">
+                        <div class="point">
+                            <div class="point-check">✓</div>
+                            <div>Top 10 Innovators Leaderboard</div>
+                        </div>
+                        <div class="point">
+                            <div class="point-check">✓</div>
+                            <div>AI matches you with sector-specific startup mentors</div>
+                        </div>
+                        <div class="point">
+                            <div class="point-check">✓</div>
+                            <div>Verified mentor connection for real-world launch</div>
+                        </div>
+                    </div>
+                    <a href="mentorship.html" class="cta-chip">Get Launched →</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Scroll Animation Script -->
+    <script>
+        const cards = document.querySelectorAll('.phase-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.2 });
+        cards.forEach(card => observer.observe(card));
+    </script>
+</body>
+</html>

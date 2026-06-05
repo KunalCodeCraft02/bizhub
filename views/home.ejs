@@ -1,0 +1,3162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hero Landing</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: #0a0a0a;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    /* Background Effects */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 90%, rgba(180, 60, 20, 0.25), transparent 60%),
+        repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 40px),
+        repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 40px);
+      z-index: -2;
+    }
+
+    /* Dot grid */
+    body::after {
+      content: "";
+      position: fixed;
+      right: 10%;
+      top: 20%;
+      width: 200px;
+      height: 200px;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 14px 14px;
+      opacity: 0.2;
+      z-index: -1;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+    }
+
+    .logo {
+      font-weight: 600;
+      /* border: 1px solid #555; */
+      /* padding: 4px 10px; */
+      width: 80px;
+    }
+
+    .logo img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      background: #1a1a1a;
+      padding: 8px 18px;
+      border-radius: 30px;
+      border: 1px solid #333;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #777;
+      font-size: 14px;
+    }
+
+    .nav-links a.active {
+      color: white;
+    }
+
+    .signin {
+      color: white;
+      text-decoration: none;
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      gap: 18px;
+    }
+
+    /* Tagline */
+    .tagline {
+      color: #E8541A;
+      font-size: 14px;
+      letter-spacing: 2px;
+      font-weight: 600;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+
+    /* Headline */
+    .headline {
+      font-size: clamp(40px, 4vw, 80px);
+      font-weight: 800;
+      line-height: 1.2;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideUp 1s forwards;
+      animation-delay: 0.3s;
+    }
+
+    .box {
+      display: inline-block;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      padding: 2px 10px;
+      margin: 0 5px;
+    }
+
+    /* Subtext */
+    .subtext {
+      color: #aaa;
+      font-size: 18px;
+      max-width: 600px;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+      animation-delay: 0.6s;
+    }
+
+    /* Social proof */
+    .social {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+      animation-delay: 0.9s;
+    }
+
+    .avatars {
+      display: flex;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      margin-left: -10px;
+    }
+
+    .avatar:nth-child(1) {
+      background: #e74c3c;
+    }
+
+    .avatar:nth-child(2) {
+      background: #3498db;
+    }
+
+    .avatar:nth-child(3) {
+      background: #2ecc71;
+    }
+
+    .avatar:nth-child(4) {
+      background: #f39c12;
+    }
+
+    .social span.orange {
+      color: #E8541A;
+      font-weight: 600;
+    }
+
+    /* Button */
+    .cta {
+      padding: 16px 36px;
+      background: linear-gradient(135deg, #E8541A, #C94A0F);
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      color: white;
+      transition: 0.3s;
+      opacity: 0;
+      animation: fadeIn 1s forwards, pulse 2.5s infinite;
+      animation-delay: 1.2s;
+    }
+
+    .cta:hover {
+      transform: scale(1.04);
+      box-shadow: 0 0 20px rgba(232, 84, 26, 0.7);
+    }
+
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+    #page2 {
+      padding: 0vw 5vw;
+    }
+
+    .bento-section {
+      background: #0d0d0d;
+      border: 1px solid #2a2a2a;
+      border-radius: 20px;
+      padding: 16px;
+      font-family: 'Inter', sans-serif;
+      color: white;
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: 55% 45%;
+      gap: 12px;
+    }
+
+    /* Left side grid */
+    .left-grid {
+      display: grid;
+      grid-template-rows: auto auto;
+      gap: 12px;
+    }
+
+    .top-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* Card base */
+    .card {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    /* Stat cards */
+    .stat-title {
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .stat-sub {
+      color: #888;
+      margin-top: 6px;
+    }
+
+    .stat-bottom {
+      color: #777;
+      font-size: 13px;
+      margin-top: 18px;
+    }
+
+    /* CTA Card */
+    .cta-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .cta-top {
+      font-size: 32px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .avatars {
+      display: flex;
+    }
+
+    .avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      margin-left: -8px;
+    }
+
+    .avatar:nth-child(1) {
+      background: #e74c3c;
+    }
+
+    .avatar:nth-child(2) {
+      background: #3498db;
+    }
+
+    .avatar:nth-child(3) {
+      background: #2ecc71;
+    }
+
+    .cta-bottom {
+      font-size: 32px;
+      font-weight: 800;
+    }
+
+    .arrow-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #444;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 18px;
+    }
+
+    /* Right card */
+    .video-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .video-box {
+      border: 1px dashed #444;
+      border-radius: 12px;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #777;
+      margin: 16px 0;
+    }
+
+    .video-box video {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+
+    }
+
+    .outline-btn {
+      border: 1px solid #E8541A;
+      color: #E8541A;
+      border-radius: 999px;
+      padding: 10px 18px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .outline-btn:hover {
+      background: #E8541A;
+      color: white;
+    }
+
+
+    #page3 {
+
+      padding: 10px;
+    }
+
+
+    .logo-marquee {
+      padding: 2.5rem 0;
+      position: relative;
+      background: #0a0a0a;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .logo-marquee--gradient {
+      background-image:
+        linear-gradient(90deg, #0a0a0a 5%, transparent 20%),
+        linear-gradient(270deg, #0a0a0a 5%, transparent 20%);
+      top: 0;
+      height: 100%;
+      left: 0;
+      position: absolute;
+      width: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .logo-marquee--marquee {
+      display: flex;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .logo-marquee--marquee-group {
+      animation: scroll-left 30s linear infinite;
+      display: flex;
+      flex-shrink: 0;
+      width: auto;
+      align-items: center;
+    }
+
+    @media (prefers-reduced-motion) {
+      .logo-marquee--marquee-group {
+        animation-play-state: paused;
+      }
+    }
+
+    .logo-marquee:hover .logo-marquee--marquee-group {
+      animation-play-state: paused;
+    }
+
+    .logo-marquee--marquee-group .logo-item {
+      height: 64px;
+      padding: 0 50px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #444;
+      white-space: nowrap;
+      transition: color 0.3s ease;
+      cursor: default;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-marquee--marquee-group .logo-item:hover {
+      color: #888;
+    }
+
+    .logo-marquee--marquee-group .logo-item .logo-accent {
+      color: #E8541A;
+      font-size: 18px;
+    }
+
+    .logo-marquee--marquee-group .logo-item .logo-small {
+      font-size: 10px;
+      font-weight: 600;
+      color: #333;
+      letter-spacing: 1px;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .logo-divider {
+      color: #222;
+      font-size: 28px;
+      font-weight: 100;
+      padding: 0;
+      align-self: center;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+
+    .impact-section {
+      background: #0a0a0a;
+      padding: 80px 20px;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* --- Header --- */
+    .impact-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .impact-tag {
+      display: inline-block;
+      border: 1px solid #3a2a1a;
+      background: #1a0f00;
+      color: #aaa;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      padding: 6px 18px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .impact-title {
+      font-size: clamp(32px, 5vw, 64px);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.15;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* --- Cards Row --- */
+    .impact-cards {
+      display: flex;
+      gap: 16px;
+      align-items: stretch;
+      min-height: 480px;
+      transform: translateX(120px);
+      opacity: 0;
+      transition: transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        opacity 0.9s ease;
+    }
+
+    .impact-cards.animate-in {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    /* --- Individual Card --- */
+    .impact-card {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      flex: 1;
+      min-width: 0;
+      background: #111;
+      border: 1px solid #222;
+      cursor: pointer;
+      min-height: 460px;
+    }
+
+    /* Image placeholder */
+    .card-img-placeholder {
+      width: 100%;
+      height: 100%;
+      min-height: 460px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #333;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .card-img-placeholder img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .placeholder-icon {
+      font-size: 28px;
+      opacity: 0.35;
+    }
+
+    /* Arrow button */
+    .card-arrow {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 40px;
+      height: 40px;
+      background: #1a1a1a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 16px;
+      z-index: 10;
+      text-decoration: none;
+      transition: background 0.3s ease, transform 0.3s ease;
+      border: 1px solid #2a2a2a;
+    }
+
+    .impact-card:hover .card-arrow {
+      background: #E8541A;
+      border-color: #E8541A;
+      transform: scale(1.1);
+    }
+
+    /* Orange badge */
+    .card-badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: #E8541A;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 10;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .impact-card:hover .card-badge {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* --- Hover Overlay (hidden by default, shows on hover) --- */
+    .card-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 28px 20px 24px;
+      z-index: 5;
+      /* Hidden state */
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      background: linear-gradient(to top,
+          rgba(180, 55, 10, 1) 0%,
+          rgba(200, 70, 15, 0.92) 40%,
+          rgba(220, 90, 20, 0.5) 75%,
+          transparent 100%);
+    }
+
+    .impact-card:hover .card-overlay {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-overlay h3 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 8px 0;
+    }
+
+    .card-overlay p {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.85);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* Subtle card hover lift */
+    .impact-card {
+      transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    }
+
+    .impact-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 60px rgba(232, 84, 26, 0.18);
+      border-color: #333;
+    }
+
+    /* Each card's unique overlay content */
+    .card-1 .card-overlay {
+      background: linear-gradient(to top,
+          rgba(180, 55, 10, 1) 0%,
+          rgba(200, 70, 15, 0.85) 50%,
+          transparent 100%);
+    }
+
+    /* Staggered entrance */
+    .impact-card:nth-child(1) {
+      transition-delay: 0s;
+    }
+
+    .impact-card:nth-child(2) {
+      transition-delay: 0.1s;
+    }
+
+    .impact-card:nth-child(3) {
+      transition-delay: 0.2s;
+    }
+
+    .impact-card:nth-child(4) {
+      transition-delay: 0.3s;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+
+    /* ===== COURSES SECTION ===== */
+    .courses-section {
+      background: #fdf0ec;
+      padding: 80px 20px 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .courses-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .courses-tag {
+      display: inline-block;
+      border: 1px solid #c0795a;
+      color: #333;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      padding: 5px 16px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      background: transparent;
+    }
+
+    .courses-title {
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 800;
+      color: #111;
+      line-height: 1.2;
+      max-width: 700px;
+      margin: 0 auto 30px;
+    }
+
+    .courses-explore-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #C94A0F;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .courses-explore-btn:hover {
+      background: #E8541A;
+      transform: scale(1.04);
+    }
+
+    /* ===== STICKY STACK WRAPPER ===== */
+    .courses-stack {
+      position: relative;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ===== EACH COURSE CARD ===== */
+    .course-card {
+      position: sticky;
+      top: 80px;
+      border-radius: 24px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      min-height: 340px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+
+      /* Scroll fade-in */
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .course-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Card color variants */
+    .course-card.card-white {
+      background: #ffffff;
+    }
+
+    .course-card.card-orange {
+      background: #C94A0F;
+    }
+
+    .course-card.card-black {
+      background: #111111;
+    }
+
+    /* ===== LEFT — Image Side ===== */
+    .course-card .course-img {
+      width: 42%;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .course-card .course-img .img-placeholder {
+      width: 100%;
+      height: 100%;
+      min-height: 340px;
+      background: #1a1a1a;
+      border: 2px dashed #2a2a2a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #444;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .course-card .course-img .img-placeholder {
+      padding: 0;
+      /* remove any default padding */
+      border: none;
+      /* remove dashed border when image is present */
+    }
+
+    .course-card .course-img .img-placeholder img {
+      width: 100%;
+      height: 100%;
+      min-height: 340px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .course-card.card-white .course-img .img-placeholder {
+      background: #f0f0f0;
+      border-color: #ddd;
+      color: #aaa;
+    }
+
+    .course-card.card-orange .course-img .img-placeholder {
+      background: #b8400d;
+      border-color: #d05010;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .img-placeholder .ph-icon {
+      font-size: 32px;
+      opacity: 0.4;
+    }
+
+    /* ===== RIGHT — Content Side ===== */
+    .course-card .course-info {
+      flex: 1;
+      padding: 40px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .course-info h2 {
+      font-size: clamp(22px, 2.5vw, 34px);
+      font-weight: 900;
+      line-height: 1.2;
+      margin: 0;
+    }
+
+    .course-card.card-white .course-info h2 {
+      color: #111;
+    }
+
+    .course-card.card-orange .course-info h2 {
+      color: #fff;
+    }
+
+    .course-card.card-black .course-info h2 {
+      color: #fff;
+    }
+
+    .course-info p {
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .course-card.card-white .course-info p {
+      color: #666;
+    }
+
+    .course-card.card-orange .course-info p {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .course-card.card-black .course-info p {
+      color: #888;
+    }
+
+    /* ===== Meta tags row ===== */
+    .course-meta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .meta-item .meta-icon {
+      font-size: 14px;
+    }
+
+    .meta-item .meta-label {
+      font-size: 10px;
+      font-weight: 400;
+      display: block;
+      opacity: 0.7;
+    }
+
+    .course-card.card-white .meta-item {
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    .course-card.card-orange .meta-item {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .course-card.card-black .meta-item {
+      background: #222;
+      color: #fff;
+    }
+
+    /* ===== Price row ===== */
+    .course-price {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .price-label {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .price-current {
+      font-size: 28px;
+      font-weight: 900;
+      color: #E8541A;
+    }
+
+    .course-card.card-orange .price-current {
+      color: #fff;
+    }
+
+    .price-original {
+      font-size: 13px;
+      text-decoration: line-through;
+      opacity: 0.5;
+    }
+
+    .course-card.card-white .price-label {
+      color: #111;
+    }
+
+    .course-card.card-orange .price-label {
+      color: #fff;
+    }
+
+    .course-card.card-black .price-label {
+      color: #fff;
+    }
+
+    .course-card.card-white .price-original {
+      color: #666;
+    }
+
+    .course-card.card-orange .price-original {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .course-card.card-black .price-original {
+      color: #666;
+    }
+
+    /* ===== CTA Button ===== */
+    .course-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      width: fit-content;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .course-btn:hover {
+      transform: scale(1.04);
+      opacity: 0.9;
+    }
+
+    .course-card.card-white .course-btn {
+      background: #111;
+      color: #fff;
+    }
+
+    .course-card.card-orange .course-btn {
+      background: #fff;
+      color: #C94A0F;
+    }
+
+    .course-card.card-black .course-btn {
+      background: #E8541A;
+      color: #fff;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+
+    /* ===== TESTIMONIALS SECTION ===== */
+    .testimonials-section {
+      background: #0a0a0a;
+      padding: 80px 0;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+    }
+
+    /* Header */
+    .testimonials-header {
+      text-align: center;
+      padding: 0 20px;
+      margin-bottom: 60px;
+    }
+
+    .testimonials-tag {
+      display: inline-block;
+      border: 1px solid #3a2a1a;
+      background: transparent;
+      color: #aaa;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      padding: 5px 16px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .testimonials-title {
+      font-size: clamp(28px, 4vw, 54px);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* ===== MARQUEE WRAPPER ===== */
+    .marquee-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Each row */
+    .marquee-row {
+      display: flex;
+      overflow: hidden;
+      user-select: none;
+      width: 100%;
+      position: relative;
+    }
+
+    /* Fade edges */
+    .marquee-row::before,
+    .marquee-row::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 120px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .marquee-row::before {
+      left: 0;
+      background: linear-gradient(90deg, #0a0a0a 0%, transparent 100%);
+    }
+
+    .marquee-row::after {
+      right: 0;
+      background: linear-gradient(270deg, #0a0a0a 0%, transparent 100%);
+    }
+
+    /* Marquee track */
+    .marquee-track {
+      display: flex;
+      gap: 20px;
+      flex-shrink: 0;
+      width: max-content;
+    }
+
+    /* Row 1 — Right to Left */
+    .marquee-row-1 .marquee-track {
+      animation: scroll-rtl 35s linear infinite;
+    }
+
+    /* Row 2 — Left to Right */
+    .marquee-row-2 .marquee-track {
+      animation: scroll-ltr 35s linear infinite;
+    }
+
+    /* Pause on hover */
+    .marquee-row:hover .marquee-track {
+      animation-play-state: paused;
+    }
+
+    /* ===== FAQ SECTION ===== */
+    .faq-section {
+     
+      background: #0a0a0a;
+      padding: 80px 20px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Header */
+    .faq-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .faq-tag {
+      display: inline-block;
+      border: 1px solid #3a2a1a;
+      background: transparent;
+      color: #aaa;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      padding: 5px 16px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .faq-title {
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    /* ===== FAQ LIST ===== */
+    .faq-list {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+       height: 100vh;
+       margin-top: 3vw;
+    }
+
+    /* ===== EACH FAQ ITEM ===== */
+    .faq-item {
+      background: #111;
+      border: 1px solid #1f1f1f;
+      border-radius: 14px;
+      overflow: hidden;
+      transition: border-color 0.3s ease;
+    }
+
+    .faq-item.open {
+      border-color: #E8541A;
+    }
+
+    /* Question row */
+    .faq-question {
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 22px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .faq-question-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.4;
+      flex: 1;
+      transition: color 0.3s ease;
+    }
+
+    .faq-item.open .faq-question-text {
+      color: #fff;
+    }
+
+    /* Icon */
+    .faq-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid #2a2a2a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.3s ease,
+        border-color 0.3s ease,
+        transform 0.4s ease;
+      color: #aaa;
+      font-size: 16px;
+      font-weight: 300;
+    }
+
+    .faq-item.open .faq-icon {
+      background: #E8541A;
+      border-color: #E8541A;
+      color: #fff;
+      transform: rotate(180deg);
+    }
+
+    /* Answer */
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+        padding 0.3s ease;
+      padding: 0 24px;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 300px;
+      padding: 0 24px 22px;
+    }
+
+    .faq-answer-inner {
+      border-top: 1px solid #1f1f1f;
+      padding-top: 16px;
+    }
+
+    .faq-answer p {
+      font-size: 13px;
+      color: #777;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    /* Hover on closed items */
+    .faq-item:not(.open):hover {
+      border-color: #2a2a2a;
+    }
+
+    .faq-item:not(.open):hover .faq-question-text {
+      color: #ddd;
+    }
+
+    .faq-item:not(.open):hover .faq-icon {
+      border-color: #444;
+      color: #ccc;
+    }
+
+    /* Scroll fade-in */
+    .faq-item {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease,
+        transform 0.5s ease,
+        border-color 0.3s ease;
+    }
+
+    .faq-item.fade-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Stagger delays */
+    .faq-item:nth-child(1) {
+      transition-delay: 0s;
+    }
+
+    .faq-item:nth-child(2) {
+      transition-delay: 0.08s;
+    }
+
+    .faq-item:nth-child(3) {
+      transition-delay: 0.16s;
+    }
+
+    .faq-item:nth-child(4) {
+      transition-delay: 0.24s;
+    }
+
+    .faq-item:nth-child(5) {
+      transition-delay: 0.32s;
+    }
+
+    .faq-item:nth-child(6) {
+      transition-delay: 0.40s;
+    }
+
+    /* ── FOOTER ─────────────────────────────────────────────── */
+    .footer {
+      position: relative;
+      background: #000;
+      overflow: hidden;
+      padding-bottom: 60px;
+    }
+
+    /* ── GIANT BACKGROUND "Sheryians" TEXT ──────────────────── */
+    .footer__bg-text {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: clamp(80px, 15vw, 200px);
+      font-weight: 900;
+      letter-spacing: -4px;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .footer__bg-text span {
+      display: inline-block;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.12);
+      transition: color 0.3s ease, text-shadow 0.3s ease, -webkit-text-stroke 0.3s ease;
+      pointer-events: all;
+      cursor: default;
+    }
+
+    /* Hover: orange glow effect on each letter */
+    .footer__bg-text:hover span {
+      color: #c0392b;
+      -webkit-text-stroke: 1px transparent;
+      text-shadow:
+        0 0 20px rgba(230, 90, 20, 0.9),
+        0 0 50px rgba(230, 90, 20, 0.6),
+        0 0 100px rgba(230, 90, 20, 0.3);
+    }
+
+    /* Individual letter hover for per-letter glow */
+    .footer__bg-text span:hover {
+      color: #e85d20 !important;
+      -webkit-text-stroke: 1px transparent !important;
+      text-shadow:
+        0 0 10px rgba(255, 120, 30, 1),
+        0 0 40px rgba(230, 90, 20, 0.9),
+        0 0 80px rgba(200, 60, 10, 0.6),
+        0 0 120px rgba(180, 40, 5, 0.3) !important;
+      transform: scale(1.05);
+      transition: all 0.2s ease;
+    }
+
+    /* ── FOOTER CONTENT (sits below the big text) ───────────── */
+    .footer__content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: clamp(160px, 18vw, 260px) 60px 0 60px;
+      gap: 40px;
+    }
+
+    /* ── LEFT: Logo + Socials ───────────────────────────────── */
+    .footer__left {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      min-width: 120px;
+    }
+
+    .logo-box {
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+
+    .footer__socials {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .footer__socials a {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 20px;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer__socials a:hover {
+      color: #e85d20;
+    }
+
+    /* ── NAV COLUMNS ─────────────────────────────────────────── */
+    .footer__nav {
+      display: flex;
+      gap: clamp(40px, 6vw, 100px);
+      flex-wrap: wrap;
+    }
+
+    .footer__col h4 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    .footer__col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer__col ul li a,
+    .footer__col p,
+    .footer__col a {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.55);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      line-height: 1.5;
+    }
+
+    .footer__col ul li a:hover,
+    .footer__col a:hover {
+      color: #e85d20;
+    }
+
+    .footer__col p {
+      margin-bottom: 4px;
+    }
+
+    .footer__col p strong {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .faq-question-text {
+        font-size: 14px;
+      }
+
+      .faq-question {
+        padding: 18px 18px;
+      }
+
+      .faq-answer {
+        padding: 0 18px;
+      }
+
+      .faq-item.open .faq-answer {
+        padding: 0 18px 18px;
+      }
+    }
+
+    @keyframes scroll-rtl {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    @keyframes scroll-ltr {
+      0% {
+        transform: translateX(-50%);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    @media (prefers-reduced-motion) {
+      .marquee-track {
+        animation-play-state: paused !important;
+      }
+    }
+
+    /* ===== TESTIMONIAL CARD ===== */
+    .t-card {
+      background: #111;
+      border: 1px solid #1f1f1f;
+      border-radius: 16px;
+      padding: 24px 28px;
+      width: 380px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+      cursor: default;
+    }
+
+    .t-card:hover {
+      border-color: #E8541A;
+      transform: translateY(-4px);
+    }
+
+    /* Avatar + Name row */
+    .t-card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .t-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #222;
+      border: 2px solid #2a2a2a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .t-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .t-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 4px 0;
+    }
+
+    .t-role {
+      font-size: 12px;
+      color: #666;
+      margin: 0;
+    }
+
+    /* Divider */
+    .t-divider {
+      height: 1px;
+      background: #1f1f1f;
+      width: 100%;
+    }
+
+    /* Stars + Rating */
+    .t-rating {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .t-rating-num {
+      font-size: 13px;
+      font-weight: 700;
+      color: #aaa;
+    }
+
+    .t-stars {
+      display: flex;
+      gap: 3px;
+    }
+
+    .star {
+      color: #E8541A;
+      font-size: 14px;
+    }
+
+    .star.half {
+      color: #E8541A;
+      opacity: 0.5;
+    }
+
+    /* Review text */
+    .t-text {
+      font-size: 13px;
+      color: #888;
+      line-height: 1.7;
+      margin: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ===== YOUTUBE SECTION ===== */
+    .youtube-section {
+      background: #0a0a0a;
+      padding: 80px 0;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+    }
+
+    /* Header */
+    .youtube-header {
+      text-align: center;
+      padding: 0 20px;
+      margin-bottom: 60px;
+    }
+
+    .youtube-tag {
+      display: inline-block;
+      border: 1px solid #3a2a1a;
+      background: #1a0a00;
+      color: #aaa;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      padding: 5px 16px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .youtube-title {
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ===== SCROLLING TRACK ===== */
+    .youtube-track-wrapper {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    /* Fade edges */
+    .youtube-track-wrapper::before,
+    .youtube-track-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 180px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .youtube-track-wrapper::before {
+      left: 0;
+      background: linear-gradient(90deg, #0a0a0a 0%, transparent 100%);
+    }
+
+    .youtube-track-wrapper::after {
+      right: 0;
+      background: linear-gradient(270deg, #0a0a0a 0%, transparent 100%);
+    }
+
+    /* Track */
+    .youtube-track {
+      display: flex;
+      gap: 24px;
+      width: max-content;
+      animation: yt-scroll-rtl 40s linear infinite;
+      padding: 20px 0;
+    }
+
+    .youtube-track-wrapper:hover .youtube-track {
+      animation-play-state: paused;
+    }
+
+    @keyframes yt-scroll-rtl {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    @media (prefers-reduced-motion) {
+      .youtube-track {
+        animation-play-state: paused;
+      }
+    }
+
+    /* ===== VIDEO CARD ===== */
+    .yt-card {
+      width: 360px;
+      flex-shrink: 0;
+      background: #111;
+      border: 1px solid #1f1f1f;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.35s ease,
+        box-shadow 0.35s ease,
+        border-color 0.35s ease;
+    }
+
+    .yt-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 24px 60px rgba(232, 84, 26, 0.2);
+      border-color: #E8541A;
+    }
+
+    /* Thumbnail */
+    .yt-thumb {
+      width: 100%;
+      height: 210px;
+      background: #1a1a1a;
+      border-bottom: 1px solid #1f1f1f;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Actual image when added */
+    .yt-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Placeholder style */
+    .yt-thumb-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      height: 100%;
+      color: #333;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .yt-thumb-placeholder .ph-icon {
+      font-size: 36px;
+      opacity: 0.3;
+    }
+
+    /* Play button overlay on hover */
+    .yt-play-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      width: 52px;
+      height: 52px;
+      background: rgba(232, 84, 26, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #fff;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .yt-card:hover .yt-play-btn {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* Dark overlay on thumb hover */
+    .yt-thumb::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0);
+      transition: background 0.3s ease;
+      z-index: 2;
+    }
+
+    .yt-card:hover .yt-thumb::after {
+      background: rgba(0, 0, 0, 0.35);
+    }
+
+    /* Card info */
+    .yt-info {
+      padding: 16px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .yt-info h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .yt-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #555;
+      font-weight: 500;
+    }
+
+    .yt-meta .dot {
+      color: #333;
+    }
+
+    .yt-meta .views {
+      color: #555;
+    }
+
+    .yt-meta .likes {
+      color: #555;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .yt-card {
+        width: 280px;
+      }
+
+      .yt-thumb {
+        height: 165px;
+      }
+
+      .youtube-track-wrapper::before,
+      .youtube-track-wrapper::after {
+        width: 60px;
+      }
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .course-card {
+        flex-direction: column;
+        position: relative;
+        top: 0;
+      }
+
+      .course-card .course-img {
+        width: 100%;
+      }
+
+      .course-card .course-img .img-placeholder {
+        min-height: 220px;
+      }
+
+      .course-card .course-info {
+        padding: 28px 24px;
+      }
+
+      .course-meta {
+        gap: 10px;
+      }
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 768px) {
+      .impact-cards {
+        flex-direction: column;
+      }
+
+      .impact-card {
+        min-height: 300px;
+      }
+
+      .card-img-placeholder {
+        min-height: 300px;
+      }
+    }
+
+    @media (max-width: 991.98px) {
+      .logo-marquee--marquee-group .logo-item {
+        height: 56px;
+        padding: 0 35px;
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 767.98px) {
+      .logo-marquee--marquee-group .logo-item {
+        height: 48px;
+        padding: 0 24px;
+        font-size: 15px;
+      }
+    }
+
+    @keyframes scroll-left {
+      0% {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-100%);
+      }
+    }
+
+
+    /* Responsive */
+    @media(max-width: 768px) {
+      .bento-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .top-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 10px rgba(232, 84, 26, 0.4);
+      }
+
+      50% {
+        box-shadow: 0 0 25px rgba(232, 84, 26, 0.7);
+      }
+    }
+
+    /* Responsive */
+    @media(max-width:600px) {
+      .navbar {
+        padding: 15px 20px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo"><img src="/assets/logo.png" alt=""></div>
+
+    <div class="nav-links">
+      <a href="/" class="active">Home</a>
+      <a href="/roadmap">Learning Path</a>
+      <a href="/mentorship">Mentorship</a>
+      <a href="/leaderboard">Leaderboard</a>
+      <a href="/about">About Us</a>
+    </div>
+
+    <a href="/logout" class="signin">Logout</a>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+
+    <div class="tagline">LEARN. INNOVATE. LAUNCH.</div>
+
+    <div class="headline">
+      Turn Your School <span class="box">IDEA</span><br>
+      Into A Million-Dollar Startup!
+    </div>
+
+    <div class="subtext">
+      Join India’s premier incubator for 8th to 12th graders.
+      Master the "0 to 100" of business mechanics through
+      action-based learning and expert mentorship.
+    </div>
+
+    <div class="social">
+      <div class="avatars">
+        <div class="avatar"></div>
+        <div class="avatar"></div>
+        <div class="avatar"></div>
+        <div class="avatar"></div>
+      </div>
+
+      <div>
+        <span class="orange">25,000+</span>
+        Future Entrepreneurs currently building the next big thing on Bizhub.
+      </div>
+    </div>
+
+    <a style="text-decoration: none;" class="cta" href="#page2">Start My Startup →</a>
+  </div>
+
+  <div id="page2">
+    <section class="bento-section">
+      <div class="bento-grid">
+
+        <!-- LEFT -->
+        <div class="left-grid">
+
+          <div class="top-cards">
+
+            <!-- Card 1 -->
+            <!-- Card 1 -->
+            <div class="card">
+              <div class="stat-title">🚀 25K+</div>
+              <div class="stat-sub">Young Founders Learning</div>
+              <div class="stat-bottom">
+                Students turning startup ideas into real ventures.
+              </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card">
+              <div class="stat-title">💡 0 To 100</div>
+              <div class="stat-sub">Startup Learning Framework</div>
+              <div class="stat-bottom">
+                Learn every stage from idea validation to launch.
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="card cta-card">
+            <div class="cta-top">
+              BUILD
+              <div class="avatars">
+                <div class="avatar"></div>
+                <div class="avatar"></div>
+                <div class="avatar"></div>
+              </div>
+              YOUR
+              <span class="arrow-btn">→</span>
+            </div>
+
+            <div class="cta-bottom">
+              FIRST STARTUP WITH BIZHUB!
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="card video-card">
+          <div style="font-weight:600;">Start Your Journey</div>
+
+          <div class="video-box">
+            <video muted loop autoplay src="/assets/155164-809618953_medium.mp4"></video>
+          </div>
+
+          <a href="/pretest" class="outline-btn" style="text-decoration: none;">
+            Start Pre-Training Quiz →
+          </a>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <div id="page3">
+
+    <div class="logo-marquee">
+      <div class="logo-marquee--gradient"></div>
+      <div class="logo-marquee--marquee">
+
+        <!-- Group 1 -->
+        <div class="logo-marquee--marquee-group">
+
+          <span class="logo-item">
+            Startup Ideas <span class="logo-accent">✦</span>
+          </span>
+
+          <span class="logo-divider">|</span>
+
+          <span class="logo-item">
+            Business Models <span class="logo-accent">✳</span>
+          </span>
+
+          <span class="logo-divider">|</span>
+
+          <span class="logo-item">
+            Pitch Decks
+          </span>
+
+          <span class="logo-divider">|</span>
+
+          <span class="logo-item">
+            Funding <span class="logo-accent">⟳</span>
+          </span>
+
+          <span class="logo-divider">|</span>
+
+          <span class="logo-item">
+            Innovation <span class="logo-accent">∞</span>
+          </span>
+
+          <span class="logo-divider">|</span>
+
+          <span class="logo-item">
+            Branding
+          </span>
+
+          <span class="logo-divider">|</span>
+
+          <span class="logo-item">
+            Marketing
+          </span>
+
+          <span class="logo-divider">|</span>
+
+          <span class="logo-item">
+            Leadership
+          </span>
+
+          <span class="logo-divider">|</span>
+
+          <span class="logo-item">
+            Startup Growth
+          </span>
+
+          <span class="logo-divider">|</span>
+
+          <span class="logo-item">
+            Entrepreneurship <span class="logo-accent">★</span>
+          </span>
+
+        </div>
+
+        <!-- Group 2 (duplicate for seamless loop) -->
+        <div aria-hidden="true" class="logo-marquee--marquee-group">
+
+          <span class="logo-item">
+            Startup Ideas <span class="logo-accent">✦</span>
+          </span>
+
+          <span class="logo-divider">|</span>
+
+          <span class="logo-item">
+            Business Models <span class="logo-accent">✳</span>
+          </span>
+
+          <span class="logo-divider">|</span>
+
+          <span class="logo-item">
+            Pitch Decks
+          </span>
+
+          <span class="logo-divider">|</span>
+
+          <span class="logo-item">
+            Funding <span class="logo-accent">⟳</span>
+          </span>
+
+          <span class="logo-divider">|</span>
+
+          <span class="logo-item">
+            Innovation <span class="logo-accent">∞</span>
+          </span>
+
+          <span class="logo-divider">|</span>
+
+          <span class="logo-item">
+            Branding
+          </span>
+
+          <span class="logo-divider">|</span>
+
+          <span class="logo-item">
+            Marketing
+          </span>
+
+          <span class="logo-divider">|</span>
+
+          <span class="logo-item">
+            Leadership
+          </span>
+
+          <span class="logo-divider">|</span>
+
+          <span class="logo-item">
+            Startup Growth
+          </span>
+
+          <span class="logo-divider">|</span>
+
+          <span class="logo-item">
+            Entrepreneurship <span class="logo-accent">★</span>
+          </span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div id="page4">
+    <section class="impact-section">
+
+      <!-- Header -->
+      <div class="impact-header">
+        <div class="impact-tag">✦ IMPACT</div>
+        <h2 class="impact-title">How We Are Doing It Faster And Better Than Others!</h2>
+      </div>
+
+      <!-- Cards -->
+      <div class="impact-cards" id="impactCards">
+
+        <!-- Card 1 -->
+        <div class="impact-card">
+          <div class="card-img-placeholder">
+            <img src="/assets/vertical2.png" alt="">
+          </div>
+          <div class="card-badge">✦ Seminars</div>
+          <a class="card-arrow" href="#">↗</a>
+          <div class="card-overlay">
+            <h3>Live Seminars</h3>
+            <p>Expert-led sessions on real-world tech, careers, and industry insights.</p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="impact-card">
+          <div class="card-img-placeholder">
+             <img src="/assets/vertical1.png" alt="">
+          </div>
+          <div class="card-badge">✦ Bootcamps</div>
+          <a class="card-arrow" href="#">↗</a>
+          <div class="card-overlay">
+            <h3>Intensive Bootcamps</h3>
+            <p>Hands-on coding bootcamps designed to take you from beginner to job-ready.</p>
+          </div>
+        </div>
+
+        <!-- Card 3 — Meet & Greet -->
+        <div class="impact-card">
+          <div class="card-img-placeholder">
+            <img src="/assets/vertical3.png" alt="">
+          </div>
+          <div class="card-badge">✦ Meet-ups</div>
+          <a class="card-arrow" href="#">→</a>
+          <div class="card-overlay">
+            <h3>Meet And Greet</h3>
+            <p>Open Conversations About Careers, Coding, Bootcamps, Internships, Real-World Engineering, And The
+              Journey.</p>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="impact-card">
+          <div class="card-img-placeholder">
+          <img src="/assets/vertical4.png" alt="">
+          </div>
+          <div class="card-badge">✦ Community</div>
+          <a class="card-arrow" href="#">↗</a>
+          <div class="card-overlay">
+            <h3>Community Hangouts</h3>
+            <p>Connect, collaborate and grow with a thriving network of developers.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <div id="page5">
+    <section class="courses-section">
+
+      <!-- Header -->
+      <div class="courses-header">
+        <div class="courses-tag">COURSES</div>
+        <h2 class="courses-title">Not Sure Which Course Fits You? Don't Worry, We're Here To Help.</h2>
+        <a href="#" class="courses-explore-btn">Explore Courses →</a>
+      </div>
+
+      <!-- Sticky Stack -->
+      <div class="courses-stack">
+
+        <!-- Card 1 — White -->
+        <div class="course-card card-white">
+          <div class="course-img">
+            <div class="img-placeholder">
+              <img src="/assets/card1.png" alt="">
+              <!-- <span>Course Image 1</span> -->
+            </div>
+          </div>
+          <div class="course-info">
+            <h2>Junior CEO Bootcamp: The Foundation
+              of Creative Entrepreneurship
+            </h2>
+            <p>Master the art of spotting real-world problems and turning them into your first big business idea.</p>
+            <div class="course-meta">
+              <div class="meta-item">
+                <span class="meta-icon">🕐</span>
+                <div>
+                  <span>6</span>
+                  <span class="meta-label">6 Hours of Gamified Learning</span>
+                </div>
+              </div>
+              <div class="meta-item">
+                <span class="meta-icon">🎖️</span>
+                <div>
+                  <span>Yes</span>
+                  <span class="meta-label">Verified Student Founder Certificate</span>
+                </div>
+              </div>
+              <div class="meta-item">
+                <span class="meta-icon">📞</span>
+                <div>
+                  <span>24/7</span>
+                  <span class="meta-label">24/7 Online Founder Support</span>
+                </div>
+              </div>
+            </div>
+            <div class="course-price">
+              <span class="price-label">Price</span>
+              <span class="price-current">Rs.399</span>
+              <span class="price-original">Rs. 999~ (+GST)</span>
+            </div>
+            <a href="#" class="course-btn">Start Course →</a>
+          </div>
+        </div>
+
+        <!-- Card 2 — Orange -->
+        <div class="course-card card-orange">
+          <div class="course-img">
+            <div class="img-placeholder">
+              <img src="/assets/card2.png" alt="">
+            </div>
+          </div>
+          <div class="course-info">
+            <h2>Venture Architect: Building &
+              Validating Your First MVP</h2>
+            <p>Go beyond the idea—learn to build a Minimum Viable Product and test it with real users to find your
+              market fit.</p>
+            <div class="course-meta">
+              <div class="meta-item">
+                <span class="meta-icon">🕐</span>
+                <div>
+                  <span>10+</span>
+                  <span class="meta-label">10+ Hours of Action-Based Learning</span>
+                </div>
+              </div>
+              <div class="meta-item">
+                <span class="meta-icon">🎖️</span>
+                <div>
+                  <span>Yes</span>
+                  <span class="meta-label">Certified Startup Innovator</span>
+                </div>
+              </div>
+              <div class="meta-item">
+                <span class="meta-icon">📞</span>
+                <div>
+                  <span>24/7</span>
+                  <span class="meta-label">24/7 Technical & Founder Support</span>
+                </div>
+              </div>
+            </div>
+            <div class="course-price">
+              <span class="price-label">Price</span>
+              <span class="price-current">Rs.499 </span>
+              <span class="price-original">Rs.1,499 (+GST)</span>
+            </div>
+            <a href="/courseplayer" class="course-btn">Start Course →</a>
+          </div>
+        </div>
+
+        <!-- Card 3 — Black -->
+        <div class="course-card card-black">
+          <div class="course-img">
+            <div class="img-placeholder">
+              <img src="/assets/card3.png" alt="">
+            </div>
+          </div>
+          <div class="course-info">
+            <h2>Startup Accelerator: From
+              Validated Idea to Market Launch</h2>
+            <p>Master advanced unit economics, legal frameworks, and investor pitching to transform your MVP into a
+              market-ready startup.</p>
+            <div class="course-meta">
+              <div class="meta-item">
+                <span class="meta-icon">🕐</span>
+                <div>
+                  <span>15</span>
+                  <span class="meta-label">15 Hours of Intensive Boot-camp</span>
+                </div>
+              </div>
+              <div class="meta-item">
+                <span class="meta-icon">🎖️</span>
+                <div>
+                  <span>Yes</span>
+                  <span class="meta-label">Professional Founder’s Diploma</span>
+                </div>
+              </div>
+              <div class="meta-item">
+                <span class="meta-icon">📞</span>
+                <div>
+                  <span>24/7</span>
+                  <span class="meta-label">24/7 Priority Mentor & Investor Access</span>
+                </div>
+              </div>
+            </div>
+            <div class="course-price">
+              <span class="price-label">Price</span>
+              <span class="price-current">Rs.599 </span>
+              <span class="price-original">Rs.2,499 (+GST)</span>
+            </div>
+            <a href="#" class="course-btn">Start Course →</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <div id="page6">
+    <section class="testimonials-section">
+
+      <!-- Header -->
+      <div class="testimonials-header">
+        <div class="testimonials-tag">HEAR FROM OUR STUDENTS</div>
+        <h2 class="testimonials-title">We Help Learners Become Industry-Ready Developers.</h2>
+      </div>
+
+      <!-- Marquee Wrapper -->
+      <div class="marquee-wrapper">
+
+        <!-- ROW 1 — Right to Left -->
+        <div class="marquee-row marquee-row-1">
+          <div class="marquee-track">
+
+            <!-- Card 1 -->
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Mohd Siraj</p>
+                  <p class="t-role">Web Developer</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.1</span>
+                <div class="t-stars">
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star half">★</span>
+                </div>
+              </div>
+              <p class="t-text">I Had A Great Experience At Coaching. The Teachers Are Highly Supportive And
+                Knowledgeable. They Explain Every Concept Clearly And Make Learning Enjoyable.</p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Parth Gupta</p>
+                  <p class="t-role">Frontend Developer</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.0</span>
+                <div class="t-stars">
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star half">★</span>
+                </div>
+              </div>
+              <p class="t-text">Sheryians Coding School Has Been An Amazing Experience! The Teachers Explain Everything
+                So Clearly, And The Hands-On Projects Really Help In Understanding Concepts.</p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Mukti Prasad Dash</p>
+                  <p class="t-role">Full Stack Developer</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.3</span>
+                <div class="t-stars">
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star half">★</span>
+                </div>
+              </div>
+              <p class="t-text">Sheryians Coding School Is An Excellent Institute For Learning Coding. The Teachers
+                Explain Concepts In A Very Clear And Simple Way, And The Course Content Is Well Structured.</p>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Rahul Verma</p>
+                  <p class="t-role">React Developer</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.5</span>
+                <div class="t-stars">
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star half">★</span>
+                </div>
+              </div>
+              <p class="t-text">Best coding school I've ever attended. The curriculum is modern, practical and the
+                mentors are always available. Got placed within 2 months of completing the course!</p>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Sneha Patil</p>
+                  <p class="t-role">UI/UX Designer</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.4</span>
+                <div class="t-stars">
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star half">★</span>
+                </div>
+              </div>
+              <p class="t-text">The projects assigned are real-world level. I built my entire portfolio during the
+                course itself. Highly recommend to anyone wanting to break into tech!</p>
+            </div>
+
+            <!-- Duplicate set for seamless loop -->
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Mohd Siraj</p>
+                  <p class="t-role">Web Developer</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.1</span>
+                <div class="t-stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+                    class="star">★</span><span class="star half">★</span>
+                </div>
+              </div>
+              <p class="t-text">I Had A Great Experience At Coaching. The Teachers Are Highly Supportive And
+                Knowledgeable. They Explain Every Concept Clearly And Make Learning Enjoyable.</p>
+            </div>
+
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Parth Gupta</p>
+                  <p class="t-role">Frontend Developer</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.0</span>
+                <div class="t-stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+                    class="star">★</span><span class="star half">★</span>
+                </div>
+              </div>
+              <p class="t-text">Sheryians Coding School Has Been An Amazing Experience! The Teachers Explain Everything
+                So Clearly, And The Hands-On Projects Really Help In Understanding Concepts.</p>
+            </div>
+
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Mukti Prasad Dash</p>
+                  <p class="t-role">Full Stack Developer</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.3</span>
+                <div class="t-stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+                    class="star">★</span><span class="star half">★</span>
+                </div>
+              </div>
+              <p class="t-text">Sheryians Coding School Is An Excellent Institute For Learning Coding. The Teachers
+                Explain Concepts In A Very Clear And Simple Way.</p>
+            </div>
+
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Rahul Verma</p>
+                  <p class="t-role">React Developer</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.5</span>
+                <div class="t-stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+                    class="star">★</span><span class="star half">★</span>
+                </div>
+              </div>
+              <p class="t-text">Best coding school I've ever attended. Got placed within 2 months of completing the
+                course!</p>
+            </div>
+
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Sneha Patil</p>
+                  <p class="t-role">UI/UX Designer</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.4</span>
+                <div class="t-stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+                    class="star">★</span><span class="star half">★</span>
+                </div>
+              </div>
+              <p class="t-text">The projects assigned are real-world level. I built my entire portfolio during the
+                course itself. Highly recommend!</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ROW 2 — Left to Right -->
+        <div class="marquee-row marquee-row-2">
+          <div class="marquee-track">
+
+            <!-- Card A -->
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Om Singhal</p>
+                  <p class="t-role">Backend Developer</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.4</span>
+                <div class="t-stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+                    class="star">★</span><span class="star half">★</span>
+                </div>
+              </div>
+              <p class="t-text">🌟 Sheryians Coding School – Best Place To Learn Coding Online! 🌟 I Am Currently
+                Learning Coding Online From Sheryians Coding School, And My Experience Has Been Truly Remarkable.</p>
+            </div>
+
+            <!-- Card B -->
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Aditya Kumar</p>
+                  <p class="t-role">Coding Mentor</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.2</span>
+                <div class="t-stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+                    class="star">★</span><span class="star half">★</span>
+                </div>
+              </div>
+              <p class="t-text">We Proudly Share Our Teaching Journey With Sheryians Coding School, Helping Students
+                Build Future-Ready Coding Skills. Provided Educational Guidance And Mentorship.</p>
+            </div>
+
+            <!-- Card C -->
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Akash Mehta</p>
+                  <p class="t-role">Software Engineer</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.9</span>
+                <div class="t-stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+                    class="star">★</span><span class="star">★</span>
+                </div>
+              </div>
+              <p class="t-text">I Am A Student Of Sheryians. Within 3 Months Here, I've Learnt A Lot By Coming Here.
+                After Coming Here, I Am Really Liking It And Getting Interested In Coding More.</p>
+            </div>
+
+            <!-- Card D -->
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Priya Sharma</p>
+                  <p class="t-role">Node.js Developer</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.6</span>
+                <div class="t-stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+                    class="star">★</span><span class="star half">★</span>
+                </div>
+              </div>
+              <p class="t-text">The community here is incredible. Everyone helps each other grow. The live sessions and
+                recorded lectures both are top quality. Worth every rupee spent!</p>
+            </div>
+
+            <!-- Card E -->
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Vikas Joshi</p>
+                  <p class="t-role">DevOps Engineer</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.7</span>
+                <div class="t-stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+                    class="star">★</span><span class="star half">★</span>
+                </div>
+              </div>
+              <p class="t-text">Joined with zero coding knowledge. Now I'm working as a DevOps engineer at a product
+                startup. The structured roadmap and mentor support made all the difference.</p>
+            </div>
+
+            <!-- Duplicate set for seamless loop -->
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Om Singhal</p>
+                  <p class="t-role">Backend Developer</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.4</span>
+                <div class="t-stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+                    class="star">★</span><span class="star half">★</span>
+                </div>
+              </div>
+              <p class="t-text">🌟 Sheryians Coding School – Best Place To Learn Coding Online! My Experience Has Been
+                Truly Remarkable.</p>
+            </div>
+
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Aditya Kumar</p>
+                  <p class="t-role">Coding Mentor</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.2</span>
+                <div class="t-stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+                    class="star">★</span><span class="star half">★</span>
+                </div>
+              </div>
+              <p class="t-text">We Proudly Share Our Teaching Journey With Sheryians Coding School, Helping Students
+                Build Future-Ready Coding Skills.</p>
+            </div>
+
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Akash Mehta</p>
+                  <p class="t-role">Software Engineer</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.9</span>
+                <div class="t-stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+                    class="star">★</span><span class="star">★</span>
+                </div>
+              </div>
+              <p class="t-text">Within 3 Months Here, I've Learnt A Lot. After Coming Here, I Am Really Getting
+                Interested In Coding More And More Every Day.</p>
+            </div>
+
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Priya Sharma</p>
+                  <p class="t-role">Node.js Developer</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.6</span>
+                <div class="t-stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+                    class="star">★</span><span class="star half">★</span>
+                </div>
+              </div>
+              <p class="t-text">The community here is incredible. The live sessions and recorded lectures both are top
+                quality. Worth every rupee spent!</p>
+            </div>
+
+            <div class="t-card">
+              <div class="t-card-header">
+                <div class="t-avatar">👤</div>
+                <div>
+                  <p class="t-name">Vikas Joshi</p>
+                  <p class="t-role">DevOps Engineer</p>
+                </div>
+              </div>
+              <div class="t-divider"></div>
+              <div class="t-rating">
+                <span class="t-rating-num">4.7</span>
+                <div class="t-stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
+                    class="star">★</span><span class="star half">★</span>
+                </div>
+              </div>
+              <p class="t-text">Joined with zero coding knowledge. Now working as a DevOps engineer. The structured
+                roadmap and mentor support made all the difference.</p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+
+  <!-- FAQ List -->
+  <div class="faq-list" id="faqList">
+
+    <!-- FAQ 1 -->
+    <div class="faq-item open">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-question-text">
+          Is this platform suitable for beginners?
+        </span>
+        <span class="faq-icon">∧</span>
+      </button>
+
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>
+            Yes, our program is specially designed for students aged 13–16 with simple,
+            interactive, and beginner-friendly learning.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ 2 -->
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-question-text">
+          What will students learn on this platform?
+        </span>
+        <span class="faq-icon">∨</span>
+      </button>
+
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>
+            Students will learn entrepreneurship, leadership, communication,
+            teamwork, creativity, and problem-solving skills.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ 3 -->
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-question-text">
+          Are the classes live or recorded?
+        </span>
+        <span class="faq-icon">∨</span>
+      </button>
+
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>
+            We provide live interactive sessions along with recorded content
+            so students can learn anytime.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ 4 -->
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-question-text">
+          Will students work on real projects?
+        </span>
+        <span class="faq-icon">∨</span>
+      </button>
+
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>
+            Yes, students participate in startup activities, business idea creation,
+            presentations, and practical challenges.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ 5 -->
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-question-text">
+          Do students need coding or business knowledge before joining?
+        </span>
+        <span class="faq-icon">∨</span>
+      </button>
+
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>
+            No prior experience is needed. We start from the basics and guide
+            students step-by-step.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ 6 -->
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-question-text">
+          How does this platform help students in the future?
+        </span>
+        <span class="faq-icon">∨</span>
+      </button>
+
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>
+            It builds confidence, leadership, creativity, and entrepreneurial
+            thinking that helps students in academics and future careers.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+
+    <div class="footer__bg-text">
+     <span>B</span><span>I</span><span>Z</span><span>H</span><span>U</span><span>B</span>
+    </div>
+
+    <div class="footer__content">
+
+      <div class="footer__left">
+        <div class="logo-box">
+          <!-- Replace with your logo image -->
+          <img src="your-logo.png" alt="Logo" />
+        </div>
+        <div class="footer__socials">
+          <a href="#"><i class='bx bxl-instagram'></i></a>
+          <a href="#"><i class='bx bxl-linkedin'></i></a>
+          <a href="#"><i class='bx bxl-discord-alt'></i></a>
+          <a href="#"><i class='bx bxl-youtube'></i></a>
+          <a href="#"><i class='bx bxl-twitter'></i></a>
+        </div>
+      </div>
+
+      <div class="footer__nav">
+
+        <div class="footer__col">
+          <h4>ABOUT</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Support</a></li>
+            <li><a href="#">Terms and Condition</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Submit Projects</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__col">
+          <h4>COMPANY</h4>
+          <ul>
+            <li><a href="#">Hire From Us</a></li>
+            <li><a href="#">Discord</a></li>
+            <li><a href="#">Pricing and Refund</a></li>
+            <li><a href="#">Jobs</a></li>
+            <li><a href="#">Feedback</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__col">
+          <h4>CONTACT</h4>
+          <p><strong>Online: 11am – 8pm</strong></p>
+          <p>+91 9993478545</p>
+          <p><strong>Offline: 11am – 8pm</strong></p>
+          <p>+91 9691778470</p>
+          <p><a href="mailto:hello@sheryians.com">hello@sheryians.com</a></p>
+          <p>23-B, Sector C<br />Indrapuri,<br />Bhopal(MP), 462023</p>
+        </div>
+
+      </div>
+    </div>
+
+  </footer>
+
+
+  <script>
+    const cards = document.getElementById('impactCards');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          cards.classList.add('animate-in');
+          observer.disconnect();
+        }
+      });
+    }, {
+      threshold: 0.15
+    });
+
+    observer.observe(cards);
+
+
+    const card = document.querySelectorAll('.course-card');
+
+    const observers = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.15
+    });
+
+    card.forEach(card => observers.observe(card));
+
+    function toggleFaq(btn) {
+      const item = btn.closest('.faq-item');
+      const icon = btn.querySelector('.faq-icon');
+      const isOpen = item.classList.contains('open');
+
+      // Close all
+      document.querySelectorAll('.faq-item').forEach(el => {
+        el.classList.remove('open');
+        el.querySelector('.faq-icon').textContent = '∨';
+      });
+
+      // Open clicked if it was closed
+      if (!isOpen) {
+        item.classList.add('open');
+        icon.textContent = '∧';
+      }
+    }
+
+    // Scroll fade-in
+    const faqItems = document.querySelectorAll('.faq-item');
+
+    const observerr = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('fade-in');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    faqItems.forEach(item => observerr.observe(item));
+  </script>
+
+</body>
+
+</html>

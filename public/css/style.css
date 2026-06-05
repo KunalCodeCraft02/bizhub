@@ -1,0 +1,234 @@
+/* =========================
+   GLOBAL ENHANCEMENTS
+========================= */
+
+/* Smooth fade-in for sections */
+section {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+section:nth-child(1) { animation-delay: 0.1s; }
+section:nth-child(2) { animation-delay: 0.2s; }
+section:nth-child(3) { animation-delay: 0.3s; }
+section:nth-child(4) { animation-delay: 0.4s; }
+section:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   NAVBAR SCROLL EFFECT
+========================= */
+.navbar.scrolled {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  height: 68px;
+}
+
+/* Mobile Menu */
+.nav-links.nav-open {
+  display: flex;
+  position: absolute;
+  top: 72px;
+  left: 0;
+  width: 100%;
+  background: white;
+  flex-direction: column;
+  padding: 20px;
+  gap: 20px;
+  box-shadow: var(--shadow-md);
+}
+
+/* Hamburger Animation */
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translateY(8px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translateY(-8px);
+}
+
+/* =========================
+   HERO CUSTOM
+========================= */
+.hero-actions .btn-primary {
+  min-width: 200px;
+}
+
+.hero-actions .btn-outline {
+  min-width: 180px;
+}
+
+.hero-tag {
+  box-shadow: 0 4px 12px rgba(108,62,244,0.2);
+}
+
+/* =========================
+   TOPIC CARD ICON HOVER FIX
+========================= */
+.topic-card:hover .topic-icon {
+  color: white;
+}
+
+/* =========================
+   PROCESS SECTION (HOW IT WORKS)
+========================= */
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.process-card {
+  text-align: center;
+  padding: 32px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: white;
+  transition: var(--transition);
+}
+
+.process-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
+}
+
+.process-icon {
+  font-size: 40px;
+  margin-bottom: 16px;
+}
+
+.process-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.process-desc {
+  font-size: 14px;
+  color: var(--text-medium);
+}
+
+/* =========================
+   CTA BANNER
+========================= */
+.cta-banner {
+  background: linear-gradient(135deg, #6C3EF4, #FF6B35);
+  padding: 80px 20px;
+  text-align: center;
+  color: white;
+}
+
+.cta-title {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.cta-banner .btn-primary {
+  background: white;
+  color: var(--primary);
+}
+
+.cta-banner .btn-primary:hover {
+  background: #f8f8ff;
+}
+
+/* =========================
+   AUTH PAGE IMPROVEMENTS
+========================= */
+.auth-card {
+  animation: fadeInScale 0.5s ease;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Password Toggle Button */
+.password-wrapper {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--text-light);
+}
+
+.password-toggle:hover {
+  color: var(--primary);
+}
+
+/* =========================
+   FORM TRANSITIONS
+========================= */
+.form-panel {
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: var(--transition);
+}
+
+.form-panel.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================
+   OTP SECTION
+========================= */
+.otp-section {
+  display: none;
+}
+
+.otp-section.active {
+  display: block;
+}
+
+/* =========================
+   SMALL IMPROVEMENTS
+========================= */
+input::placeholder {
+  color: var(--text-light);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+/* =========================
+   RESPONSIVE TWEAKS
+========================= */
+@media (max-width: 768px) {
+  .process-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-title {
+    font-size: 26px;
+  }
+}

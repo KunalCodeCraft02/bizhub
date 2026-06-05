@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture Statistics - BizHub</title>
+    <!-- Include Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lecture Attempt Statistics</h1>
+        <p>Average number of attempts taken by students to complete each lecture correctly.</p>
+
+        <% if (lectureStats && lectureStats.length > 0) { %>
+            <div class="chart-container">
+                <canvas id="lectureChart"></canvas>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Lecture ID</th>
+                        <th>Average Attempts</th>
+                        <th>Total Attempts</th>
+                        <th>Number of Students</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% lectureStats.forEach(stat => { %>
+                        <tr>
+                            <td><%= stat.lectureId %></td>
+                            <td><%= stat.averageAttempts %></td>
+                            <td><%= stat.totalAttempts %></td>
+                            <td><%= stat.studentCount %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p class="no-data">No lecture statistics available.</p>
+        <% } %>
+    </div>
+
+    <script>
+        // Chart.js configuration
+        const ctx = document.getElementById('lectureChart').getContext('2d');
+        const lectureChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: <% = JSON.stringify(lectureStats.map(stat => stat.lectureId)) %>,
+                datasets: [{
+                    label: 'Average Attempts per Lecture',
+                    data: <% = JSON.stringify(lectureStats.map(stat => stat.averageAttempts)) %>,
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Average Attempts'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Lecture ID'
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'Average Attempts: ' + context.parsed.y;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

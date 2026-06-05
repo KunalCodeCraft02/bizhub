@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mentor Login - Bizhub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0a0a0a;
+            color: white;
+            padding: 20px;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 50% 90%, rgba(180, 60, 20, 0.25), transparent 60%);
+            z-index: -1;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 430px;
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 22px;
+            padding: 36px;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        h1 span {
+            color: #E8541A;
+        }
+
+        p {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .error {
+            background: rgba(231, 76, 60, 0.08);
+            border: 1px solid rgba(231, 76, 60, 0.25);
+            color: #e74c3c;
+            font-size: 13px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid #333;
+            background: #0f0f0f;
+            color: #fff;
+            outline: none;
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+
+        input:focus {
+            border-color: #E8541A;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: #E8541A;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 15px;
+            margin-top: 6px;
+        }
+
+        button:hover {
+            background: #ff6b2b;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #888;
+        }
+
+        .links a {
+            color: #E8541A;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <form class="card" method="POST" action="/mentorlogin">
+        <h1>Mentor <span>Login</span></h1>
+        <p>Sign in to your Bizhub mentor account</p>
+
+        <% if (query && query.error) { %>
+            <div class="error">⚠️ <%= query.error %>
+            </div>
+            <% } %>
+
+                <input type="email" name="email" placeholder="Mentor Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+
+                <div class="links">
+                    New to Bizhub? <a href="/mentorsignup">Become a Mentor</a>
+                </div>
+    </form>
+</body>
+
+</html>

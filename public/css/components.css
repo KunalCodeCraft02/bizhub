@@ -1,0 +1,247 @@
+/* =========================
+   BADGES
+========================= */
+.badge {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 50px;
+  background: var(--bg-light);
+  color: var(--primary);
+}
+
+.badge-accent {
+  background: rgba(255, 107, 53, 0.1);
+  color: var(--accent);
+}
+
+.badge-success {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10B981;
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: #F59E0B;
+}
+
+.badge-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: #EF4444;
+}
+
+/* =========================
+   LOADER / SPINNER
+========================= */
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--bg-light);
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto;
+}
+
+.loader-sm {
+  width: 24px;
+  height: 24px;
+  border-width: 3px;
+}
+
+.loader-lg {
+  width: 60px;
+  height: 60px;
+  border-width: 5px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================
+   PROGRESS BAR
+========================= */
+.progress {
+  width: 100%;
+  height: 10px;
+  background: var(--bg-light);
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 50px;
+  transition: width 0.5s ease;
+}
+
+/* =========================
+   ALERT BOXES
+========================= */
+.alert {
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  margin-bottom: 16px;
+  border: 1px solid transparent;
+}
+
+.alert-success {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: #10B981;
+  color: #065F46;
+}
+
+.alert-error {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #EF4444;
+  color: #7F1D1D;
+}
+
+.alert-warning {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: #F59E0B;
+  color: #78350F;
+}
+
+.alert-info {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: #3B82F6;
+  color: #1E3A8A;
+}
+
+/* =========================
+   NOTIFICATION (TOAST)
+========================= */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.toast {
+  min-width: 260px;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  background: white;
+  box-shadow: var(--shadow-md);
+  border-left: 4px solid var(--primary);
+  font-size: 14px;
+  color: var(--text-dark);
+  animation: slideIn 0.3s ease;
+}
+
+.toast-success {
+  border-left-color: #10B981;
+}
+
+.toast-error {
+  border-left-color: #EF4444;
+}
+
+.toast-warning {
+  border-left-color: #F59E0B;
+}
+
+.toast-info {
+  border-left-color: #3B82F6;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* =========================
+   MODAL (OPTIONAL USE)
+========================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  opacity: 0;
+  pointer-events: none;
+  transition: var(--transition);
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 32px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(20px);
+  transition: var(--transition);
+}
+
+.modal-overlay.active .modal {
+  transform: translateY(0);
+}
+
+/* =========================
+   TOOLTIP
+========================= */
+.tooltip {
+  position: relative;
+  cursor: pointer;
+}
+
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--text-dark);
+  color: white;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: var(--transition);
+}
+
+.tooltip:hover::after {
+  opacity: 1;
+}
+
+/* =========================
+   DIVIDER
+========================= */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+  margin: 24px 0;
+}

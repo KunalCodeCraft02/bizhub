@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Admin Login - BizHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        :root {
+            --accent: #E8541A;
+            --accent-dim: rgba(232, 84, 26, 0.15);
+            --accent-glow: rgba(232, 84, 26, 0.5);
+            --bg: #080808;
+            --card: #111111;
+            --input-bg: #1a1a1a;
+            --border: #252525;
+            --border-focus: #E8541A;
+            --text: #ffffff;
+            --text-muted: #666;
+            --text-sub: #999;
+            --error: #ff4d4d;
+            --success: #22c55e;
+        }
+
+        body {
+            background: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text);
+            padding: 24px 16px;
+            background-image: linear-gradient(rgba(232, 84, 26, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(232, 84, 26, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 460px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 40px 36px;
+            border-radius: 20px;
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.6);
+            animation: slideUp 0.4s ease both;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-header {
+            margin-bottom: 28px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--accent-dim);
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(232, 84, 26, 0.2);
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 13.5px;
+        }
+
+        .role-tabs {
+            display: flex;
+            gap: 6px;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 5px;
+            margin-bottom: 26px;
+        }
+
+        .role-tabs a {
+            flex: 1;
+            padding: 9px 6px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 12.5px;
+            font-weight: 500;
+            text-decoration: none;
+            color: var(--text-muted);
+            transition: background 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+
+        .role-tabs a.active {
+            background: var(--accent);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .role-tabs a:not(.active):hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .server-error,
+        .server-success {
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .server-error {
+            background: rgba(255, 77, 77, 0.08);
+            border: 1px solid rgba(255, 77, 77, 0.3);
+            color: var(--error);
+        }
+
+        .server-success {
+            background: rgba(34, 197, 94, 0.08);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: var(--success);
+        }
+
+        .server-error svg,
+        .server-success svg {
+            flex-shrink: 0;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 12.5px;
+            font-weight: 500;
+            color: var(--text-sub);
+            letter-spacing: 0.02em;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--input-bg);
+            color: var(--text);
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input::placeholder {
+            color: #444;
+        }
+
+        input:focus {
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px var(--accent-dim);
+        }
+
+        input.invalid {
+            border-color: var(--error);
+            box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.1);
+        }
+
+        input.pw-field {
+            padding-right: 44px;
+        }
+
+        .toggle-pw {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #555;
+            padding: 0;
+            width: auto;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+
+        .toggle-pw:hover {
+            color: var(--accent);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: none;
+        }
+
+        .toggle-pw:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .forgot-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 6px;
+        }
+
+        .forgot-link {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .forgot-link:hover {
+            color: var(--accent);
+        }
+
+        .error-msg {
+            color: var(--error);
+            font-size: 11.5px;
+            margin-top: 5px;
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .error-msg.visible {
+            display: flex;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 22px 0;
+        }
+
+        /* Info hint box */
+        .info-hint {
+            background: rgba(232, 84, 26, 0.06);
+            border: 1px solid rgba(232, 84, 26, 0.15);
+            border-radius: 10px;
+            padding: 11px 14px;
+            font-size: 12.5px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            line-height: 1.5;
+        }
+
+        .info-hint svg {
+            flex-shrink: 0;
+            margin-top: 1px;
+            color: var(--accent);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #E8541A, #C94A0F);
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 4px;
+            letter-spacing: 0.02em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px var(--accent-glow);
+        }
+
+        .btn-submit:hover::after {
+            opacity: 1;
+        }
+
+        .btn-submit:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .bottom-text {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 20px;
+        }
+
+        .bottom-text a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .bottom-text a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 28px 20px;
+            }
+
+            .role-tabs a {
+                font-size: 11px;
+                padding: 8px 4px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+
+        <div class="card-header">
+            <div class="badge">🏫 School Admin</div>
+            <h1>Admin Portal</h1>
+            <p class="subtitle">Sign in to manage your school on BizHub</p>
+        </div>
+
+        <!-- Role switcher -->
+        <div class="role-tabs">
+            <a href="/login">🎓 Student</a>
+            <a href="/schoollogin" class="active">🏫 School Admin</a>
+            <a href="/mentorlogin">💡 Mentor</a>
+        </div>
+
+        <% if (typeof query !=='undefined' && query && query.error) { %>
+            <div class="server-error">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <%= query.error %>
+            </div>
+            <% } %>
+                <% if (typeof query !=='undefined' && query && query.success) { %>
+                    <div class="server-success">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <%= query.success %>
+                    </div>
+                    <% } %>
+
+                        <div class="info-hint">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="16" x2="12" y2="12" />
+                                <line x1="12" y1="8" x2="12.01" y2="8" />
+                            </svg>
+                            Use the credentials provided to your institution during onboarding. Contact support if you
+                            need access.
+                        </div>
+
+                        <form id="loginForm" method="POST" action="/schoollogin" novalidate>
+
+                            <div class="form-group">
+                                <label for="email">Institutional Email</label>
+                                <input name="email" type="email" id="email" placeholder="admin@school.edu"
+                                    autocomplete="email">
+                                <div class="error-msg" id="emailError">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                                    </svg>
+                                    Enter a valid email address
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="schoolCode">School Code</label>
+                                <input name="schoolCode" type="text" id="schoolCode" placeholder="e.g. SCH-00123"
+                                    autocomplete="off" style="text-transform:uppercase;">
+                                <div class="error-msg" id="schoolCodeError">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                                    </svg>
+                                    School code is required
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <div class="input-wrap">
+                                    <input name="password" type="password" id="password"
+                                        placeholder="Enter your password" autocomplete="current-password"
+                                        class="pw-field">
+                                    <button type="button" class="toggle-pw" data-target="password"
+                                        title="Show/hide password">
+                                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                            <circle cx="12" cy="12" r="3" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="forgot-row">
+                                    <a href="/forgot-password" class="forgot-link">Forgot password?</a>
+                                </div>
+                                <div class="error-msg" id="passwordError">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                                    </svg>
+                                    Password is required
+                                </div>
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <button type="submit" class="btn-submit">Sign In as Admin →</button>
+                        </form>
+
+                        <div class="bottom-text">
+                            Not an admin? <a href="/login">Student login</a> &nbsp;·&nbsp; <a href="/signinas">Sign
+                                up</a>
+                        </div>
+    </div>
+    <script>
+        document.querySelectorAll('.toggle-pw').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const input = document.getElementById(btn.dataset.target);
+                const hidden = input.type === 'password';
+                input.type = hidden ? 'text' : 'password';
+                btn.querySelector('svg').innerHTML = hidden
+                    ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>`
+                    : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+            });
+        });
+        function showError(id, eid) { const e = document.getElementById(id), r = document.getElementById(eid); if (e) e.classList.add('invalid'); if (r) r.classList.add('visible'); }
+        function clearError(id, eid) { const e = document.getElementById(id), r = document.getElementById(eid); if (e) e.classList.remove('invalid'); if (r) r.classList.remove('visible'); }
+        const validateEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+        const fields = [
+            { id: 'email', err: 'emailError', check: v => validateEmail(v) },
+            { id: 'schoolCode', err: 'schoolCodeError', check: v => v.trim() !== '' },
+            { id: 'password', err: 'passwordError', check: v => v.trim() !== '' },
+        ];
+        fields.forEach(({ id, err, check }) => {
+            const el = document.getElementById(id); if (!el) return;
+            el.addEventListener('blur', () => check(el.value) ? clearError(id, err) : showError(id, err));
+            el.addEventListener('input', () => { if (el.classList.contains('invalid') && check(el.value)) clearError(id, err); });
+        });
+        // Auto-uppercase school code
+        const sc = document.getElementById('schoolCode');
+        if (sc) sc.addEventListener('input', () => { const pos = sc.selectionStart; sc.value = sc.value.toUpperCase(); sc.setSelectionRange(pos, pos); });
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            let valid = true;
+            fields.forEach(({ id, err }) => clearError(id, err));
+            fields.forEach(({ id, err, check }) => { const el = document.getElementById(id); if (!el) return; if (!check(el.value)) { showError(id, err); valid = false; } });
+            if (!valid) { e.preventDefault(); const f = document.querySelector('.invalid'); if (f) f.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        });
+    </script>
+</body>
+
+</html>

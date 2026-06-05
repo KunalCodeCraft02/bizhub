@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Bizhub</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: #0a0a0a;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    /* Background Effects matching home */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 90%, rgba(180, 60, 20, 0.18), transparent 60%),
+        repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 40px),
+        repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 40px);
+      z-index: -2;
+    }
+
+    /* Navbar exact same as home */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(10, 10, 10, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .logo {
+      width: 80px;
+    }
+
+    .logo img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      background: #1a1a1a;
+      padding: 8px 18px;
+      border-radius: 30px;
+      border: 1px solid #333;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #777;
+      font-size: 14px;
+    }
+
+    .nav-links a.active {
+      color: white;
+    }
+
+    .signin {
+      color: white;
+      text-decoration: none;
+    }
+
+    /* Base Utilities */
+    .pill {
+      display: inline-block;
+      border: 1px solid #3a2a1a;
+      background: #1a0f00;
+      color: #aaa;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      padding: 6px 18px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .section {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 96px 32px;
+    }
+
+    .section-h2 {
+      font-size: clamp(32px, 4vw, 64px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .section-h2 em {
+      font-style: normal;
+      color: #E8541A;
+    }
+
+    .section-sub {
+      color: #aaa;
+      font-size: 16px;
+      line-height: 1.75;
+      max-width: 600px;
+      margin-bottom: 56px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+      position: relative;
+    }
+
+    .hero-eyebrow {
+      color: #E8541A;
+      font-size: 14px;
+      letter-spacing: 2px;
+      font-weight: 600;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+      margin-bottom: 28px;
+    }
+
+    .hero-h1 {
+      font-size: clamp(40px, 4vw, 80px);
+      font-weight: 800;
+      line-height: 1.1;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideUp 1s forwards;
+      animation-delay: 0.3s;
+      max-width: 960px;
+    }
+
+    .hero-h1 em {
+      font-style: normal;
+      color: #E8541A;
+    }
+
+    .hero-sub {
+      color: #aaa;
+      font-size: 18px;
+      max-width: 580px;
+      line-height: 1.75;
+      margin-top: 24px;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+      animation-delay: 0.6s;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 14px;
+      margin-top: 36px;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+      animation-delay: 0.9s;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      padding: 16px 36px;
+      background: linear-gradient(135deg, #E8541A, #C94A0F);
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      color: white;
+      transition: 0.3s;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      transform: scale(1.04);
+      box-shadow: 0 0 20px rgba(232, 84, 26, 0.7);
+    }
+
+    .btn-outline {
+      padding: 14px 34px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background: transparent;
+      color: #aaa;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-outline:hover {
+      color: #fff;
+      border-color: #444;
+    }
+
+    /* ── STATS TICKER ── */
+    .stats-bar {
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+      background: #0d0d0d;
+      padding: 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .stats-track {
+      display: inline-flex;
+      gap: 0;
+      animation: ticker 30s linear infinite;
+    }
+
+    .stat-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 32px;
+      padding: 18px 48px;
+      border-right: 1px solid #1a1a1a;
+    }
+
+    .stat-num {
+      font-size: 22px;
+      font-weight: 800;
+      color: #E8541A;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #777;
+      font-weight: 400;
+    }
+
+    @keyframes ticker {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* ── WHO WE ARE ── */
+    .who-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .who-panel {
+      background: #111;
+      border: 1px solid #1f1f1f;
+      border-radius: 16px;
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .who-panel::after {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(232, 84, 26, 0.08), transparent 70%);
+    }
+
+    .who-panel-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: #E8541A;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .who-big {
+      font-size: clamp(28px, 3vw, 42px);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 24px;
+    }
+
+    .who-big em {
+      font-style: normal;
+      color: #E8541A;
+    }
+
+    .who-box-word {
+      display: inline-block;
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      padding: 2px 12px;
+      border-radius: 4px;
+    }
+
+    .who-body {
+      color: #aaa;
+      font-size: 15px;
+      line-height: 1.85;
+      max-width: 480px;
+    }
+
+    .who-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .who-stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .ws-cell {
+      background: #111;
+      border: 1px solid #1f1f1f;
+      border-radius: 12px;
+      padding: 28px 24px;
+    }
+
+    .ws-num {
+      font-size: 32px;
+      font-weight: 800;
+      color: #E8541A;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .ws-lbl {
+      font-size: 13px;
+      color: #777;
+    }
+
+    .who-quote {
+      background: #111;
+      border: 1px solid #1f1f1f;
+      border-left: 3px solid var(--orange);
+      border-radius: 0 12px 12px 0;
+      padding: 24px 28px;
+      font-size: 15px;
+      color: #bbb;
+      line-height: 1.7;
+      font-style: italic;
+    }
+
+    /* ── MISSION VISION ── */
+    .mv-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .mv-card {
+      background: #111;
+      border: 1px solid #1f1f1f;
+      border-radius: 16px;
+      padding: 48px 40px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .mv-card:hover {
+      border-color: #333;
+      transform: translateY(-4px);
+    }
+
+    .mv-badge {
+      display: inline-block;
+      background: rgba(232, 84, 26, 0.1);
+      color: #E8541A;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 32px;
+      border: 1px solid rgba(232, 84, 26, 0.2);
+      margin-bottom: 20px;
+    }
+
+    .mv-icon {
+      font-size: 28px;
+      margin-bottom: 18px;
+    }
+
+    .mv-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 14px;
+      color: #fff;
+    }
+
+    .mv-text {
+      font-size: 14px;
+      color: #aaa;
+      line-height: 1.85;
+    }
+
+    /* ── VALUES ── */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .val-card {
+      background: #111;
+      border: 1px solid #1f1f1f;
+      border-radius: 16px;
+      padding: 32px 28px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .val-card:hover {
+      border-color: #333;
+      transform: translateY(-3px);
+    }
+
+    .val-icon {
+      width: 46px;
+      height: 46px;
+      background: #161616;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 18px;
+    }
+
+    .val-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .val-desc {
+      font-size: 13px;
+      color: #aaa;
+      line-height: 1.75;
+    }
+
+    /* ── TEAM ── */
+    .team-photo-section {
+      padding: 0 32px 96px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .team-photo-wrap {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #1f1f1f;
+      background: #111;
+      aspect-ratio: 16/7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .team-photo-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 60%, rgba(232, 84, 26, 0.08), transparent 50%);
+    }
+
+    .team-photo-placeholder {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      color: #444;
+    }
+
+    .team-photo-caption {
+      text-align: center;
+      color: #666;
+      font-size: 13px;
+      margin-top: 16px;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .team-card {
+      background: #111;
+      border: 1px solid #1f1f1f;
+      border-radius: 16px;
+      padding: 32px 24px 28px;
+      text-align: center;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .team-card:hover {
+      border-color: #E8541A;
+      transform: translateY(-5px);
+    }
+
+    .tc-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      margin: 0 auto 18px;
+      background: #161616;
+      border: 2px solid #2a2a2a;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tc-avatar-placeholder {
+      font-size: 28px;
+      color: #444;
+    }
+
+    .team-card:hover .tc-avatar {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 4px rgba(232, 84, 26, 0.15);
+    }
+
+    .tc-name {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .tc-role {
+      font-size: 12px;
+      color: #E8541A;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .tc-bio {
+      font-size: 12.5px;
+      color: #888;
+      line-height: 1.7;
+    }
+
+    .tc-socials {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .tc-socials a {
+      width: 32px;
+      height: 32px;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      background: #161616;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #777;
+      font-size: 14px;
+      text-decoration: none;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .tc-socials a:hover {
+      color: #E8541A;
+      border-color: #E8541A;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      margin: 0 32px 96px;
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-inner {
+      background: #111;
+      border: 1px solid #1f1f1f;
+      border-radius: 16px;
+      padding: 64px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      position: relative;
+      overflow: hidden;
+      flex-wrap: wrap;
+    }
+
+    .cta-inner::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      right: -80px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(232, 84, 26, 0.08), transparent 65%);
+    }
+
+    .cta-text h2 {
+      font-size: clamp(24px, 3vw, 40px);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .cta-text p {
+      color: #aaa;
+      font-size: 15px;
+    }
+
+    .cta-btn {
+      padding: 16px 40px;
+      background: linear-gradient(135deg, #E8541A, #C94A0F);
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      flex-shrink: 0;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 36px rgba(232, 84, 26, 0.5);
+    }
+
+    /* ── FOOTER EXACT SAME AS HOME ── */
+    .footer {
+      position: relative;
+      background: #000;
+      overflow: hidden;
+      padding-bottom: 60px;
+    }
+
+    .footer__bg-text {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: clamp(80px, 15vw, 200px);
+      font-weight: 900;
+      letter-spacing: -4px;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .footer__bg-text span {
+      display: inline-block;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.12);
+      transition: color 0.3s ease, text-shadow 0.3s ease, -webkit-text-stroke 0.3s ease;
+      pointer-events: all;
+      cursor: default;
+    }
+
+    .footer__bg-text span:hover {
+      color: #e85d20 !important;
+      -webkit-text-stroke: 1px transparent !important;
+      text-shadow:
+        0 0 10px rgba(255, 120, 30, 1),
+        0 0 40px rgba(230, 90, 20, 0.9),
+        0 0 80px rgba(200, 60, 10, 0.6);
+      transform: scale(1.05);
+    }
+
+    .footer__content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: clamp(160px, 18vw, 260px) 60px 0 60px;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .footer__left {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      min-width: 120px;
+    }
+
+    .logo-box {
+      width: 56px;
+      height: 56px;
+    }
+
+    .logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+
+    .footer__socials {
+      display: flex;
+      gap: 18px;
+    }
+
+    .footer__socials a {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 20px;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer__socials a:hover {
+      color: #E8541A;
+    }
+
+    .footer__nav {
+      display: flex;
+      gap: clamp(40px, 6vw, 100px);
+      flex-wrap: wrap;
+    }
+
+    .footer__col h4 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    .footer__col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer__col ul li a,
+    .footer__col p,
+    .footer__col a {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.55);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      line-height: 1.5;
+    }
+
+    .footer__col ul li a:hover,
+    .footer__col a:hover {
+      color: #E8541A;
+    }
+
+    .footer__col p strong {
+      color: #fff;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 10px rgba(232, 84, 26, 0.4);
+      }
+
+      50% {
+        box-shadow: 0 0 25px rgba(232, 84, 26, 0.7);
+      }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width:1024px) {
+      .section {
+        padding: 72px 32px;
+      }
+
+      .who-grid,
+      .mv-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .values-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .cta-section,
+      .team-photo-section {
+        margin: 0 32px 72px;
+      }
+
+      .cta-inner {
+        padding: 48px 40px;
+      }
+
+      .footer__content {
+        padding: 140px 32px 0;
+      }
+
+      .navbar {
+        padding: 16px 32px;
+      }
+    }
+
+    @media (max-width:640px) {
+      .nav-links {
+        display: none;
+      }
+
+      .team-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .values-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .who-panel,
+      .who-right {
+        padding: 36px 28px;
+      }
+
+      .cta-inner {
+        flex-direction: column;
+        text-align: center;
+        padding: 36px 28px;
+      }
+
+      .cta-section,
+      .team-photo-section {
+        margin: 0 16px 60px;
+      }
+
+      .section {
+        padding: 56px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="logo"><img src="/assets/logo.png" alt="Bizhub"></div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/roadmap">Learning Path</a>
+      <a href="/mentorship">Mentorship</a>
+      <a href="/leaderboard">Leaderboard</a>
+      <a href="/about" class="active">About Us</a>
+    </div>
+    <div class="nav-right">
+      <a href="/logout" class="signin">Logout</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">ABOUT BIZHUB</div>
+    <h1 class="hero-h1">
+      Where <em>Ideas</em> Transform<br>Into <em>Ventures</em>
+    </h1>
+    <p class="hero-sub">
+      Empowering India's next generation of school-age founders — from raw curiosity to real companies.
+    </p>
+    <div class="hero-cta">
+      <a href="/pretest" class="btn-primary">Start Building →</a>
+      <a href="#who" class="btn-outline">Learn More</a>
+    </div>
+  </section>
+
+  <!-- STATS TICKER -->
+  <div class="stats-bar" aria-hidden="true">
+    <div class="stats-track">
+      <div class="stat-item"><span class="stat-num">25K+</span><span class="stat-label">Young Founders</span></div>
+      <div class="stat-item"><span class="stat-num">3</span><span class="stat-label">Core Courses</span></div>
+      <div class="stat-item"><span class="stat-num">0→100</span><span class="stat-label">Startup Framework</span></div>
+      <div class="stat-item"><span class="stat-num">8–12</span><span class="stat-label">Grade Range</span></div>
+      <div class="stat-item"><span class="stat-num">500+</span><span class="stat-label">MVPs Built</span></div>
+      <div class="stat-item"><span class="stat-num">40+</span><span class="stat-label">Mentor Network</span></div>
+
+      <div class="stat-item"><span class="stat-num">25K+</span><span class="stat-label">Young Founders</span></div>
+      <div class="stat-item"><span class="stat-num">3</span><span class="stat-label">Core Courses</span></div>
+      <div class="stat-item"><span class="stat-num">0→100</span><span class="stat-label">Startup Framework</span></div>
+      <div class="stat-item"><span class="stat-num">8–12</span><span class="stat-label">Grade Range</span></div>
+      <div class="stat-item"><span class="stat-num">500+</span><span class="stat-label">MVPs Built</span></div>
+      <div class="stat-item"><span class="stat-num">40+</span><span class="stat-label">Mentor Network</span></div>
+    </div>
+  </div>
+
+  <!-- WHO WE ARE -->
+  <section class="section" id="who">
+    <div class="pill">Who We Are</div>
+    <div class="who-grid reveal">
+
+      <div class="who-panel">
+        <div class="who-panel-label">✦ OUR STORY</div>
+        <h2 class="who-big">
+          We turn <em>curiosity</em> into<br>
+          <span class="who-box-word">COMPANY</span> creation.
+        </h2>
+        <p class="who-body">
+          At Bizhub, we provide a complete 0-to-100 experiential playground where high school students
+          shift from passive test-takers to active innovators. We bridge the gap between classroom
+          learning and real-world execution — shaping everyday school-level ideas into startups that
+          inspire the world.
+        </p>
+      </div>
+
+      <div class="who-right">
+        <div class="who-stats-grid">
+          <div class="ws-cell">
+            <div class="ws-num">25K+</div>
+            <div class="ws-lbl">Young Founders</div>
+          </div>
+          <div class="ws-cell">
+            <div class="ws-num">3</div>
+            <div class="ws-lbl">Core Courses</div>
+          </div>
+          <div class="ws-cell">
+            <div class="ws-num">0→100</div>
+            <div class="ws-lbl">Startup Framework</div>
+          </div>
+          <div class="ws-cell">
+            <div class="ws-num">8–12</div>
+            <div class="ws-lbl">Grade Range</div>
+          </div>
+        </div>
+        <div class="who-quote">
+          "A 10th-grader's startup pitch should be celebrated just as loudly as a 12th-grader's board exam score."
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MISSION & VISION -->
+  <section class="section" style="padding-top:0;">
+    <div class="pill">Purpose</div>
+    <h2 class="section-h2">Our Mission &amp; <em>Vision</em></h2>
+    <div class="mv-grid">
+
+      <div class="mv-card reveal">
+        <div class="mv-badge">Mission</div>
+        <div class="mv-icon">🎯</div>
+        <h3 class="mv-title">Democratizing Business Education</h3>
+        <p class="mv-text">
+          To democratize business education and introduce entrepreneurship as a baseline career path for
+          school students — alongside traditional fields like science, arts, and commerce. Every student
+          deserves access to the tools, knowledge, and mentorship that turns an idea into action,
+          regardless of background or resources.
+        </p>
+      </div>
+
+      <div class="mv-card reveal" style="transition-delay:0.15s;">
+        <div class="mv-badge">Vision</div>
+        <div class="mv-icon">🔭</div>
+        <h3 class="mv-title">Redefining Early Education</h3>
+        <p class="mv-text">
+          To redefine early education by making entrepreneurship as fundamental as science, arts, or
+          commerce — turning every classroom into a launchpad for the next generation of global founders.
+          We envision a world where a 10th-grader's startup pitch is celebrated just as loudly as a
+          board exam score.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CORE VALUES -->
+  <section class="section" style="padding-top:0;">
+    <div class="pill">What We Stand For</div>
+    <h2 class="section-h2">Core <em>Values</em></h2>
+    <p class="section-sub">Six principles that guide every decision, every course, and every student we work with.</p>
+    <div class="values-grid">
+
+      <div class="val-card reveal">
+        <div class="val-icon">🚀</div>
+        <div class="val-title">Action Over Theory</div>
+        <p class="val-desc">We believe in learning by doing. Every lesson is tied to a real deliverable — a pitch, a
+          product, a plan.</p>
+      </div>
+
+      <div class="val-card reveal" style="transition-delay:0.1s;">
+        <div class="val-icon">🌍</div>
+        <div class="val-title">Inclusive Innovation</div>
+        <p class="val-desc">From Tier-1 cities to small towns, every student deserves a shot at building something
+          meaningful.</p>
+      </div>
+
+      <div class="val-card reveal" style="transition-delay:0.2s;">
+        <div class="val-icon">💡</div>
+        <div class="val-title">Curiosity First</div>
+        <p class="val-desc">We nurture questions before answers. Curiosity is the engine of every great startup.</p>
+      </div>
+
+      <div class="val-card reveal" style="transition-delay:0.3s;">
+        <div class="val-icon">🤝</div>
+        <div class="val-title">Community-Led Growth</div>
+        <p class="val-desc">Founders don't build alone. Our cohort-based model ensures every student has a team behind
+          them.</p>
+      </div>
+
+      <div class="val-card reveal" style="transition-delay:0.4s;">
+        <div class="val-icon">📈</div>
+        <div class="val-title">Measurable Impact</div>
+        <p class="val-desc">We track real outcomes — MVPs launched, pitches delivered, and ideas validated with actual
+          users.</p>
+      </div>
+
+      <div class="val-card reveal" style="transition-delay:0.5s;">
+        <div class="val-icon">🎓</div>
+        <div class="val-title">Lifelong Founder Mindset</div>
+        <p class="val-desc">Beyond courses, we plant a mindset that compounds over a lifetime — resilience, creativity,
+          and ambition.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <div class="team-photo-section">
+    <div class="pill">Behind The Mission</div>
+    <h2 class="section-h2" style="margin-bottom:32px;">Meet the <em>Team</em></h2>
+
+    <div class="team-photo-wrap reveal">
+      <div class="team-photo-placeholder">
+        <i class='bx bx-image-add'></i>
+        <p>
+          <img src="/assets/team.jpeg" alt="The Bizhub Team" style="width:100%; border-radius:8px; border:1px solid #2a2a2a;">
+        </p>
+      </div>
+    </div>
+    <p class="team-photo-caption">The Bizhub team — builders, mentors &amp; dreamers based across India</p>
+  </div>
+
+  <section class="section" style="padding-top:0;">
+    <div class="team-grid">
+
+      <div class="team-card reveal">
+        <div class="tc-avatar">
+          <div class="tc-avatar-placeholder"><i class='bx bx-user'></i></div>
+        </div>
+        <div class="tc-name">Founder Name</div>
+        <div class="tc-role">Co-Founder &amp; CEO</div>
+        <p class="tc-bio">Vision, strategy, and the relentless drive to put entrepreneurship in every classroom.</p>
+        <div class="tc-socials">
+          <a href="#"><i class='bx bxl-linkedin'></i></a>
+          <a href="#"><i class='bx bxl-twitter'></i></a>
+        </div>
+      </div>
+
+      <div class="team-card reveal" style="transition-delay:0.1s;">
+        <div class="tc-avatar">
+          <div class="tc-avatar-placeholder"><i class='bx bx-user'></i></div>
+        </div>
+        <div class="tc-name">Co-Founder Name</div>
+        <div class="tc-role">Co-Founder &amp; CTO</div>
+        <p class="tc-bio">Architects the platform that powers 25K+ young founders end-to-end.</p>
+        <div class="tc-socials">
+          <a href="#"><i class='bx bxl-linkedin'></i></a>
+          <a href="#"><i class='bx bxl-github'></i></a>
+        </div>
+      </div>
+
+      <div class="team-card reveal" style="transition-delay:0.2s;">
+        <div class="tc-avatar">
+          <div class="tc-avatar-placeholder"><i class='bx bx-user'></i></div>
+        </div>
+        <div class="tc-name">Team Member</div>
+        <div class="tc-role">Head of Curriculum</div>
+        <p class="tc-bio">Designs the 0-to-100 learning journey that bridges classroom ideas to real companies.</p>
+        <div class="tc-socials">
+          <a href="#"><i class='bx bxl-linkedin'></i></a>
+        </div>
+      </div>
+
+      <div class="team-card reveal" style="transition-delay:0.3s;">
+        <div class="tc-avatar">
+          <div class="tc-avatar-placeholder"><i class='bx bx-user'></i></div>
+        </div>
+        <div class="tc-name">Team Member</div>
+        <div class="tc-role">Head of Growth</div>
+        <p class="tc-bio">Expanding Bizhub's reach from metro schools to every corner of India.</p>
+        <div class="tc-socials">
+          <a href="#"><i class='bx bxl-twitter'></i></a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-section reveal">
+    <div class="cta-inner">
+      <div class="cta-text">
+        <h2>Ready to Build Your First Startup?</h2>
+        <p>Join 25,000+ young founders already on Bizhub and take your first step today.</p>
+      </div>
+      <a href="/pretest" class="cta-btn">Start My Startup →</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__bg-text">
+      <span>B</span><span>I</span><span>Z</span><span>H</span><span>U</span><span>B</span>
+    </div>
+
+    <div class="footer__content">
+      <div class="footer__left">
+        <div class="logo-box"><img src="/assets/logo.png" alt="Bizhub"></div>
+        <div class="footer__socials">
+          <a href="#"><i class='bx bxl-instagram'></i></a>
+          <a href="#"><i class='bx bxl-linkedin'></i></a>
+          <a href="#"><i class='bx bxl-discord-alt'></i></a>
+          <a href="#"><i class='bx bxl-youtube'></i></a>
+          <a href="#"><i class='bx bxl-twitter'></i></a>
+        </div>
+      </div>
+
+      <div class="footer__nav">
+        <div class="footer__col">
+          <h4>ABOUT</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Support</a></li>
+            <li><a href="#">Terms and Condition</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Submit Projects</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>COMPANY</h4>
+          <ul>
+            <li><a href="#">Hire From Us</a></li>
+            <li><a href="#">Discord</a></li>
+            <li><a href="#">Pricing and Refund</a></li>
+            <li><a href="#">Jobs</a></li>
+            <li><a href="#">Feedback</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>CONTACT</h4>
+          <p><strong>Online: 11am – 8pm</strong></p>
+          <p>+91 9993478545</p>
+          <p><strong>Offline: 11am – 8pm</strong></p>
+          <p>+91 9691778470</p>
+          <p><a href="mailto:hello@bizhub.com">hello@bizhub.com</a></p>
+          <p>23-B, Sector C<br>Indrapuri,<br>Bhopal (MP), 462023</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+
+</html>

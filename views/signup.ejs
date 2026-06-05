@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Sign Up</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        :root {
+            --accent: #E8541A;
+            --accent-dim: rgba(232, 84, 26, 0.15);
+            --accent-glow: rgba(232, 84, 26, 0.5);
+            --bg: #080808;
+            --card: #111111;
+            --input-bg: #1a1a1a;
+            --border: #252525;
+            --border-focus: #E8541A;
+            --text: #ffffff;
+            --text-muted: #666;
+            --text-sub: #999;
+            --error: #ff4d4d;
+            --success: #22c55e;
+        }
+
+        body {
+            background: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text);
+            padding: 24px 16px;
+            /* Subtle grid background */
+            background-image:
+                linear-gradient(rgba(232, 84, 26, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(232, 84, 26, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* ── Card ── */
+        .card {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 40px 36px;
+            border-radius: 20px;
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.6);
+            animation: slideUp 0.4s ease both;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── Header ── */
+        .card-header {
+            margin-bottom: 28px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--accent-dim);
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(232, 84, 26, 0.2);
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 13.5px;
+        }
+
+        /* ── Server error banner ── */
+        .server-error {
+            background: rgba(255, 77, 77, 0.08);
+            border: 1px solid rgba(255, 77, 77, 0.3);
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 13px;
+            color: var(--error);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .server-error svg {
+            flex-shrink: 0;
+        }
+
+        /* ── Form ── */
+        .row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .row .form-group {
+            flex: 1;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 12.5px;
+            font-weight: 500;
+            color: var(--text-sub);
+            letter-spacing: 0.02em;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--input-bg);
+            color: var(--text);
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input::placeholder {
+            color: #444;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px var(--accent-dim);
+        }
+
+        input.invalid,
+        select.invalid {
+            border-color: var(--error);
+            box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.1);
+        }
+
+        /* Custom select arrow */
+        .select-wrap {
+            position: relative;
+        }
+
+        .select-wrap::after {
+            content: '';
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #555;
+            pointer-events: none;
+        }
+
+        select option {
+            background: #1a1a1a;
+        }
+
+        /* Password toggle */
+        .toggle-pw {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #555;
+            padding: 0;
+            width: auto;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+
+        .toggle-pw:hover {
+            color: var(--accent);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: none;
+        }
+
+        .toggle-pw:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        input[type="password"],
+        input.pw-field {
+            padding-right: 44px;
+        }
+
+        /* Error messages */
+        .error-msg {
+            color: var(--error);
+            font-size: 11.5px;
+            margin-top: 5px;
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .error-msg.visible {
+            display: flex;
+        }
+
+        /* Divider */
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 20px 0;
+        }
+
+        /* Submit button */
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #E8541A, #C94A0F);
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+            margin-top: 4px;
+            letter-spacing: 0.02em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px var(--accent-glow);
+        }
+
+        .btn-submit:hover::after {
+            opacity: 1;
+        }
+
+        .btn-submit:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* Bottom text */
+        .bottom-text {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 20px;
+        }
+
+        .bottom-text a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .bottom-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .card {
+                padding: 28px 20px;
+            }
+
+            .row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <!-- Header -->
+        <div class="card-header">
+            <div class="badge">✦ Student Registration</div>
+            <h1>Create your account</h1>
+            <p class="subtitle">Fill in your details to get started</p>
+        </div>
+
+        <!-- Server-side error from redirect query param -->
+        <% if (typeof query !=='undefined' && query && query.error) { %>
+            <div class="server-error">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <%= query.error %>
+            </div>
+            <% } %>
+
+                <form id="signupForm" method="post" action="/signup" novalidate>
+
+                    <!-- Name row -->
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input name="firstName" type="text" id="firstName" placeholder="First name"
+                                autocomplete="given-name">
+                            <div class="error-msg" id="firstNameError">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                                </svg>
+                                First name is required
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input name="lastName" type="text" id="lastName" placeholder="Last name"
+                                autocomplete="family-name">
+                            <div class="error-msg" id="lastNameError">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                                </svg>
+                                Last name is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input name="email" type="email" id="email" placeholder="you@example.com" autocomplete="email">
+                        <div class="error-msg" id="emailError">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                            </svg>
+                            Enter a valid email address
+                        </div>
+                    </div>
+
+                    <!-- College -->
+                    <div class="form-group">
+                        <label for="collegeName">College Name</label>
+                        <input name="collegeName" type="text" id="collegeName" placeholder="Enter your college name"
+                            autocomplete="organization">
+                        <div class="error-msg" id="collegeError">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                            </svg>
+                            College name is required
+                        </div>
+                    </div>
+
+                    <!-- Mobile -->
+                    <div class="form-group">
+                        <label for="mobileNumber">Mobile Number</label>
+                        <input name="mobileNumber" type="tel" id="mobileNumber" placeholder="10-digit mobile number"
+                            maxlength="15" autocomplete="tel">
+                        <div class="error-msg" id="mobileError">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                            </svg>
+                            Enter a valid 10-digit mobile number
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-wrap">
+                            <input name="password" type="password" id="password" placeholder="Min. 8 characters"
+                                autocomplete="new-password" class="pw-field">
+                            <button type="button" class="toggle-pw" data-target="password" title="Toggle password">
+                                <svg class="eye-icon" width="17" height="17" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="error-msg" id="passwordError">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                            </svg>
+                            Password must contain uppercase, number & special character (min 8)
+                        </div>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="form-group">
+                        <label for="cpassword">Confirm Password</label>
+                        <div class="input-wrap">
+                            <input name="cpassword" type="password" id="cpassword" placeholder="Re-enter your password"
+                                autocomplete="new-password" class="pw-field">
+                            <button type="button" class="toggle-pw" data-target="cpassword" title="Toggle password">
+                                <svg class="eye-icon" width="17" height="17" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="error-msg" id="cpasswordError">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                            </svg>
+                            Passwords do not match
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <!-- Year -->
+                    <div class="form-group">
+                        <label for="year">Standard / Year</label>
+                        <div class="select-wrap">
+                            <select name="year" id="year">
+                                <option value="">Select your year</option>
+                                <option value="1st Year">1st Year</option>
+                                <option value="2nd Year">2nd Year</option>
+                                <option value="3rd Year">3rd Year</option>
+                                <option value="4th Year">4th Year</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="error-msg" id="yearError">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                            </svg>
+                            Please select your year
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Register Now →</button>
+
+                </form>
+
+                <div class="bottom-text">
+                    Already have an account? <a href="/login">Sign in here</a>
+                </div>
+
+    </div>
+
+    <script>
+        // ── Password toggle ──
+        document.querySelectorAll('.toggle-pw').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const input = document.getElementById(btn.dataset.target);
+                const isHidden = input.type === 'password';
+                input.type = isHidden ? 'text' : 'password';
+
+                // Swap icon (closed vs open eye)
+                btn.querySelector('svg').innerHTML = isHidden
+                    ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                       <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                       <line x1="1" y1="1" x2="23" y2="23"/>`
+                    : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                       <circle cx="12" cy="12" r="3"/>`;
+            });
+        });
+
+        // ── Helpers ──
+        function showError(inputId, errorId) {
+            const el = document.getElementById(inputId);
+            const err = document.getElementById(errorId);
+            if (el) el.classList.add('invalid');
+            if (err) err.classList.add('visible');
+        }
+
+        function clearError(inputId, errorId) {
+            const el = document.getElementById(inputId);
+            const err = document.getElementById(errorId);
+            if (el) el.classList.remove('invalid');
+            if (err) err.classList.remove('visible');
+        }
+
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        // ── Live validation (on blur) ──
+        const fields = [
+            { id: 'firstName', err: 'firstNameError', check: v => v.trim() !== '' },
+            { id: 'lastName', err: 'lastNameError', check: v => v.trim() !== '' },
+            { id: 'email', err: 'emailError', check: v => validateEmail(v) },
+            { id: 'collegeName', err: 'collegeError', check: v => v.trim() !== '' },
+            { id: 'mobileNumber', err: 'mobileError', check: v => /^\d{10}$/.test(v.trim()) },
+            {
+                id: 'password',
+                err: 'passwordError',
+                check: v => /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(v)
+            },
+            { id: 'cpassword', err: 'cpasswordError', check: v => v === document.getElementById('password').value && v !== '' },
+            { id: 'year', err: 'yearError', check: v => v !== '' },
+        ];
+
+        fields.forEach(({ id, err, check }) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('blur', () => {
+                check(el.value) ? clearError(id, err) : showError(id, err);
+            });
+            el.addEventListener('input', () => {
+                if (el.classList.contains('invalid')) {
+                    check(el.value) ? clearError(id, err) : null;
+                }
+            });
+        });
+
+        // Also re-validate confirm password when main password changes
+        document.getElementById('password').addEventListener('input', () => {
+            const cEl = document.getElementById('cpassword');
+            if (cEl.value !== '') {
+                cEl.value === document.getElementById('password').value
+                    ? clearError('cpassword', 'cpasswordError')
+                    : showError('cpassword', 'cpasswordError');
+            }
+        });
+
+        // ── Form submit validation ──
+        document.getElementById('signupForm').addEventListener('submit', function (e) {
+            let valid = true;
+
+            // Clear all first
+            fields.forEach(({ id, err }) => clearError(id, err));
+
+            // Validate each
+            fields.forEach(({ id, err, check }) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (!check(el.value)) {
+                    showError(id, err);
+                    valid = false;
+                }
+            });
+
+            if (!valid) {
+                e.preventDefault();
+
+                if (!validateEmail(document.getElementById('email').value)) {
+                    alert("Please enter a valid email");
+                }
+                else if (!/^\d{10}$/.test(document.getElementById('mobileNumber').value.trim())) {
+                    alert("Mobile number must be exactly 10 digits");
+                }
+                else if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(document.getElementById('password').value)) {
+                    alert("Password must contain uppercase letter, number and special character");
+                }
+                else if (document.getElementById('password').value !== document.getElementById('cpassword').value) {
+                    alert("Passwords do not match");
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

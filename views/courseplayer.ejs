@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bizhub Learning Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+    <style>
+        /* ===== ALL EXISTING STYLES (KEEP AS-IS) ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 50% 90%, rgba(180, 60, 20, 0.18), transparent 60%),
+                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 40px),
+                repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 40px);
+            z-index: -2;
+        }
+
+        .navbar {
+            width: 100%;
+            padding: 20px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #1b1b1b;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            backdrop-filter: blur(12px);
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 800;
+            color: white;
+        }
+
+        .logo span {
+            color: #E8541A;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            background: #111;
+            border: 1px solid #222;
+            padding: 10px 22px;
+            border-radius: 999px;
+        }
+
+        .nav-links a {
+            color: #777;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: white;
+        }
+
+        .signin-btn {
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: #E8541A;
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 65% 35%;
+            gap: 24px;
+            padding: 30px;
+            min-height: calc(100vh - 90px);
+        }
+
+        .left-panel {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 20px;
+            padding: 22px;
+        }
+
+        .course-path {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .video-container {
+            width: 100%;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid #222;
+            background: black;
+        }
+
+        video {
+            width: 100%;
+            height: 520px;
+            object-fit: cover;
+            background: black;
+            display: block;
+        }
+
+        .video-error {
+            padding: 40px;
+            text-align: center;
+            color: #ff6b6b;
+            background: #1a0000;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .lecture-meta {
+            margin-top: 24px;
+        }
+
+        .module-tag {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(232, 84, 16, 0.12);
+            border: 1px solid rgba(232, 84, 16, 0.25);
+            color: #E8541A;
+            border-radius: 999px;
+            font-size: 12px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .lecture-title {
+            font-size: 34px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 14px;
+        }
+
+        .lecture-description {
+            color: #888;
+            line-height: 1.7;
+            font-size: 15px;
+            max-width: 90%;
+        }
+
+        .watch-progress-wrapper {
+            margin-top: 24px;
+        }
+
+        .watch-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .watch-bar {
+            width: 100%;
+            height: 8px;
+            border-radius: 999px;
+            background: #1b1b1b;
+            overflow: hidden;
+            border: 1px solid #222;
+        }
+
+        .watch-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #E8541A, #ff7b42);
+            transition: width 0.2s linear;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            margin-top: 28px;
+        }
+
+        .next-btn {
+            background: #E8541A;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .next-btn:disabled {
+            background: #222;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .right-sidebar {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 20px;
+            padding: 24px;
+            height: fit-content;
+            position: sticky;
+            top: 110px;
+        }
+
+        .course-title {
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .level-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border-radius: 999px;
+            background: rgba(232, 84, 26, 0.12);
+            border: 1px solid rgba(232, 84, 16, 0.2);
+            color: #E8541A;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #1b1b1b;
+            border-radius: 999px;
+            overflow: hidden;
+            border: 1px solid #222;
+            margin-bottom: 30px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #E8541A, #ff7b42);
+            transition: width 0.4s ease;
+        }
+
+        .module-section {
+            margin-bottom: 16px;
+        }
+
+        .module-header {
+            font-size: 11px;
+            font-weight: 700;
+            color: #555;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 0 4px;
+            margin-bottom: 10px;
+        }
+
+        .lesson-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .lesson-card {
+            background: #141414;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            position: relative;
+        }
+
+        .lesson-card:hover:not(.locked) {
+            border-color: #333;
+            background: #181818;
+        }
+
+        .lesson-card.active {
+            border-left: 3px solid #E8541A;
+            background: #181818;
+        }
+
+        .lesson-card.locked {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .lesson-status {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            flex-shrink: 0;
+            color: #666;
+        }
+
+        .lesson-status.completed {
+            background: #2ecc71;
+            border-color: #2ecc71;
+            color: white;
+        }
+
+        .lesson-status.current {
+            border-color: #E8541A;
+            color: #E8541A;
+        }
+
+        .lesson-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .lesson-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .lesson-duration {
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* ===== TEST/SUBMISSION STYLES ===== */
+        .test-overlay {
+            margin-top: 24px;
+            background: #141414;
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 28px;
+        }
+
+        .test-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .test-icon {
+            font-size: 24px;
+        }
+
+        .test-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #E8541A;
+        }
+
+        .test-subtitle {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 28px;
+        }
+
+        .question-block {
+            margin-bottom: 28px;
+        }
+
+        .question-number {
+            font-size: 11px;
+            font-weight: 700;
+            color: #E8541A;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 14px;
+            color: #eee;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 13px 18px;
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            color: #ccc;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-letter {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1.5px solid #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
+            color: #666;
+        }
+
+        .option:hover {
+            background: #1a1a1a;
+            border-color: #444;
+            color: white;
+        }
+
+        .option:hover .option-letter {
+            border-color: #E8541A;
+            color: #E8541A;
+        }
+
+        .option.selected {
+            border-color: #E8541A;
+            background: rgba(232, 84, 26, 0.1);
+            color: white;
+        }
+
+        .option.selected .option-letter {
+            border-color: #E8541A;
+            color: #E8541A;
+            background: rgba(232, 84, 26, 0.2);
+        }
+
+        .option.correct {
+            border-color: #2ecc71;
+            background: rgba(46, 204, 113, 0.1);
+            color: white;
+            pointer-events: none;
+        }
+
+        .option.correct .option-letter {
+            border-color: #2ecc71;
+            color: #2ecc71;
+        }
+
+        .option.incorrect {
+            border-color: #e74c3c;
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            pointer-events: none;
+        }
+
+        .option.incorrect .option-letter {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .option.disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .test-divider {
+            border: none;
+            border-top: 1px solid #222;
+            margin: 24px 0;
+        }
+
+        .test-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .test-progress-text {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .submit-test-btn {
+            padding: 12px 28px;
+            background: #E8541A;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .submit-test-btn:hover {
+            background: #ff6b2b;
+        }
+
+        .submit-test-btn:disabled {
+            background: #222;
+            color: #555;
+            cursor: not-allowed;
+        }
+
+        .rewind-notice {
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: rgba(231, 76, 60, 0.08);
+            border: 1px solid rgba(231, 76, 60, 0.25);
+            border-radius: 12px;
+            color: #e74c3c;
+            font-size: 14px;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .rewind-notice strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .success-notice {
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: rgba(46, 204, 113, 0.08);
+            border: 1px solid rgba(46, 204, 113, 0.25);
+            border-radius: 12px;
+            color: #2ecc71;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+            font-weight: 600;
+        }
+
+        /* ===== FILE SUBMISSION STYLES ===== */
+        .file-upload-area {
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-button {
+            background: #1a1a1a;
+            border: 1px dashed #444;
+            border-radius: 12px;
+            padding: 40px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: white;
+            font: inherit;
+            width: 100%;
+        }
+
+        .file-button:hover {
+            border-color: #E8541A;
+            background: rgba(232, 84, 26, 0.05);
+        }
+
+        .file-button i {
+            font-size: 32px;
+            color: #666;
+        }
+
+        .file-button span {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .file-name {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #E8541A;
+            word-break: break-all;
+        }
+
+        .submission-instructions {
+            background: rgba(232, 84, 26, 0.08);
+            border: 1px solid rgba(232, 84, 26, 0.25);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        .submission-instructions strong {
+            color: #E8541A;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        @media(max-width:1100px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .right-sidebar {
+                position: relative;
+                top: 0;
+            }
+
+            video {
+                height: 350px;
+            }
+        }
+
+        @media(max-width:768px) {
+            .navbar {
+                padding: 18px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .main-layout {
+                padding: 16px;
+            }
+
+            .lecture-title {
+                font-size: 26px;
+            }
+
+            .course-title {
+                font-size: 22px;
+            }
+
+            video {
+                height: 220px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Biz<span>hub</span></div>
+        <div class="nav-links">
+            <a href="/home">Home</a>
+            <a href="/courseplayer" class="active">Learning</a>
+            <a href="/mentorship">Mentorship</a>
+            <a href="/leaderboard">Leaderboard</a>
+        </div>
+        <button class="signin-btn">
+            <%= user.level || "No Level" %>
+        </button>
+    </nav>
+
+    <div class="main-layout">
+        <div class="left-panel">
+            <div class="course-path" id="coursePath">Venture Architect > Module 1 > Pitching Techniques</div>
+            <div class="video-container">
+                <video id="videoPlayer" controls controlsList="nodownload nofullscreen" disablePictureInPicture
+                    preload="metadata">
+                    <source id="videoSource" src="" type="video/mp4">
+                    Your browser doesn't support HTML5 video.
+                </video>
+            </div>
+            <div class="lecture-meta">
+                <div class="module-tag" id="moduleTag">MODULE 1 • Pitching Techniques</div>
+                <h1 class="lecture-title" id="lectureTitle">Problem Statement</h1>
+                <p class="lecture-description" id="lectureDesc">
+                    Learn how entrepreneurs identify real-world problems, define their target audience,
+                    and build the foundation of a successful startup idea.
+                </p>
+                <div class="watch-progress-wrapper">
+                    <div class="watch-label">
+                        <span id="watchText">⏱ 0:00 / 3:00 min watched</span>
+                        <span id="watchPercent">0%</span>
+                    </div>
+                    <div class="watch-bar">
+                        <div class="watch-fill" id="watchFill"></div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="next-btn" id="nextLectureBtn" disabled>Next Lecture →</button>
+                </div>
+            </div>
+            <div id="testArea"></div>
+        </div>
+
+        <div class="right-sidebar">
+            <h2 class="course-title">Venture Architect: Building & Validating Your First MVP</h2>
+            <div class="level-badge">🚀 <%= user.level || "Beginner" %> level</div>
+            <div class="progress-text">
+                <span id="progressLessons">0 of 15 lessons completed</span>
+                <span id="progressPercentText">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div id="lessonList"></div>
+        </div>
+    </div>
+
+    <script id="app-data" type="application/json">
+        {
+            "userId": "<%= String(user._id) %>",
+            "userLevel": "<%= user.level || 'Beginner' %>"
+        }
+    </script>
+
+    <script>
+        // ===== USER & CONFIG =====
+        const _appData = JSON.parse(document.getElementById('app-data').textContent);
+        const userId = _appData.userId;
+        const userLevel = _appData.userLevel;
+        const MIN_WATCH_SECONDS = 180; // 3 minutes
+
+        // ===== HELPER: Encode video path safely =====
+        function encodeVideoPath(path) {
+            // Split by '/' and encode each segment to handle spaces and special chars
+            return path.split('/').map(segment => encodeURIComponent(segment)).join('/');
+        }
+
+        // ===== MODULE / VIDEO DATA =====
+        const modules = [
+            {
+                id: "module1",
+                title: "Pitching Techniques",
+                videos: [
+                    {
+                        id: "m1v1",
+                        title: "Problem Statement",
+                        duration: "5:00",
+                        src: "/assets/coursevideos/Problem Statement.mp4",
+                        minWatch: MIN_WATCH_SECONDS,
+                        description: "Learn how entrepreneurs identify real-world problems, define their target audience, and build the foundation of a successful startup idea."
+                    },
+                    {
+                        id: "m1v2",
+                        title: "Crafting a Solution",
+                        duration: "5:00",
+                        src: "/assets/coursevideos/Crafting a Solution.mp4",
+                        minWatch: MIN_WATCH_SECONDS,
+                        description: "Discover how to transform a well-defined problem into a viable solution, validate assumptions, and design a product people actually want."
+                    },
+                    {
+                        id: "m1v3",
+                        title: "Unique Selling Proposition",
+                        duration: "5:00",
+                        src: "/assets/coursevideos/Unique Selling Proposition.mp4",
+                        minWatch: MIN_WATCH_SECONDS,
+                        description: "Understand what makes your startup different from the competition and how to communicate your unique value clearly to customers."
+                    },
+                    {
+                        id: "m1v4",
+                        title: "Differentiating Factor",
+                        duration: "5:45",
+                        src: "/assets/coursevideos/Diffrentiating Factor.mp4",
+                        minWatch: MIN_WATCH_SECONDS,
+                        description: "Explore deep differentiating factors that protect your business, pass the copycat test, and build a lasting moat around your startup."
+                    }
+                ]
+            },
+            {
+                id: "module2",
+                title: "Validation and Building",
+                videos: [
+                    { id: "m2v1", title: "Market Validation Basics", duration: "5:00", src: "/assets/coursevideos/Problem Statement.mp4", minWatch: MIN_WATCH_SECONDS, description: "Learn how to validate your market before building your product." },
+                    { id: "m2v2", title: "Customer Discovery", duration: "5:00", src: "/assets/coursevideos/Crafting a Solution.mp4", minWatch: MIN_WATCH_SECONDS, description: "Master the art of customer interviews and discovery sessions." },
+                    { id: "m2v3", title: "Building Your MVP", duration: "5:00", src: "/assets/coursevideos/Unique Selling Proposition.mp4", minWatch: MIN_WATCH_SECONDS, description: "Build a Minimum Viable Product that tests your core assumption." },
+                    { id: "m2v4", title: "Iterate and Improve", duration: "5:45", src: "/assets/coursevideos/Diffrentiating Factor.mp4", minWatch: MIN_WATCH_SECONDS, description: "Use feedback loops to improve your product continuously." }
+                ]
+            },
+            {
+                id: "module3",
+                title: "Identifying Competitors",
+                videos: [
+                    { id: "m3v1", title: "Competitive Analysis", duration: "5:00", src: "/assets/coursevideos/Problem Statement.mp4", minWatch: MIN_WATCH_SECONDS, description: "Understand the competitive landscape and identify key players." },
+                    { id: "m3v2", title: "Market Positioning", duration: "5:00", src: "/assets/coursevideos/Crafting a Solution.mp4", minWatch: MIN_WATCH_SECONDS, description: "Position your startup effectively in the market." },
+                    { id: "m3v3", title: "Differentiation Strategies", duration: "5:00", src: "/assets/coursevideos/Unique Selling Proposition.mp4", minWatch: MIN_WATCH_SECONDS, description: "Develop strategies that make your startup stand out." },
+                    { id: "m3v4", title: "SWOT Analysis", duration: "5:45", src: "/assets/coursevideos/Diffrentiating Factor.mp4", minWatch: MIN_WATCH_SECONDS, description: "Apply SWOT analysis to your startup strategy." }
+                ]
+            },
+            {
+                id: "module4",
+                title: "Idea Document Drafting",
+                videos: [
+                    {
+                        id: "m4v1",
+                        title: "Decoding the Idea Document",
+                        duration: "5:00",
+                        src: "/assets/coursevideos/Idea Pitch By Madhura.mp4",
+                        minWatch: MIN_WATCH_SECONDS,
+                        description: "Learn how to structure and draft a comprehensive idea document for your startup.",
+                        type: "submission",
+                        submissionType: "ideaDocument",
+                        maxScore: 100
+                    }
+                ]
+            },
+            {
+                id: "module5",
+                title: "Business Model Canvas",
+                videos: [
+                    {
+                        id: "m5v1",
+                        title: "Understanding the Business Model Canvas",
+                        duration: "5:00",
+                        src: "/assets/coursevideos/BMC By Saie.mp4",
+                        minWatch: MIN_WATCH_SECONDS,
+                        description: "Master the Business Model Canvas framework to map out your startup's strategy.",
+                        type: "submission",
+                        submissionType: "businessModelCanvas",
+                        maxScore: 150,
+                        requires: ["m4v1"]
+                    }
+                ]
+            },
+            {
+                id: "module6",
+                title: "Submitting Pitch Video",
+                videos: [
+                    {
+                        id: "m6v1",
+                        title: "The Concept of Pitching a Startup Idea",
+                        duration: "5:00",
+                        src: "/assets/coursevideos/Pitch Deck by Nirmal.mp4",
+                        minWatch: MIN_WATCH_SECONDS,
+                        description: "Learn the art of pitching your startup idea effectively to investors and stakeholders.",
+                        type: "submission",
+                        submissionType: "pitchDeck",
+                        maxScore: 300,
+                        requires: ["m5v1"]
+                    }
+                ]
+            }
+        ];
+
+        // ===== ENCODE ALL VIDEO PATHS =====
+        modules.forEach(mod => {
+            mod.videos.forEach(video => {
+                video.src = encodeVideoPath(video.src);
+            });
+        });
+
+        // ===== MCQ QUESTIONS (Same as before) =====
+        const mcqQuestions = {
+            "m1v1": [
+                { q: "Which of the following is the very first thing a successful entrepreneur looks for?", options: ["A) A cool brand name and a colorful logo", "B) A clear, real-world problem faced by a group of people", "C) A large office space to start a factory", "D) A product that has never been built, even if no one needs it"], answer: 1, startTime: 15, endTime: 57 },
+                { q: "If an entrepreneur says, \"My product is built for absolutely everyone in the world,\" what mistake are they making?", options: ["A) They are being too polite.", "B) They forgot to figure out their specific \"Target Audience.\"", "C) They are spending too much money on advertising.", "D) They are choosing a problem that is too painful."], answer: 1, startTime: 58, endTime: 99 },
+                { q: "Imagine school students are consistently falling asleep during afternoon classes. To find the \"Root Cause,\" which question should an entrepreneur ask?", options: ["A) \"How can we make more comfortable pillows for the desks?\"", "B) \"Why are the students tired? Is it the heavy lunch, the room temperature, or boring teaching methods?\"", "C) \"Can we sell energy drinks to these students during recess?\"", "D) \"Should we punish the students who fall asleep?\""], answer: 1, startTime: 100, endTime: 146 },
+                { q: "Why is a solar-powered umbrella for rainy days considered a poor entrepreneurial idea?", options: ["A) Because it doesn't solve a real problem since there is no sun when it rains.", "B) Because umbrellas are too cheap to make a profit.", "C) Because school students don't use umbrellas.", "D) Because solar panels only work indoors."], answer: 0, startTime: 15, endTime: 57 },
+                { q: "An entrepreneur wants to design an automated machine that sharpens exactly one pencil in 2 hours. Why might this NOT be a good problem to solve?", options: ["A) The problem isn't painful or frequent enough to justify a slow, expensive machine.", "B) Pencils are no longer used in schools.", "C) It is illegal to sharpen pencils automatically.", "D) The target audience is too small because only teachers use pencils."], answer: 0, startTime: 147, endTime: 202 }
+            ],
+            "m1v2": [
+                { q: "What does \"Solution-Market Fit\" mean for a young entrepreneur?", options: ["A) The product looks very expensive and premium.", "B) The solution perfectly matches and resolves the specific problem of the target audience.", "C) The product can be sold in any market or shopping mall across the country.", "D) The solution uses the newest and most complicated technology available."], answer: 1, startTime: 0, endTime: 55 },
+                { q: "If you are selling a new school bag, which of the following describes a \"Benefit\" rather than just a feature?", options: ["A) \"The bag is made of 100% polyester fabric.\"", "B) \"The bag comes in neon green, bright blue, and jet black colors.\"", "C) \"The weight-distribution straps reduce shoulder strain so your back won't hurt.\"", "D) \"The bag has four zippered compartments and two mesh pockets.\""], answer: 2, startTime: 56, endTime: 124 },
+                { q: "When an entrepreneur engages in \"Ideation\" to solve a problem, what are they doing?", options: ["A) Calculating how much money they will make in the first year.", "B) Brainstorming many different creative ways (products, apps, or services) to fix the same problem.", "C) Arguing with customers about why their first idea was perfect.", "D) Designing the final logo and shipping boxes for their product."], answer: 1, startTime: 125, endTime: 181 },
+                { q: "Why is a lunch pre-ordering webpage considered a better solution for long cafeteria lines than a food-teleportation machine?", options: ["A) Because webpages look cooler than teleportation machines.", "B) Because a webpage is practical, realistic, and technically \"feasible\" to build right now.", "C) Because students don't like using high-tech machinery.", "D) Because a webpage allows the school to increase the price of the food."], answer: 1, startTime: 182, endTime: 238 },
+                { q: "If your target users are losing their paper homework diaries, which solution directly addresses the root cause of the problem?", options: ["A) A digital app that sends automated homework notifications directly to their devices.", "B) Giving them a heavier binder so it's harder to drop.", "C) Changing the school uniform to have bigger pockets.", "D) Giving them more homework so they practice writing more often."], answer: 0, startTime: 0, endTime: 55 }
+            ],
+            "m1v3": [
+                { q: "What does the term \"Unique Selling Proposition\" (USP) mean?", options: ["A) The total amount of money it costs to launch a startup.", "B) The specific feature or benefit that makes your business completely different from and better than competitors.", "C) A secret legal password required to sell products in schools.", "D) The colorful logo and brand design printed on a product's box."], answer: 1, startTime: 0, endTime: 50 },
+                { q: "If a student starts a notebook business and claims their USP is \"We sell good quality notebooks,\" why is this considered a trap?", options: ["A) Because notebooks are too cheap to have a quality standard.", "B) Because general claims like \"good quality\" are promised by everyone and aren't specific or unique.", "C) Because school students do not care about the quality of their notebooks.", "D) Because it is illegal to use the word \"quality\" in advertising."], answer: 1, startTime: 165, endTime: 205 },
+                { q: "A student launches a water bottle brand with the USP: \"Our bottles are wrapped in a layer of bubble wrap just for fun.\" Why might this be a weak USP?", options: ["A) It is unique, but it lacks real value or use to the thirsty customer.", "B) Bubble wrap is way too expensive to buy.", "C) It is impossible to prove if bubble wrap is real.", "D) The target audience for water bottles is too small."], answer: 0, startTime: 69, endTime: 91 },
+                { q: "Apple AirPods became famous because they instantly connected to your phone the moment you put them in your ears. Which type of USP angle did they master?", options: ["A) The Ingredient/Quality USP", "B) The Lowest Price USP", "C) The Convenience/Design USP", "D) The Customer Service USP"], answer: 2, startTime: 127, endTime: 153 },
+                { q: "Why did Domino's Pizza focus their original USP on \"30-minute delivery or it's free\" instead of just saying \"our pizza is yummy\"?", options: ["A) Because their pizza tasted terrible.", "B) Because a specific guarantee of extreme speed separated them cleanly from all other traditional pizza shops.", "C) Because they wanted to show off their fast cars.", "D) Because school teachers told them to do it."], answer: 1, startTime: 50, endTime: 69 },
+                { q: "To successfully find a great USP for your startup, what two things must you look at closely?", options: ["A) What your competitors are missing, and what your target customers genuinely need.", "B) The size of your office building and the number of employees you have.", "C) The historical origin of the product and how it was built 100 years ago.", "D) How many followers your business page has on social media apps."], answer: 0, startTime: 205, endTime: 230 }
+            ],
+            "m1v4": [
+                { q: "What is the main difference between a USP and a Differentiating Factor?", options: ["A) USP is how much money you make; Differentiating Factor is how much you spend.", "B) USP is the external promise made to the customer; Differentiating Factor is the internal feature or process that makes that promise possible.", "C) USP is used for online businesses; Differentiating Factor is only for physical shops.", "D) There is no difference; they are two different words for a logo."], answer: 1, startTime: 0, endTime: 65 },
+                { q: "If you start a delivery service and say your edge is \"Our delivery boys wear bright yellow t-shirts,\" why does this fail the \"Copycat Test\"?", options: ["A) Because yellow t-shirts are too expensive to buy.", "B) Because a competitor can easily buy yellow t-shirts for their team within 24 hours.", "C) Because school students do not like the color yellow.", "D) Because clothes do not protect your business from rain."], answer: 1, startTime: 176, endTime: 243 },
+                { q: "Which of the following is an example of a strong, technology-based Differentiating Factor for an educational app?", options: ["A) Having a very long and complicated user manual.", "B) A custom-coded AI algorithm that automatically adapts to a student's weak subjects and helps them learn faster.", "C) Putting a large picture of a school building on the home screen.", "D) Offering the app completely free with no way to make a profit."], answer: 1, startTime: 92, endTime: 175 },
+                { q: "In the puzzle analogy of entrepreneurship, if the \"Problem\" is the lock and the \"Solution\" is the key, what represents the \"Differentiating Factor\"?", options: ["A) The price tag hanging off the key.", "B) The box the key is delivered in.", "C) The tough material of the key that prevents others from easily making a copy of it.", "D) The name of the person who bought the key."], answer: 2, startTime: 246, endTime: 323 },
+                { q: "Why do entrepreneurs refer to deep Differentiating Factors as a \"Moat\"?", options: ["A) Because they want to build actual castles for their offices.", "B) Because it acts as a protective shield that keeps competitors from easily invading and copying their business success.", "C) Because it helps transport products across rivers and oceans easily.", "D) Because it is a legal document signed by the government."], answer: 1, startTime: 327, endTime: 356 }
+            ]
+        };
+
+        // Add placeholder questions for modules 2-3
+        const placeholderQuestions = (title) => [
+            { q: `Sample question 1 for ${title}?`, options: ["A) Option A", "B) Option B", "C) Option C", "D) Option D"], answer: 0, startTime: 0, endTime: 10 },
+            { q: `Sample question 2 for ${title}?`, options: ["A) Option A", "B) Option B", "C) Option C", "D) Option D"], answer: 0, startTime: 10, endTime: 20 },
+            { q: `Sample question 3 for ${title}?`, options: ["A) Option A", "B) Option B", "C) Option C", "D) Option D"], answer: 0, startTime: 20, endTime: 30 },
+            { q: `Sample question 4 for ${title}?`, options: ["A) Option A", "B) Option B", "C) Option C", "D) Option D"], answer: 0, startTime: 30, endTime: 40 },
+            { q: `Sample question 5 for ${title}?`, options: ["A) Option A", "B) Option B", "C) Option C", "D) Option D"], answer: 0, startTime: 40, endTime: 50 }
+        ];
+
+        modules.forEach(mod => {
+            mod.videos.forEach(video => {
+                if (!mcqQuestions[video.id] && video.type !== "submission") {
+                    mcqQuestions[video.id] = placeholderQuestions(video.title);
+                }
+            });
+        });
+
+        // ===== FLATTEN ALL VIDEOS =====
+        let allVideos = [];
+        modules.forEach((mod, mIdx) => {
+            mod.videos.forEach((video, vIdx) => {
+                video.moduleIndex = mIdx;
+                video.videoIndex = vIdx;
+                allVideos.push(video);
+            });
+        });
+
+        // ===== ✅ FIXED LEVEL START INDEX =====
+        // Beginner starts from Lecture 1 (Problem Statement)
+        // Intermediate starts from Lecture 2 (Crafting a Solution)
+        // Advanced starts from Lecture 3 (Unique Selling Proposition)
+        const LEVEL_START_INDEX = {
+            Beginner: 0,
+            Intermediate: 1,  // ✅ Was 4, now 1 = "Crafting a Solution"
+            Advanced: 2       // ✅ Was 8, now 2 = "Unique Selling Proposition"
+        };
+        const levelStartIndex = LEVEL_START_INDEX[userLevel] !== undefined ? LEVEL_START_INDEX[userLevel] : 0;
+
+        // ===== DOM REFS =====
+        const videoPlayer = document.getElementById("videoPlayer");
+        const videoSource = document.getElementById("videoSource");
+        const lectureTitle = document.getElementById("lectureTitle");
+        const lectureDesc = document.getElementById("lectureDesc");
+        const moduleTag = document.getElementById("moduleTag");
+        const coursePathEl = document.getElementById("coursePath");
+        const lessonListEl = document.getElementById("lessonList");
+        const watchFill = document.getElementById("watchFill");
+        const watchText = document.getElementById("watchText");
+        const watchPercent = document.getElementById("watchPercent");
+        const nextLectureBtn = document.getElementById("nextLectureBtn");
+        const progressFill = document.getElementById("progressFill");
+        const progressLessons = document.getElementById("progressLessons");
+        const progressPercentText = document.getElementById("progressPercentText");
+        const testArea = document.getElementById("testArea");
+
+        // ===== VIDEO ERROR HANDLING =====
+        videoPlayer.addEventListener('error', function (e) {
+            console.error("Video load error:", videoPlayer.error);
+            console.error("Failed to load:", videoSource.src);
+            console.error("Error code:", videoPlayer.error?.code, "Message:", videoPlayer.error?.message);
+        });
+
+        videoPlayer.addEventListener('loadeddata', function () {
+            console.log("✅ Video loaded successfully:", videoSource.src);
+        });
+
+        // ===== STATE =====
+        let currentVideoIndex = 0;
+        let watchData = {};
+        let completedVideos = [];
+        let testResults = {};
+        let showingTest = false;
+        let actualWatchSeconds = 0;
+        let lastTick = null;
+        let maxAllowedTime = 0;
+        let currentSelectedAnswers = [];
+        let isReviewMode = false;
+        let reviewEndTime = 0;
+        let currentAttemptCount = {};
+        let testStartTime = 0;
+        let currentVideoId = "";
+        let userSubmissions = {};
+
+        // ===== PERSISTENCE =====
+        function loadProgress() {
+            try {
+                watchData = JSON.parse(localStorage.getItem(`bh_watch_${userId}`) || "{}");
+                completedVideos = JSON.parse(localStorage.getItem(`bh_done_${userId}`) || "[]");
+                testResults = JSON.parse(localStorage.getItem(`bh_tests_${userId}`) || "{}");
+                currentAttemptCount = JSON.parse(localStorage.getItem(`bh_attempts_${userId}`) || "{}");
+                userSubmissions = JSON.parse(localStorage.getItem(`bh_submissions_${userId}`) || "{}");
+            } catch (e) {
+                watchData = {}; completedVideos = []; testResults = {}; currentAttemptCount = {}; userSubmissions = {};
+            }
+        }
+
+        function saveProgress() {
+            localStorage.setItem(`bh_watch_${userId}`, JSON.stringify(watchData));
+            localStorage.setItem(`bh_done_${userId}`, JSON.stringify(completedVideos));
+            localStorage.setItem(`bh_tests_${userId}`, JSON.stringify(testResults));
+            localStorage.setItem(`bh_attempts_${userId}`, JSON.stringify(currentAttemptCount));
+            localStorage.setItem(`bh_submissions_${userId}`, JSON.stringify(userSubmissions));
+        }
+
+        loadProgress();
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        // ===== UNLOCK LOGIC =====
+        function isUnlocked(idx) {
+            const video = allVideos[idx];
+            if (video.moduleIndex === 3) return true; // Module 4 always open
+            if (video.moduleIndex < 3) {
+                if (idx <= levelStartIndex) return true;
+                const prevId = allVideos[idx - 1]?.id;
+                return testResults[prevId]?.passed === true;
+            }
+            if (video.requires) {
+                return video.requires.every(reqId => userSubmissions[reqId]?.submitted);
+            }
+            return true;
+        }
+
+        // ===== RENDER LESSONS =====
+        function renderLessons() {
+            lessonListEl.innerHTML = "";
+            modules.forEach((mod, mIdx) => {
+                const section = document.createElement("div");
+                section.className = "module-section";
+                const header = document.createElement("div");
+                header.className = "module-header";
+                header.textContent = `Module ${mIdx + 1} — ${mod.title}`;
+                section.appendChild(header);
+
+                const list = document.createElement("div");
+                list.className = "lesson-list";
+
+                mod.videos.forEach(video => {
+                    const idx = allVideos.findIndex(v => v.id === video.id);
+                    const unlocked = isUnlocked(idx);
+                    const passed = testResults[video.id]?.passed === true;
+                    const submitted = userSubmissions[video.id]?.submitted;
+                    const isCurrent = currentVideoIndex === idx;
+                    const isRecommendedStart = idx === levelStartIndex;
+
+                    const card = document.createElement("div");
+                    card.className = `lesson-card ${isCurrent ? "active" : ""} ${!unlocked ? "locked" : ""}`;
+
+                    let statusIcon = "○";
+                    let statusClass = "";
+                    if (video.type === "submission") {
+                        if (submitted) { statusIcon = "✓"; statusClass = "completed"; }
+                        else if (isCurrent) { statusIcon = "▶"; statusClass = "current"; }
+                    } else {
+                        if (passed) { statusIcon = "✓"; statusClass = "completed"; }
+                        else if (isCurrent) { statusIcon = "▶"; statusClass = "current"; }
+                    }
+
+                    card.innerHTML = `
+                        <div class="lesson-status ${statusClass}">${statusIcon}</div>
+                        <div class="lesson-content">
+                            <div class="lesson-title">${video.title}</div>
+                            <div class="lesson-duration">
+                                Module ${mIdx + 1} · ${video.duration}
+                                ${isRecommendedStart ? " · Start here" : ""}
+                            </div>
+                        </div>
+                    `;
+
+                    if (unlocked) card.addEventListener("click", () => loadVideo(idx));
+                    list.appendChild(card);
+                });
+
+                section.appendChild(list);
+                lessonListEl.appendChild(section);
+            });
+            updateOverallProgress();
+        }
+
+        function updateOverallProgress() {
+            let completedCount = 0;
+            allVideos.forEach(video => {
+                if (video.type === "submission") {
+                    if (userSubmissions[video.id]?.submitted) completedCount++;
+                } else {
+                    if (testResults[video.id]?.passed) completedCount++;
+                }
+            });
+            const pct = Math.floor((completedCount / allVideos.length) * 100);
+            progressLessons.textContent = `${completedCount} of ${allVideos.length} lessons completed`;
+            progressPercentText.textContent = `${pct}%`;
+            progressFill.style.width = `${pct}%`;
+        }
+
+        // ===== ✅ FIXED LOAD VIDEO =====
+        function loadVideo(idx) {
+            if (!isUnlocked(idx)) return;
+            currentVideoIndex = idx;
+            showingTest = false;
+            currentSelectedAnswers = [];
+            isReviewMode = false;
+
+            const video = allVideos[idx];
+            const mod = modules[video.moduleIndex];
+            currentVideoId = video.id;
+
+            if (!currentAttemptCount[currentVideoId]) currentAttemptCount[currentVideoId] = 0;
+
+            console.log("🎬 Loading video:", video.title, "from", video.src);
+
+            // ✅ FIX: Set src on both video and source elements
+            videoSource.src = video.src;
+            videoPlayer.src = video.src;
+            videoPlayer.style.display = "block";
+
+            lectureTitle.textContent = video.title;
+            lectureDesc.textContent = video.description;
+            moduleTag.textContent = `MODULE ${video.moduleIndex + 1} • ${mod.title}`;
+            coursePathEl.textContent = `Venture Architect > Module ${video.moduleIndex + 1} > ${mod.title}`;
+
+            testArea.innerHTML = "";
+            resetWatchUI();
+            renderLessons();
+
+            if (video.type === "submission" && userSubmissions[video.id]?.submitted) {
+                testArea.innerHTML = `
+                    <div class="test-overlay">
+                        <div class="test-header">
+                            <span class="test-icon">✅</span>
+                            <div class="test-title">Submission Received</div>
+                        </div>
+                        <div class="test-subtitle">
+                            Your ${video.submissionType === 'ideaDocument' ? 'Idea Document' :
+                        video.submissionType === 'businessModelCanvas' ? 'Business Model Canvas' :
+                            'Pitch Deck'} has been submitted and is under review.
+                        </div>
+                    </div>
+                `;
+            } else if (video.type !== "submission") {
+                const alreadyPassed = testResults[video.id]?.passed === true;
+                nextLectureBtn.disabled = !alreadyPassed;
+            }
+
+            // ✅ FIX: Force reload the video
+            videoPlayer.load();
+        }
+
+        function resetWatchUI() {
+            const video = allVideos[currentVideoIndex];
+            const alreadyPassed = testResults[video.id]?.passed === true;
+            const alreadySubmitted = userSubmissions[video.id]?.submitted;
+            actualWatchSeconds = 0;
+            maxAllowedTime = 0;
+            watchData[video.id] = 0;
+            lastTick = null;
+            if (video.type === "submission") {
+                nextLectureBtn.disabled = !alreadySubmitted;
+            } else {
+                nextLectureBtn.disabled = !alreadyPassed;
+            }
+            updateWatchBar();
+        }
+
+        function updateWatchBar() {
+            const video = allVideos[currentVideoIndex];
+            const req = video.minWatch;
+            const pct = Math.min((actualWatchSeconds / req) * 100, 100);
+            watchFill.style.width = pct + "%";
+            watchPercent.textContent = Math.floor(pct) + "%";
+            const m = Math.floor(actualWatchSeconds / 60);
+            const s = String(actualWatchSeconds % 60).padStart(2, "0");
+            const rm = Math.floor(req / 60);
+            const rs = String(req % 60).padStart(2, "0");
+            watchText.textContent = `⏱ ${m}:${s} / ${rm}:${rs} min watched`;
+        }
+
+        videoPlayer.addEventListener("seeking", () => {
+            if (videoPlayer.currentTime > maxAllowedTime + 1.5) {
+                videoPlayer.currentTime = maxAllowedTime;
+            }
+        });
+
+        videoPlayer.addEventListener("timeupdate", () => {
+            if (isReviewMode) {
+                if (videoPlayer.currentTime >= reviewEndTime) {
+                    videoPlayer.pause();
+                    isReviewMode = false;
+                    showTest();
+                    return;
+                }
+                maxAllowedTime = Math.max(maxAllowedTime, videoPlayer.currentTime);
+                return;
+            }
+            if (videoPlayer.paused || showingTest) return;
+
+            const now = Date.now();
+            if (!lastTick) { lastTick = now; return; }
+            const elapsed = (now - lastTick) / 1000;
+            if (elapsed >= 1) {
+                lastTick = now;
+                actualWatchSeconds = Math.min(actualWatchSeconds + 1, 99999);
+                maxAllowedTime = Math.max(maxAllowedTime, videoPlayer.currentTime);
+                const videoId = allVideos[currentVideoIndex].id;
+                watchData[videoId] = actualWatchSeconds;
+                saveProgress();
+                updateWatchBar();
+            }
+        });
+
+        videoPlayer.addEventListener("pause", () => { lastTick = null; });
+
+        videoPlayer.addEventListener("ended", () => {
+            lastTick = null;
+            if (isReviewMode) return;
+
+            const video = allVideos[currentVideoIndex];
+            const videoId = video.id;
+            const minRequired = video.minWatch;
+            const alreadyPassed = testResults[videoId]?.passed === true;
+            const alreadySubmitted = userSubmissions[videoId]?.submitted;
+
+            if (video.type === "submission") {
+                if (actualWatchSeconds >= minRequired && !alreadySubmitted) {
+                    saveProgress();
+                    renderLessons();
+                    showTest();
+                } else if (!alreadySubmitted && actualWatchSeconds < minRequired) {
+                    videoPlayer.currentTime = 0;
+                    maxAllowedTime = 0;
+                    videoPlayer.play();
+                }
+            } else {
+                if (actualWatchSeconds >= minRequired && !alreadyPassed) {
+                    saveProgress();
+                    renderLessons();
+                    showTest();
+                } else if (!alreadyPassed && actualWatchSeconds < minRequired) {
+                    videoPlayer.currentTime = 0;
+                    maxAllowedTime = 0;
+                    videoPlayer.play();
+                }
+            }
+        });
+
+        nextLectureBtn.addEventListener("click", () => {
+            const nextIdx = currentVideoIndex + 1;
+            if (nextIdx < allVideos.length && isUnlocked(nextIdx)) {
+                loadVideo(nextIdx);
+            }
+        });
+
+        // ===== SHOW TEST/SUBMISSION (Same as before) =====
+        function showTest() {
+            showingTest = true;
+            currentSelectedAnswers = [];
+            videoPlayer.style.display = "none";
+
+            const video = allVideos[currentVideoIndex];
+            const videoId = video.id;
+
+            if (video.type === "submission") {
+                const acceptedExtensions = {
+                    ideaDocument: ['pdf', 'doc', 'jpg', 'jpeg'],
+                    businessModelCanvas: ['jpg', 'jpeg', 'pdf'],
+                    pitchDeck: ['pptx', 'pdf']
+                }[video.submissionType];
+
+                const submissionName = {
+                    ideaDocument: 'Idea Document',
+                    businessModelCanvas: 'Business Model Canvas',
+                    pitchDeck: 'Pitch Deck'
+                }[video.submissionType];
+
+                testArea.innerHTML = `
+                    <div class="test-overlay">
+                        <div class="test-header">
+                            <span class="test-icon">📄</span>
+                            <div class="test-title">Submit Your ${submissionName}</div>
+                        </div>
+                        <div class="submission-instructions">
+                            <strong>📌 Submission Guidelines</strong>
+                            Please upload your ${submissionName} file in one of the following formats: <b>${acceptedExtensions.join(', ')}</b>.<br>
+                            Maximum file size: 10MB
+                        </div>
+                        <div class="file-upload-area">
+                            <input type="file" id="fileUpload" class="file-input" accept=".${acceptedExtensions.join(',.')}">
+                            <button onclick="document.getElementById('fileUpload').click()" class="file-button">
+                                <i class='bx bx-cloud-upload'></i>
+                                <span>Click to upload or drag and drop</span>
+                            </button>
+                            <div id="fileName" class="file-name"></div>
+                        </div>
+                        <hr class="test-divider">
+                        <div class="test-actions">
+                            <button class="submit-test-btn" id="submitFileBtn" disabled>Submit ${submissionName}</button>
+                        </div>
+                        <div class="success-notice" id="successNotice" style="display: none;">
+                            ✅ File uploaded successfully! Your submission is under review.
+                        </div>
+                    </div>
+                `;
+
+                const fileInput = document.getElementById('fileUpload');
+                const fileNameDisplay = document.getElementById('fileName');
+                const submitBtn = document.getElementById('submitFileBtn');
+
+                fileInput.addEventListener('change', function () {
+                    if (this.files.length > 0) {
+                        const file = this.files[0];
+                        const fileExt = file.name.split('.').pop().toLowerCase();
+                        if (!acceptedExtensions.includes(fileExt)) {
+                            alert(`Invalid file type. Please upload ${acceptedExtensions.join(', ')} only.`);
+                            this.value = '';
+                            fileNameDisplay.textContent = '';
+                            submitBtn.disabled = true;
+                            return;
+                        }
+                        if (file.size > 10 * 1024 * 1024) {
+                            alert('File size exceeds 10MB limit.');
+                            this.value = '';
+                            fileNameDisplay.textContent = '';
+                            submitBtn.disabled = true;
+                            return;
+                        }
+                        fileNameDisplay.textContent = `Selected: ${file.name}`;
+                        submitBtn.disabled = false;
+                    } else {
+                        fileNameDisplay.textContent = '';
+                        submitBtn.disabled = true;
+                    }
+                });
+
+                submitBtn.addEventListener('click', function () {
+                    const file = fileInput.files[0];
+                    if (!file) return;
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = "Uploading...";
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('videoId', videoId);
+                    formData.append('submissionType', video.submissionType);
+                    formData.append('userId', userId);
+
+                    fetch('/submit-file', {
+                        method: 'POST',
+                        body: formData,
+                        credentials: 'same-origin'  // ✅ Include cookies for auth
+                    })
+                        .then(response => {
+                            console.log("Upload response status:", response.status);
+
+                            // ✅ Check if response is JSON
+                            const contentType = response.headers.get("content-type");
+                            if (!contentType || !contentType.includes("application/json")) {
+                                throw new Error("Server returned non-JSON response. You may need to log in again.");
+                            }
+
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log("Upload response data:", data);
+
+                            if (data.success) {
+                                userSubmissions[videoId] = {
+                                    submitted: true,
+                                    file: data.filePath,
+                                    timestamp: Date.now()
+                                };
+                                saveProgress();
+                                renderLessons();
+                                document.getElementById("successNotice").style.display = "block";
+                                submitBtn.style.display = "none";
+                                fileInput.disabled = true;
+                                updateOverallProgress();
+                                nextLectureBtn.disabled = false;
+                            } else {
+                                submitBtn.disabled = false;
+                                submitBtn.textContent = `Submit ${submissionName}`;
+                                alert("Upload failed: " + (data.message || "Unknown error"));
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Upload Error Details:', error);
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = `Submit ${submissionName}`;
+                            alert("Upload failed: " + error.message);
+                        });
+                });
+            } else {
+                const questions = mcqQuestions[videoId] || [];
+                const videoName = allVideos[currentVideoIndex].title;
+                testStartTime = Date.now();
+
+                testArea.innerHTML = `
+                    <div class="test-overlay">
+                        <div class="test-header">
+                            <span class="test-icon">📝</span>
+                            <div class="test-title">Knowledge Check</div>
+                        </div>
+                        <div class="test-subtitle">Answer all questions correctly to unlock the next lecture — "${videoName}"</div>
+                        <div id="questionsContainer"></div>
+                        <hr class="test-divider">
+                        <div class="test-actions">
+                            <span class="test-progress-text" id="answeredCount">0 / ${questions.length} answered</span>
+                            <button class="submit-test-btn" id="submitTestBtn" disabled>Submit Answers</button>
+                        </div>
+                        <div class="rewind-notice" id="rewindNotice">
+                            <strong>⏪ Incorrect answers detected</strong>
+                            <span id="rewindDetails"></span>
+                        </div>
+                        <div class="success-notice" id="successNotice">
+                            ✅ All correct! Well done — the next lecture is now unlocked.
+                        </div>
+                    </div>
+                `;
+
+                const container = document.getElementById("questionsContainer");
+                const letters = ["A", "B", "C", "D"];
+
+                questions.forEach((q, qIdx) => {
+                    const block = document.createElement("div");
+                    block.className = "question-block";
+                    block.innerHTML = `
+                        <div class="question-number">Question ${qIdx + 1} of ${questions.length}</div>
+                        <div class="question-text">${q.q}</div>
+                        <div class="options" id="opts_${qIdx}">
+                            ${q.options.map((opt, oIdx) => `
+                                <div class="option" data-q="${qIdx}" data-o="${oIdx}">
+                                    <div class="option-letter">${letters[oIdx]}</div>
+                                    <span>${opt.replace(/^[A-D]\) /, "")}</span>
+                                </div>
+                            `).join("")}
+                        </div>
+                    `;
+                    container.appendChild(block);
+                });
+
+                testArea.querySelectorAll(".option").forEach(opt => {
+                    opt.addEventListener("click", function () {
+                        const qIdx = parseInt(this.dataset.q);
+                        const oIdx = parseInt(this.dataset.o);
+                        testArea.querySelectorAll(`.option[data-q="${qIdx}"]`).forEach(o => o.classList.remove("selected"));
+                        this.classList.add("selected");
+                        currentSelectedAnswers[qIdx] = oIdx;
+                        const answered = currentSelectedAnswers.filter(a => a !== undefined).length;
+                        document.getElementById("answeredCount").textContent = `${answered} / ${questions.length} answered`;
+                        document.getElementById("submitTestBtn").disabled = answered < questions.length;
+                    });
+                });
+
+                document.getElementById("submitTestBtn").addEventListener("click", submitTest);
+            }
+        }
+
+        function submitTest() {
+            const videoId = allVideos[currentVideoIndex].id;
+            const questions = mcqQuestions[videoId] || [];
+            let allCorrect = true;
+
+            questions.forEach((q, idx) => {
+                if (currentSelectedAnswers[idx] !== q.answer) allCorrect = false;
+            });
+
+            document.getElementById("submitTestBtn").disabled = true;
+
+            questions.forEach((q, qIdx) => {
+                const selected = currentSelectedAnswers[qIdx];
+                const correct = q.answer;
+                const selEl = testArea.querySelector(`.option[data-q="${qIdx}"][data-o="${selected}"]`);
+                if (selEl) selEl.classList.add(selected === correct ? "correct" : "incorrect");
+                if (selected !== correct) {
+                    const corrEl = testArea.querySelector(`.option[data-q="${qIdx}"][data-o="${correct}"]`);
+                    if (corrEl) corrEl.classList.add("correct");
+                }
+                testArea.querySelectorAll(`.option[data-q="${qIdx}"]`).forEach(o => o.classList.add("disabled"));
+            });
+
+            if (allCorrect) {
+                const timeTaken = Math.round((Date.now() - testStartTime) / 1000);
+                currentAttemptCount[videoId] = (currentAttemptCount[videoId] || 0) + 1;
+                const attemptNumber = currentAttemptCount[videoId];
+
+                fetch('/save-test-score', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ videoId, timeTaken, attemptNumber })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // ✅ FIX: Mark this video as passed BEFORE updating UI
+                            testResults[videoId] = {
+                                passed: true,
+                                timestamp: Date.now(),
+                                score: data.totalScore,
+                                attemptNumber,
+                                timeTaken
+                            };
+                            saveProgress();
+
+                            // ✅ FIX: Re-render lessons to update unlock status
+                            renderLessons();
+                            updateOverallProgress();
+
+                            // Show success message
+                            document.getElementById("successNotice").style.display = "block";
+                            const notice = document.getElementById("successNotice");
+                            notice.innerHTML = `
+                        ✅ All correct! Well done — the next lecture is now unlocked.
+                        <br><br>
+                        <small>Score: ${data.totalScore} pts (${data.attemptScore} for attempt #${attemptNumber} + ${data.timeBonus} time bonus)</small>
+                    `;
+
+                            // ✅ FIX: Enable next button AND check if next video exists
+                            nextLectureBtn.disabled = false;
+                            const nextIdx = currentVideoIndex + 1;
+                            if (nextIdx < allVideos.length && isUnlocked(nextIdx)) {
+                                nextLectureBtn.disabled = false;
+                                console.log("✅ Next lecture unlocked:", allVideos[nextIdx].title);
+                            } else {
+                                console.log("⚠️ Next lecture not available or locked");
+                            }
+
+                            document.getElementById("successNotice").scrollIntoView({ behavior: "smooth", block: "center" });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error saving score:', error);
+                        // Fallback: still mark as passed locally
+                        testResults[videoId] = { passed: true, timestamp: Date.now() };
+                        saveProgress();
+                        renderLessons();
+                        updateOverallProgress();
+                        document.getElementById("successNotice").style.display = "block";
+                        nextLectureBtn.disabled = false;
+                    });
+            } else {
+                const wrongQuestions = [];
+                questions.forEach((q, idx) => {
+                    if (currentSelectedAnswers[idx] !== q.answer) wrongQuestions.push(q);
+                });
+                wrongQuestions.sort((a, b) => a.startTime - b.startTime);
+                const targetQ = wrongQuestions[0];
+                const notice = document.getElementById("rewindNotice");
+                const details = document.getElementById("rewindDetails");
+                notice.style.display = "block";
+                details.innerHTML = `
+            <br>You must review the concept from
+            <b>${formatTime(targetQ.startTime)}</b> to <b>${formatTime(targetQ.endTime)}</b>.
+            <br>The video will resume automatically at the correct section.
+        `;
+                saveProgress();
+                setTimeout(() => {
+                    testArea.innerHTML = "";
+                    showingTest = false;
+                    currentSelectedAnswers = [];
+                    isReviewMode = true;
+                    reviewEndTime = targetQ.endTime;
+                    videoPlayer.style.display = "block";
+                    videoPlayer.currentTime = targetQ.startTime;
+                    maxAllowedTime = targetQ.startTime;
+                    lastTick = null;
+                    videoPlayer.play();
+                }, 3000);
+            }
+        }
+
+        // ===== BOOT =====
+        loadVideo(levelStartIndex);
+    </script>
+</body>
+
+</html>

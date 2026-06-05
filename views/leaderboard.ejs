@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bizhub - Leaderboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 50% 90%, rgba(180, 60, 20, 0.25), transparent 60%),
+                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 40px),
+                repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 40px);
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            right: 10%;
+            top: 20%;
+            width: 200px;
+            height: 200px;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+            background-size: 14px 14px;
+            opacity: 0.2;
+            z-index: -1;
+        }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+        }
+
+        .logo {
+            font-weight: 600;
+            width: 80px;
+        }
+
+        .logo img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            background: #1a1a1a;
+            padding: 8px 18px;
+            border-radius: 30px;
+            border: 1px solid #333;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #777;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .nav-links a.active {
+            color: white;
+        }
+
+        .nav-links a.leaderboard-active {
+            color: #E8541A;
+        }
+
+        .signin {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        /* ── PAGE CONTENT ── */
+        .page-wrap {
+            padding: 10px 5vw 100px;
+        }
+
+        /* ── SECTION HEADER ── */
+        .lb-header {
+            text-align: center;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: fadeIn 0.8s forwards;
+        }
+
+        .lb-tag {
+            display: inline-block;
+            border: 1px solid #3a2a1a;
+            background: #1a0f00;
+            color: #aaa;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            padding: 6px 18px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .lb-title {
+            font-size: clamp(36px, 5vw, 72px);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 12px;
+        }
+
+        .lb-title span {
+            color: #E8541A;
+        }
+
+        .lb-sub {
+            color: #888;
+            font-size: 16px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* ── STATS ROW ── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeIn 0.8s 0.1s forwards;
+        }
+
+        .stat-card {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: #E8541A;
+            box-shadow: 0 10px 30px rgba(232, 84, 26, 0.15);
+        }
+
+        .stat-val {
+            font-size: 36px;
+            font-weight: 800;
+            color: #E8541A;
+            margin-bottom: 6px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
+
+        /* ── PODIUM ── */
+        .podium-section {
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeIn 0.8s 0.2s forwards;
+        }
+
+        .section-micro {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: #555;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .podium {
+            display: grid;
+            grid-template-columns: 1fr 1.08fr 1fr;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .podium-card {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 26px 18px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .podium-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 40px rgba(232, 84, 26, 0.12);
+        }
+
+        .podium-card.p1 {
+            background: linear-gradient(160deg, #1a1200, #0f0f0f);
+            border-color: rgba(255, 215, 0, 0.2);
+        }
+
+        .podium-card.p2 {
+            background: linear-gradient(160deg, #131313, #0f0f0f);
+            border-color: rgba(192, 192, 192, 0.12);
+        }
+
+        .podium-card.p3 {
+            background: linear-gradient(160deg, #120a00, #0f0f0f);
+            border-color: rgba(205, 127, 50, 0.15);
+        }
+
+        .podium-medal {
+            font-size: 34px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .podium-place {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.5;
+            margin-bottom: 10px;
+        }
+
+        .p1 .podium-place {
+            color: #FFD700;
+        }
+
+        .p2 .podium-place {
+            color: #C0C0C0;
+        }
+
+        .p3 .podium-place {
+            color: #CD7F32;
+        }
+
+        .podium-name {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 3px;
+        }
+
+        .podium-college {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 16px;
+        }
+
+        .podium-score {
+            font-size: 32px;
+            font-weight: 800;
+            color: #E8541A;
+            line-height: 1;
+        }
+
+        .podium-pts {
+            font-size: 11px;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        .crown {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            font-size: 16px;
+        }
+
+        /* ── LEADERBOARD TABLE ── */
+        .lb-section {
+            background: #0d0d0d;
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 0.8s 0.3s forwards;
+        }
+
+        .lb-section-header {
+            background: linear-gradient(135deg, #E8541A, #C94A0F);
+            padding: 18px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .lb-section-header h2 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .lb-section-header .student-count {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            background: #1a1a1a;
+            padding: 13px 20px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #666;
+        }
+
+        thead th:last-child {
+            text-align: right;
+        }
+
+        tbody tr {
+            border-top: 1px solid #1a1a1a;
+            transition: background 0.2s;
+            opacity: 0;
+            transform: translateY(8px);
+            animation: fadeUp 0.35s forwards;
+        }
+
+        tbody tr:hover {
+            background: #111;
+        }
+
+        tbody tr.me {
+            background: rgba(232, 84, 26, 0.06) !important;
+            border-left: 3px solid #E8541A;
+        }
+
+        td {
+            padding: 16px 20px;
+            font-size: 14px;
+        }
+
+        td:last-child {
+            text-align: right;
+        }
+
+        /* rank badge */
+        .rank-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rank-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        .rank-badge.gold {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000;
+        }
+
+        .rank-badge.silver {
+            background: linear-gradient(135deg, #C0C0C0, #888);
+            color: #000;
+        }
+
+        .rank-badge.bronze {
+            background: linear-gradient(135deg, #CD7F32, #8B4513);
+            color: #fff;
+        }
+
+        .rank-badge.other {
+            background: #1a1a1a;
+            color: #666;
+            border: 1px solid #333;
+        }
+
+        .name-text {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .you-tag {
+            display: inline-block;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: rgba(232, 84, 26, 0.12);
+            color: #E8541A;
+            border: 1px solid rgba(232, 84, 26, 0.25);
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .college-text {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .meta-cell {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #888;
+        }
+
+        .score-val {
+            font-size: 22px;
+            font-weight: 800;
+            color: #E8541A;
+        }
+
+        .score-pts {
+            font-size: 11px;
+            color: #555;
+            margin-left: 2px;
+        }
+
+        /* ── EMPTY STATE ── */
+        .empty-state {
+            text-align: center;
+            padding: 70px 20px;
+        }
+
+        .empty-icon {
+            font-size: 52px;
+            opacity: 0.15;
+            margin-bottom: 14px;
+        }
+
+        .empty-text {
+            font-size: 15px;
+            color: #666;
+        }
+
+        /* ── LEGEND ── */
+        .legend-card {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 28px;
+            opacity: 0;
+            animation: fadeIn 0.8s 0.4s forwards;
+        }
+
+        .legend-micro {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: #555;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .legend-col h4 {
+            font-size: 12px;
+            font-weight: 700;
+            color: #E8541A;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .legend-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #1a1a1a;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .legend-row:last-child {
+            border-bottom: none;
+        }
+
+        .legend-pts {
+            font-weight: 800;
+            color: white;
+            font-size: 14px;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1100px) {
+            .stats-row {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .podium {
+                grid-template-columns: 1fr;
+            }
+
+            .podium-card.p1 {
+                order: -1;
+            }
+
+            .legend-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            thead th:nth-child(3),
+            td:nth-child(3),
+            thead th:nth-child(5),
+            td:nth-child(5) {
+                display: none;
+            }
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo"><img src="/assets/logo.png" alt=""></div>
+
+        <div class="nav-links">
+            <a href="/home">Home</a>
+            <a href="/roadmap">Learning Path</a>
+            <a href="/mentorship">Mentorship</a>
+            <a href="/leaderboard" class="leaderboard-active">Leaderboard</a>
+            <a href="/about">Our Mission</a>
+        </div>
+
+        <a href="/logout" class="signin">Logout</a>
+    </div>
+
+    <div class="page-wrap">
+
+        <% const lb = (typeof leaderboard !== 'undefined' && leaderboard.length > 0) ? leaderboard : [];
+            const totalStudents = lb.length;
+            const topScore = totalStudents > 0 ? lb[0].totalScore : 0;
+            const avgScore = totalStudents > 0 ? Math.round(lb.reduce((s, u) => s + u.totalScore, 0) / totalStudents) : 0;
+            const myName = (typeof user !== 'undefined' && user) ? (user.firstName + ' ' + user.lastName).trim() : '';
+            const myEntry = lb.find(u => u.name === myName);
+            const myRank = myEntry ? myEntry.rank : null;
+        %>
+
+        <!-- HEADER -->
+        <div class="lb-header">
+            <div class="lb-tag">✦ LIVE RANKINGS</div>
+            <h1 class="lb-title">🏆 Leader<span>board</span></h1>
+            <p class="lb-sub">Rankings based on quiz accuracy, response speed, and file submissions across all course lectures.</p>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-val"><%= totalStudents %></div>
+                <div class="stat-label">Active Students</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val"><%= topScore %></div>
+                <div class="stat-label">Highest Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val"><%= avgScore %></div>
+                <div class="stat-label">Average Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val"><%= myRank ? '#' + myRank : '—' %></div>
+                <div class="stat-label">Your Rank</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val"><%= myEntry ? (myEntry.testScore || 0) : 0 %></div>
+                <div class="stat-label">Test Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val"><%= myEntry ? (myEntry.ideaDocScore || 0) : 0 %></div>
+                <div class="stat-label">Idea Doc</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val"><%= myEntry ? (myEntry.bmcScore || 0) : 0 %></div>
+                <div class="stat-label">BMC Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val"><%= myEntry ? (myEntry.pitchScore || 0) : 0 %></div>
+                <div class="stat-label">Pitch Score</div>
+            </div>
+        </div>
+
+        <!-- PODIUM -->
+        <% if (lb.length >= 3) { %>
+            <div class="podium-section">
+                <div class="section-micro">✦ Top 3 Performers</div>
+                <div class="podium">
+
+                    <!-- 2nd -->
+                    <div class="podium-card p2">
+                        <span class="podium-medal">🥈</span>
+                        <div class="podium-place">2nd Place</div>
+                        <div class="podium-name"><%= lb[1].name %></div>
+                        <div class="podium-college"><%= lb[1].collegeName %></div>
+                        <div class="podium-score"><%= lb[1].totalScore %></div>
+                        <div class="podium-pts">pts</div>
+                    </div>
+
+                    <!-- 1st -->
+                    <div class="podium-card p1">
+                        <span class="crown">👑</span>
+                        <span class="podium-medal">🥇</span>
+                        <div class="podium-place">1st Place</div>
+                        <div class="podium-name"><%= lb[0].name %></div>
+                        <div class="podium-college"><%= lb[0].collegeName %></div>
+                        <div class="podium-score"><%= lb[0].totalScore %></div>
+                        <div class="podium-pts">pts</div>
+                    </div>
+
+                    <!-- 3rd -->
+                    <div class="podium-card p3">
+                        <span class="podium-medal">🥉</span>
+                        <div class="podium-place">3rd Place</div>
+                        <div class="podium-name"><%= lb[2].name %></div>
+                        <div class="podium-college"><%= lb[2].collegeName %></div>
+                        <div class="podium-score"><%= lb[2].totalScore %></div>
+                        <div class="podium-pts">pts</div>
+                    </div>
+
+                </div>
+            </div>
+        <% } %>
+
+        <!-- FULL TABLE -->
+        <div class="lb-section">
+            <div class="lb-section-header">
+                <h2>🏆 Full Rankings</h2>
+                <span class="student-count"><%= totalStudents %> students enrolled</span>
+            </div>
+
+            <% if (lb.length > 0) { %>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>College</th>
+                            <th>Lessons</th>
+                            <th>Attempts</th>
+                            <th>Test</th>
+                            <th>Idea</th>
+                            <th>BMC</th>
+                            <th>Pitch</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% lb.forEach(function(u, i) {
+                            const isMe = (u.name === myName);
+                            const rc = u.rank === 1 ? 'gold' : u.rank === 2 ? 'silver' : u.rank === 3 ? 'bronze' : 'other';
+                        %>
+                            <tr class="<%= isMe ? 'me' : '' %>" style="animation-delay:<%= 0.04 * i %>s">
+
+                                <td>
+                                    <div class="rank-wrap">
+                                        <div class="rank-badge <%= rc %>"><%= u.rank %></div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="name-text"><%= u.name %></span>
+                                    <% if (isMe) { %><span class="you-tag">You</span><% } %>
+                                </td>
+
+                                <td><span class="college-text"><%= u.collegeName %></span></td>
+
+                                <td>
+                                    <div class="meta-cell">
+                                        <i class='bx bx-check-circle' style="color:#2ecc71;font-size:15px"></i>
+                                        <%= u.completedLessons %>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="meta-cell">
+                                        <i class='bx bx-refresh' style="color:#E8541A;font-size:15px"></i>
+                                        <%= u.totalAttempts %>
+                                    </div>
+                                </td>
+
+                                <td><%= u.testScore || 0 %></td>
+                                <td><%= u.ideaDocScore || 0 %></td>
+                                <td><%= u.bmcScore || 0 %></td>
+                                <td><%= u.pitchScore || 0 %></td>
+
+                                <td>
+                                    <span class="score-val"><%= u.totalScore %></span>
+                                    <span class="score-pts">pts</span>
+                                </td>
+
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <div class="empty-state">
+                    <div class="empty-icon">📊</div>
+                    <p class="empty-text">No scores yet — complete a lecture and pass its quiz to appear here!</p>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- SCORING LEGEND -->
+        <div class="legend-card">
+            <div class="legend-micro">✦ How scores are calculated &nbsp;·&nbsp; Max 550 pts from submissions + test scores</div>
+            <div class="legend-grid">
+
+                <div class="legend-col">
+                    <h4>Submission Scores</h4>
+                    <div class="legend-row"><span>Idea Document</span><span class="legend-pts">100 pts</span></div>
+                    <div class="legend-row"><span>Business Model Canvas</span><span class="legend-pts">150 pts</span></div>
+                    <div class="legend-row"><span>Pitch Deck</span><span class="legend-pts">300 pts</span></div>
+                </div>
+
+                <div class="legend-col">
+                    <h4>Test Scores (Modules 1-3)</h4>
+                    <div class="legend-row"><span>1st attempt correct</span><span class="legend-pts">25 pts</span></div>
+                    <div class="legend-row"><span>Speed Bonus (max)</span><span class="legend-pts">10 pts</span></div>
+                    <div class="legend-row"><span>Per Lecture</span><span class="legend-pts">35 pts</span></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div><!-- /page-wrap -->
+
+    <script>
+        // Stagger table rows
+        document.querySelectorAll('tbody tr').forEach((row, i) => {
+            row.style.animationDelay = (0.04 * i) + 's';
+        });
+    </script>
+
+</body>
+
+</html>

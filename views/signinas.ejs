@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Role Sign In</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        /* Card */
+        .card {
+            width: 90%;
+            max-width: 420px;
+            padding: 40px 30px;
+            background: #111111;
+            border-radius: 20px;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #9a9a9a;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* Buttons */
+        .role-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #E8541A, #C94A0F);
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 16px;
+            transition: all 0.25s ease;
+        }
+
+        .role-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 18px rgba(232, 84, 26, 0.6);
+        }
+
+        .role-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Bottom text */
+        .bottom-text {
+            text-align: center;
+            font-size: 13px;
+            color: #888;
+            margin-top: 10px;
+        }
+
+        .bottom-text a {
+            color: #E8541A;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .bottom-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Input style (for future use) */
+        .input {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            color: white;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .input::placeholder {
+            color: #777;
+        }
+
+        /* Responsive */
+        @media(max-width: 480px) {
+            .card {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h1>Welcome Back</h1>
+        <div class="subtitle">Choose your role to sign in</div>
+
+        <div style="display:flex; flex-direction:column; gap:15px;">
+
+            <!-- STUDENT -->
+            <!-- <a href="/login">
+                <button class="role-btn">🎓 Login as Student</button>
+            </a> -->
+
+            <a href="/signup">
+                <button class="role-btn">🎓 Signup as Student</button>
+            </a>
+
+            <!-- MENTOR -->
+            <!-- <a href="/mentorlogin">
+                <button class="role-btn">🧑‍🏫 Login as Mentor</button>
+            </a> -->
+
+            <a href="/mentorsignup">
+                <button class="role-btn">🧑‍🏫 Signup as Mentor</button>
+            </a>
+
+            <!-- SCHOOL -->
+            <!-- <a href="/schoollogin">
+                <button class="role-btn">🏫 Login as School Admin</button>
+            </a> -->
+
+            <a href="/schoolsignup">
+                <button class="role-btn">🏫 Signup as School Admin</button>
+            </a>
+
+        </div>
+        </a>
+        <div class="bottom-text">
+            Don't have an account? <a href="#">Register here</a>
+        </div>
+    </div>
+
+    <script>
+        // subtle click animation polish
+        document.querySelectorAll('.role-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.style.transform = 'scale(0.96)';
+                setTimeout(() => btn.style.transform = '', 120);
+            });
+        });
+    </script>
+
+</body>
+
+</html>

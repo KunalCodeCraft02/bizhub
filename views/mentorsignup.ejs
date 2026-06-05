@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentor Sign Up</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .card {
+            width: 95%;
+            max-width: 520px;
+            background: #111;
+            padding: 30px 24px;
+            border-radius: 16px;
+        }
+
+        .icon {
+            text-align: center;
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 10px;
+            background: #1a1a1a;
+            border: 1px solid #222;
+            color: white;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #777;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        /* Row */
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .row .form-group {
+            flex: 1;
+        }
+
+        /* Dropdown arrow */
+        select {
+            appearance: none;
+            background-image: linear-gradient(45deg, transparent 50%, #E8541A 50%),
+                linear-gradient(135deg, #E8541A 50%, transparent 50%);
+            background-position: calc(100% - 18px) calc(50% - 4px),
+                calc(100% - 12px) calc(50% - 4px);
+            background-size: 6px 6px;
+            background-repeat: no-repeat;
+        }
+
+        /* Password toggle */
+        .password-wrapper {
+            position: relative;
+        }
+
+        .toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #777;
+        }
+
+        .toggle.active {
+            color: #E8541A;
+        }
+
+        /* States */
+        input.valid,
+        select.valid,
+        textarea.valid {
+            border: 1px solid #2ecc71;
+        }
+
+        input.invalid,
+        select.invalid,
+        textarea.invalid {
+            border: 1px solid #ff4d4d;
+        }
+
+        .error {
+            color: #ff4d4d;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        /* Button */
+        button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, #E8541A, #C94A0F);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.25s;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 18px rgba(232, 84, 26, 0.6);
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        /* Bottom */
+        .bottom-text {
+            text-align: center;
+            font-size: 13px;
+            color: #888;
+            margin-top: 14px;
+        }
+
+        .bottom-text a {
+            color: #E8541A;
+            text-decoration: none;
+        }
+
+        .bottom-text a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* Responsive */
+        @media(max-width:480px) {
+            .row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="icon">🧑‍🏫</div>
+        <h1>Sign Up as Mentor</h1>
+        <div class="subtitle">Share your expertise and inspire the next generation</div>
+
+        <form id="form" action="/mentorsignup" method="post">
+
+            <div class="row">
+
+                <div class="form-group">
+                    <label>First Name</label>
+
+                    <input type="text" id="firstName" name="firstName">
+
+                    <div class="error" id="firstNameError">
+                        Required
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Last Name</label>
+
+                    <input type="text" id="lastName" name="lastName">
+
+                    <div class="error" id="lastNameError">
+                        Required
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Email Address</label>
+
+                <input type="email" id="email" name="email" placeholder="Enter your email address">
+
+                <div class="error" id="emailError">
+                    Invalid email
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Mobile Number</label>
+
+                <input type="text" id="mobile" name="mobile" placeholder="Enter your phone number">
+
+                <div class="error" id="mobileError">
+                    Invalid number
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Select Your Domain</label>
+
+                <select id="domain" name="domain">
+
+                    <option value="">
+                        Select Domain
+                    </option>
+
+                    <option>
+                        🖥️ Technology
+                    </option>
+
+                    <option>
+                        🌾 Agriculture
+                    </option>
+
+                    <option>
+                        🏥 Healthcare
+                    </option>
+
+                    <option>
+                        💰 Finance & Business
+                    </option>
+
+                    <option>
+                        🎨 Arts & Design
+                    </option>
+
+                    <option>
+                        📚 Education
+                    </option>
+
+                    <option>
+                        ⚖️ Law & Policy
+                    </option>
+
+                    <option>
+                        🏗️ Engineering
+                    </option>
+
+                    <option>
+                        🌍 Environment & Sustainability
+                    </option>
+
+                    <option>
+                        Other
+                    </option>
+
+                </select>
+
+                <div class="error" id="domainError">
+                    Please select
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Field of Expertise</label>
+
+                <input type="text" id="expertise" name="expertise"
+                    placeholder="e.g. Machine Learning, Crop Science, Digital Marketing">
+
+                <div class="error" id="expertiseError">
+                    Required
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Years of Experience</label>
+
+                <select id="experience" name="experience">
+
+                    <option value="">
+                        Select Experience
+                    </option>
+
+                    <option>
+                        Less than 1 year
+                    </option>
+
+                    <option>
+                        1 - 2 years
+                    </option>
+
+                    <option>
+                        3 - 5 years
+                    </option>
+
+                    <option>
+                        6 - 10 years
+                    </option>
+
+                    <option>
+                        10+ years
+                    </option>
+
+                </select>
+
+                <div class="error" id="experienceError">
+                    Please select
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Short Bio</label>
+
+                <textarea id="bio" name="bio"
+                    placeholder="Tell students a little about yourself and your journey..."></textarea>
+
+                <div class="error" id="bioError">
+                    Minimum 20 characters required
+                </div>
+
+            </div>
+
+            <div class="form-group password-wrapper">
+
+                <label>Password</label>
+
+                <input type="password" id="password" name="password" placeholder="Create a strong password">
+
+                <span class="toggle" onclick="togglePassword('password', this)">
+                    👁
+                </span>
+
+                <div class="error" id="passwordError">
+                    Weak password
+                </div>
+
+            </div>
+
+            <div class="form-group password-wrapper">
+
+                <label>Confirm Password</label>
+
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter your password">
+
+                <span class="toggle" onclick="togglePassword('confirmPassword', this)">
+                    👁
+                </span>
+
+                <div class="error" id="confirmError">
+                    Passwords do not match
+                </div>
+
+            </div>
+
+            <button type="submit">
+                Register as Mentor
+            </button>
+
+        </form>
+
+        <div class="bottom-text">
+            Already have an account? <a href="#">Sign in here</a>
+        </div>
+    </div>
+
+
+
+ <script>
+
+    const form = document.getElementById('form');
+
+    form.addEventListener('submit', function (e) {
+
+        e.preventDefault();
+
+        let valid = true;
+
+        const f = id => document.getElementById(id);
+
+        const reset = () => {
+
+            document.querySelectorAll('.error').forEach(e => {
+                e.style.display = 'none';
+            });
+
+            document.querySelectorAll('input,select,textarea').forEach(i => {
+                i.classList.remove('invalid', 'valid');
+            });
+        };
+
+        reset();
+
+        const markInvalid = (el, id) => {
+
+            el.classList.add('invalid');
+
+            f(id).style.display = 'block';
+
+            valid = false;
+        }
+
+        const markValid = el => {
+            el.classList.add('valid');
+        }
+
+        // FIRST NAME
+        if (f('firstName').value.trim() === '') {
+            markInvalid(f('firstName'), 'firstNameError');
+        } else {
+            markValid(f('firstName'));
+        }
+
+        // LAST NAME
+        if (f('lastName').value.trim() === '') {
+            markInvalid(f('lastName'), 'lastNameError');
+        } else {
+            markValid(f('lastName'));
+        }
+
+        // EMAIL
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f('email').value)) {
+            markInvalid(f('email'), 'emailError');
+        } else {
+            markValid(f('email'));
+        }
+
+        // MOBILE
+        if (!/^\d{10,}$/.test(f('mobile').value)) {
+            markInvalid(f('mobile'), 'mobileError');
+        } else {
+            markValid(f('mobile'));
+        }
+
+        // DOMAIN
+        if (f('domain').value === '') {
+            markInvalid(f('domain'), 'domainError');
+        } else {
+            markValid(f('domain'));
+        }
+
+        // EXPERTISE
+        if (f('expertise').value.trim() === '') {
+            markInvalid(f('expertise'), 'expertiseError');
+        } else {
+            markValid(f('expertise'));
+        }
+
+        // EXPERIENCE
+        if (f('experience').value === '') {
+            markInvalid(f('experience'), 'experienceError');
+        } else {
+            markValid(f('experience'));
+        }
+
+        // BIO
+        if (f('bio').value.trim().length < 20) {
+            markInvalid(f('bio'), 'bioError');
+        } else {
+            markValid(f('bio'));
+        }
+
+        // PASSWORD
+        if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(f('password').value)) {
+
+            markInvalid(f('password'), 'passwordError');
+
+        } else {
+
+            markValid(f('password'));
+        }
+
+        // CONFIRM PASSWORD
+        if (
+            f('confirmPassword').value !== f('password').value ||
+            f('confirmPassword').value === ''
+        ) {
+
+            markInvalid(f('confirmPassword'), 'confirmError');
+
+        } else {
+
+            markValid(f('confirmPassword'));
+        }
+
+        // FINAL SUBMIT
+        if (valid) {
+
+            const button =
+                form.querySelector('button');
+
+            button.innerHTML =
+                "Creating Mentor Account...";
+
+            button.disabled = true;
+
+            // SUBMIT FORM TO EXPRESS BACKEND
+            form.submit();
+        }
+
+    });
+
+    function togglePassword(id, el) {
+
+        const input = document.getElementById(id);
+
+        if (input.type === "password") {
+
+            input.type = "text";
+
+            el.classList.add('active');
+
+        } else {
+
+            input.type = "password";
+
+            el.classList.remove('active');
+        }
+    }
+
+</script>
+
+</body>
+
+</html>
