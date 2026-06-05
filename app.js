@@ -518,7 +518,7 @@ app.get("/leaderboard", isLoggedIn, async (req, res) => {
 
     let entries = allUsers.map(u => {
       const attempts = u.testAttempts
-        ? Array.from(u.testAttempts.values())
+        ? Object.values(u.testAttempts)
         : [];
       const totalAttempts = attempts
         .filter(a => a && a.passed)
@@ -1268,9 +1268,9 @@ app.post("/save-failed-attempt", isLoggedIn, async (req, res) => {
       });
     }
 
- if (!user.testAttempts) {
-    user.testAttempts = new Map();
-}
+    if (!user.testAttempts) {
+      user.testAttempts = new Map();
+    }
     const existing = user.testAttempts.get(videoId);
 
     user.testAttempts.set(videoId, {

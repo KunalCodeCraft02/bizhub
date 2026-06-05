@@ -727,7 +727,9 @@
             <div class="question-card" id="questionCard">
                 <div class="q-header">
                     <div class="q-number" id="questionNo">Question 1 of 20</div>
-                    <div class="q-score-chip">Score: <span id="liveScore">0</span>/20</div>
+                 <div class="q-score-chip">
+    Answered: <span id="answeredCount">0</span>/20
+</div>
                 </div>
                 <div class="question" id="questionText"></div>
                 <div class="options" id="optionsContainer"></div>
@@ -1052,13 +1054,14 @@
             document.getElementById("progressFill").style.width = pct + "%";
             document.getElementById("progressText").innerText = `${count} / 15 required`;
             document.getElementById("progressPct").innerText = Math.round(pct) + "%";
+            document.getElementById("answeredCount").innerText = count;
 
             // live score
-            let score = 0;
-            Object.entries(answers).forEach(([idx, ans]) => {
-                if (questions[idx].correct === ans) score++;
-            });
-            document.getElementById("liveScore").innerText = score;
+            // let score = 0;
+            // Object.entries(answers).forEach(([idx, ans]) => {
+            //     if (questions[idx].correct === ans) score++;
+            // });
+            // document.getElementById("liveScore").innerText = score;
 
             // enable submit
             const submitBtn = document.getElementById("submitBtn");

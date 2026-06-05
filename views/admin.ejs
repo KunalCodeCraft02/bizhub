@@ -286,6 +286,16 @@
             font-weight: 600;
         }
 
+        .chart-container {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            height: 320px;
+            position: relative;
+        }
+
         @media (max-width:768px) {
             .navbar {
                 padding: 15px 20px;
@@ -357,54 +367,61 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% let ideaCount=0; if (submissions && submissions.length> 0) {
-                            submissions.forEach(function(user) {
-                            if (user.ideaDocumentSubmission && user.ideaDocumentSubmission.file) {
-                            ideaCount++;
-                            %>
-                            <tr>
-                                <td class="student-name">
-                                    <%= user.firstName %>
-                                        <%= user.lastName %>
-                                </td>
-                                <td>
-                                    <%= user.collegeName || '—' %>
-                                </td>
-                                <td>
-                                    <a href="<%= user.ideaDocumentSubmission.file %>" class="file-link" target="_blank">
-                                        📎 <%= user.ideaDocumentSubmission.file.split('/').pop() %>
-                                    </a>
-                                </td>
-                                <td>
-                                    <input type="text" class="sector-input" id="sector_<%= user._id %>_ideaDocument"
-                                        value="<%= user.ideaDocumentSubmission.sector || '' %>"
-                                        placeholder="e.g. EdTech">
-                                </td>
-                                <td>
-                                    <input type="number" class="score-input" id="score_<%= user._id %>_ideaDocument"
-                                        value="<%= user.ideaDocumentSubmission.marks || 0 %>" min="0" max="100">
-                                </td>
-                                <td>
-                                    <% if (user.ideaDocumentSubmission.marks && user.ideaDocumentSubmission.marks> 0) {
-                                        %>
-                                        <span class="status-badge status-graded">✓ Graded</span>
-                                        <% } else { %>
-                                            <span class="status-badge status-pending">⏳ Pending</span>
+                        <% let ideaCount=0; %>
+                            <% if (locals.submissions && submissions.length> 0) { %>
+                                <% submissions.forEach(function(user) { %>
+                                    <% if (user.ideaDocumentSubmission && user.ideaDocumentSubmission.file) { %>
+                                        <% ideaCount++; %>
+                                            <tr>
+                                                <td class="student-name">
+                                                    <%= user.firstName %>
+                                                        <%= user.lastName %>
+                                                </td>
+                                                <td>
+                                                    <%= user.collegeName || '—' %>
+                                                </td>
+                                                <td>
+                                                    <a href="<%= user.ideaDocumentSubmission.file %>" class="file-link"
+                                                        target="_blank">
+                                                        📎 <%= user.ideaDocumentSubmission.file.split('/').pop() %>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="sector-input"
+                                                        id="sector_<%= user._id %>_ideaDocument"
+                                                        value="<%= user.ideaDocumentSubmission.sector || '' %>"
+                                                        placeholder="e.g. EdTech">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="score-input"
+                                                        id="score_<%= user._id %>_ideaDocument"
+                                                        value="<%= user.ideaDocumentSubmission.marks || 0 %>" min="0"
+                                                        max="100">
+                                                </td>
+                                                <td>
+                                                    <% if (user.ideaDocumentSubmission.marks &&
+                                                        user.ideaDocumentSubmission.marks> 0) { %>
+                                                        <span class="status-badge status-graded">✓ Graded</span>
+                                                        <% } else { %>
+                                                            <span class="status-badge status-pending">⏳ Pending</span>
+                                                            <% } %>
+                                                </td>
+                                                <td>
+                                                    <button class="save-btn"
+                                                        onclick="saveMarks('<%= user._id %>', 'ideaDocument', 100)">Save</button>
+                                                </td>
+                                            </tr>
                                             <% } %>
-                                </td>
-                                <td>
-                                    <button class="save-btn"
-                                        onclick="saveMarks('<%= user._id %>', 'ideaDocument', 100)">Save</button>
-                                </td>
-                            </tr>
-                            <% } }); } if (ideaCount===0) { %>
-                                <tr>
-                                    <td colspan="7" class="no-data">
-                                        <i class='bx bx-file-blank'></i>
-                                        No Idea Document submissions yet
-                                    </td>
-                                </tr>
-                                <% } %>
+                                                <% }); %>
+                                                    <% } %>
+                                                        <% if (ideaCount===0) { %>
+                                                            <tr>
+                                                                <td colspan="7" class="no-data">
+                                                                    <i class='bx bx-file-blank'></i>
+                                                                    No Idea Document submissions yet
+                                                                </td>
+                                                            </tr>
+                                                            <% } %>
                     </tbody>
                 </table>
             </div>
@@ -426,52 +443,59 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% let bmcCount=0; if (submissions && submissions.length> 0) {
-                            submissions.forEach(function(user) {
-                            if (user.bmcSubmission && user.bmcSubmission.file) {
-                            bmcCount++;
-                            %>
-                            <tr>
-                                <td class="student-name">
-                                    <%= user.firstName %>
-                                        <%= user.lastName %>
-                                </td>
-                                <td>
-                                    <%= user.collegeName || '—' %>
-                                </td>
-                                <td>
-                                    <a href="<%= user.bmcSubmission.file %>" class="file-link" target="_blank">
-                                        📎 <%= user.bmcSubmission.file.split('/').pop() %>
-                                    </a>
-                                </td>
-                                <td>
-                                    <input type="text" class="sector-input" id="sector_<%= user._id %>_bmc"
-                                        value="<%= user.bmcSubmission.sector || '' %>" placeholder="e.g. FinTech">
-                                </td>
-                                <td>
-                                    <input type="number" class="score-input" id="score_<%= user._id %>_bmc"
-                                        value="<%= user.bmcSubmission.marks || 0 %>" min="0" max="150">
-                                </td>
-                                <td>
-                                    <% if (user.bmcSubmission.marks && user.bmcSubmission.marks> 0) { %>
-                                        <span class="status-badge status-graded">✓ Graded</span>
-                                        <% } else { %>
-                                            <span class="status-badge status-pending">⏳ Pending</span>
+                        <% let bmcCount=0; %>
+                            <% if (locals.submissions && submissions.length> 0) { %>
+                                <% submissions.forEach(function(user) { %>
+                                    <% if (user.bmcSubmission && user.bmcSubmission.file) { %>
+                                        <% bmcCount++; %>
+                                            <tr>
+                                                <td class="student-name">
+                                                    <%= user.firstName %>
+                                                        <%= user.lastName %>
+                                                </td>
+                                                <td>
+                                                    <%= user.collegeName || '—' %>
+                                                </td>
+                                                <td>
+                                                    <a href="<%= user.bmcSubmission.file %>" class="file-link"
+                                                        target="_blank">
+                                                        📎 <%= user.bmcSubmission.file.split('/').pop() %>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="sector-input"
+                                                        id="sector_<%= user._id %>_bmc"
+                                                        value="<%= user.bmcSubmission.sector || '' %>"
+                                                        placeholder="e.g. FinTech">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="score-input"
+                                                        id="score_<%= user._id %>_bmc"
+                                                        value="<%= user.bmcSubmission.marks || 0 %>" min="0" max="150">
+                                                </td>
+                                                <td>
+                                                    <% if (user.bmcSubmission.marks && user.bmcSubmission.marks> 0) { %>
+                                                        <span class="status-badge status-graded">✓ Graded</span>
+                                                        <% } else { %>
+                                                            <span class="status-badge status-pending">⏳ Pending</span>
+                                                            <% } %>
+                                                </td>
+                                                <td>
+                                                    <button class="save-btn"
+                                                        onclick="saveMarks('<%= user._id %>', 'bmc', 150)">Save</button>
+                                                </td>
+                                            </tr>
                                             <% } %>
-                                </td>
-                                <td>
-                                    <button class="save-btn"
-                                        onclick="saveMarks('<%= user._id %>', 'bmc', 150)">Save</button>
-                                </td>
-                            </tr>
-                            <% } }); } if (bmcCount===0) { %>
-                                <tr>
-                                    <td colspan="7" class="no-data">
-                                        <i class='bx bx-file-blank'></i>
-                                        No Business Model Canvas submissions yet
-                                    </td>
-                                </tr>
-                                <% } %>
+                                                <% }); %>
+                                                    <% } %>
+                                                        <% if (bmcCount===0) { %>
+                                                            <tr>
+                                                                <td colspan="7" class="no-data">
+                                                                    <i class='bx bx-file-blank'></i>
+                                                                    No Business Model Canvas submissions yet
+                                                                </td>
+                                                            </tr>
+                                                            <% } %>
                     </tbody>
                 </table>
             </div>
@@ -493,57 +517,66 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% let pitchCount=0; if (submissions && submissions.length> 0) {
-                            submissions.forEach(function(user) {
-                            if (user.pitchDeckSubmission && user.pitchDeckSubmission.file) {
-                            pitchCount++;
-                            %>
-                            <tr>
-                                <td class="student-name">
-                                    <%= user.firstName %>
-                                        <%= user.lastName %>
-                                </td>
-                                <td>
-                                    <%= user.collegeName || '—' %>
-                                </td>
-                                <td>
-                                    <a href="<%= user.pitchDeckSubmission.file %>" class="file-link" target="_blank">
-                                        📎 <%= user.pitchDeckSubmission.file.split('/').pop() %>
-                                    </a>
-                                </td>
-                                <td>
-                                    <input type="text" class="sector-input" id="sector_<%= user._id %>_pitchDeck"
-                                        value="<%= user.pitchDeckSubmission.sector || '' %>"
-                                        placeholder="e.g. HealthTech">
-                                </td>
-                                <td>
-                                    <input type="number" class="score-input" id="score_<%= user._id %>_pitchDeck"
-                                        value="<%= user.pitchDeckSubmission.marks || 0 %>" min="0" max="300">
-                                </td>
-                                <td>
-                                    <% if (user.pitchDeckSubmission.marks && user.pitchDeckSubmission.marks> 0) { %>
-                                        <span class="status-badge status-graded">✓ Graded</span>
-                                        <% } else { %>
-                                            <span class="status-badge status-pending">⏳ Pending</span>
+                        <% let pitchCount=0; %>
+                            <% if (locals.submissions && submissions.length> 0) { %>
+                                <% submissions.forEach(function(user) { %>
+                                    <% if (user.pitchDeckSubmission && user.pitchDeckSubmission.file) { %>
+                                        <% pitchCount++; %>
+                                            <tr>
+                                                <td class="student-name">
+                                                    <%= user.firstName %>
+                                                        <%= user.lastName %>
+                                                </td>
+                                                <td>
+                                                    <%= user.collegeName || '—' %>
+                                                </td>
+                                                <td>
+                                                    <a href="<%= user.pitchDeckSubmission.file %>" class="file-link"
+                                                        target="_blank">
+                                                        📎 <%= user.pitchDeckSubmission.file.split('/').pop() %>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="sector-input"
+                                                        id="sector_<%= user._id %>_pitchDeck"
+                                                        value="<%= user.pitchDeckSubmission.sector || '' %>"
+                                                        placeholder="e.g. HealthTech">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="score-input"
+                                                        id="score_<%= user._id %>_pitchDeck"
+                                                        value="<%= user.pitchDeckSubmission.marks || 0 %>" min="0"
+                                                        max="300">
+                                                </td>
+                                                <td>
+                                                    <% if (user.pitchDeckSubmission.marks &&
+                                                        user.pitchDeckSubmission.marks> 0) { %>
+                                                        <span class="status-badge status-graded">✓ Graded</span>
+                                                        <% } else { %>
+                                                            <span class="status-badge status-pending">⏳ Pending</span>
+                                                            <% } %>
+                                                </td>
+                                                <td>
+                                                    <button class="save-btn"
+                                                        onclick="saveMarks('<%= user._id %>', 'pitchDeck', 300)">Save</button>
+                                                </td>
+                                            </tr>
                                             <% } %>
-                                </td>
-                                <td>
-                                    <button class="save-btn"
-                                        onclick="saveMarks('<%= user._id %>', 'pitchDeck', 300)">Save</button>
-                                </td>
-                            </tr>
-                            <% } }); } if (pitchCount===0) { %>
-                                <tr>
-                                    <td colspan="7" class="no-data">
-                                        <i class='bx bx-file-blank'></i>
-                                        No Pitch Deck submissions yet
-                                    </td>
-                                </tr>
-                                <% } %>
+                                                <% }); %>
+                                                    <% } %>
+                                                        <% if (pitchCount===0) { %>
+                                                            <tr>
+                                                                <td colspan="7" class="no-data">
+                                                                    <i class='bx bx-file-blank'></i>
+                                                                    No Pitch Deck submissions yet
+                                                                </td>
+                                                            </tr>
+                                                            <% } %>
                     </tbody>
                 </table>
             </div>
         </div>
+
         <!-- ===== MENTORS TAB ===== -->
         <div id="mentors" class="tab-content">
             <div class="table-container">
@@ -561,7 +594,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% if (mentors && mentors.length> 0) { %>
+                        <% if (locals.mentors && mentors.length> 0) { %>
                             <% mentors.forEach(function(m) { %>
                                 <tr>
                                     <td class="student-name">
@@ -624,6 +657,8 @@
                 </table>
             </div>
         </div>
+
+        <!-- ===== SCHOOL APPROVALS TAB ===== -->
         <div id="schoolApprovals" class="tab-content">
             <div class="table-container">
                 <table>
@@ -637,28 +672,41 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% schools.forEach(school=> { %>
-                            <tr>
-                                <td>
-                                    <%= school.schoolName %>
-                                </td>
-                                <td>
-                                    <%= school.email %>
-                                </td>
-                                <td>
-                                    <%= school.establishmentYear %>
-                                </td>
-                                <td><span class="status-badge status-<%= school.status %>">
-                                        <%= school.status %>
-                                    </span></td>
-                                <td>
-                                    <button onclick="updateSchoolStatus('<%= school._id %>', 'approved')"
-                                        class="save-btn">Approve</button>
-                                    <button onclick="updateSchoolStatus('<%= school._id %>', 'rejected')"
-                                        class="save-btn" style="background:red">Reject</button>
-                                </td>
-                            </tr>
-                            <% }) %>
+                        <% if (locals.schools && schools.length> 0) { %>
+                            <% schools.forEach(function(school) { %>
+                                <tr>
+                                    <td>
+                                        <%= school.schoolName %>
+                                    </td>
+                                    <td>
+                                        <%= school.email %>
+                                    </td>
+                                    <td>
+                                        <%= school.establishmentYear %>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge status-<%= school.status %>">
+                                            <%= school.status %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                                            <button onclick="updateSchoolStatus('<%= school._id %>', 'approved')"
+                                                class="save-btn">Approve</button>
+                                            <button onclick="updateSchoolStatus('<%= school._id %>', 'rejected')"
+                                                class="save-btn" style="background:red;">Reject</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="5" class="no-data">
+                                                <i class='bx bx-buildings'></i>
+                                                No school applications yet
+                                            </td>
+                                        </tr>
+                                        <% } %>
                     </tbody>
                 </table>
             </div>
@@ -666,84 +714,97 @@
 
         <!-- ===== LECTURE STATS TAB ===== -->
         <div id="lectureStats" class="tab-content">
-            <% if (lectureStats && lectureStats.length > 0) { %>
+            <% if (locals.lectureStats && lectureStats.length> 0) { %>
                 <div class="chart-container">
                     <canvas id="lectureChart"></canvas>
                 </div>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Lecture ID</th>
-                            <th>Average Attempts</th>
-                            <th>Total Attempts</th>
-                            <th>Number of Students</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% lectureStats.forEach(stat => { %>
+                <div class="table-container">
+                    <table>
+                        <thead>
                             <tr>
-                                <td><%= stat.lectureId %></td>
-                                <td><%= stat.averageAttempts %></td>
-                                <td><%= stat.totalAttempts %></td>
-                                <td><%= stat.studentCount %></td>
+                                <th>Lecture ID</th>
+                                <th>Average Attempts</th>
+                                <th>Total Attempts</th>
+                                <th>Number of Students</th>
                             </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
-            <% } else { %>
-                <div class="no-data">
-                    <i class='bx bx-bar-chart-alt-2'></i>
-                    <p>No lecture statistics available yet.</p>
+                        </thead>
+                        <tbody>
+                            <% lectureStats.forEach(function(stat) { %>
+                                <tr>
+                                    <td>
+                                        <%= stat.lectureId %>
+                                    </td>
+                                    <td>
+                                        <%= stat.averageAttempts %>
+                                    </td>
+                                    <td>
+                                        <%= stat.totalAttempts %>
+                                    </td>
+                                    <td>
+                                        <%= stat.studentCount %>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                        </tbody>
+                    </table>
                 </div>
-            <% } %>
+                <% } else { %>
+                    <div class="no-data">
+                        <i class='bx bx-bar-chart-alt-2'></i>
+                        <p>No lecture statistics available yet.</p>
+                    </div>
+                    <% } %>
         </div>
+
     </div>
 
     <script>
         // ===== TAB SWITCHING =====
         function showTab(evt, tabName) {
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(function (content) {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(function (tab) {
+                tab.classList.remove('active');
+            });
             document.getElementById(tabName).classList.add('active');
             evt.currentTarget.classList.add('active');
         }
 
         // ===== SAVE STUDENT MARKS & SECTOR =====
         function saveMarks(userId, module, maxScore) {
-            const scoreInput = document.getElementById(`score_${userId}_${module}`);
-            const sectorInput = document.getElementById(`sector_${userId}_${module}`);
+            var scoreInput = document.getElementById('score_' + userId + '_' + module);
+            var sectorInput = document.getElementById('sector_' + userId + '_' + module);
 
-            const score = parseInt(scoreInput.value) || 0;
-            const sector = sectorInput ? sectorInput.value.trim() : '';
+            var score = parseInt(scoreInput.value) || 0;
+            var sector = sectorInput ? sectorInput.value.trim() : '';
 
             if (score < 0 || score > maxScore) {
-                alert(`Score must be between 0 and ${maxScore}`);
+                alert('Score must be between 0 and ' + maxScore);
                 return;
             }
 
-            const btn = event.target;
+            var btn = event.target;
             btn.disabled = true;
-            const originalText = btn.textContent;
+            var originalText = btn.textContent;
             btn.textContent = 'Saving...';
 
             fetch('/admin/save-marks', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId, module, score, sector })
+                body: JSON.stringify({ userId: userId, module: module, score: score, sector: sector })
             })
-                .then(response => response.json())
-                .then(data => {
+                .then(function (response) { return response.json(); })
+                .then(function (data) {
                     if (data.success) {
                         btn.textContent = 'Saved!';
-                        // Update status badge in the same row
-                        const row = btn.closest('tr');
-                        const statusBadge = row.querySelector('.status-badge');
+                        var row = btn.closest('tr');
+                        var statusBadge = row.querySelector('.status-badge');
                         if (statusBadge) {
                             statusBadge.textContent = '✓ Graded';
                             statusBadge.className = 'status-badge status-graded';
                         }
-                        setTimeout(() => {
+                        setTimeout(function () {
                             btn.textContent = originalText;
                             btn.disabled = false;
                         }, 1500);
@@ -753,7 +814,7 @@
                         alert('Failed to save: ' + (data.message || 'Unknown error'));
                     }
                 })
-                .catch(error => {
+                .catch(function (error) {
                     console.error('Error:', error);
                     btn.disabled = false;
                     btn.textContent = originalText;
@@ -763,37 +824,37 @@
 
         // ===== UPDATE MENTOR STATUS =====
         function updateMentorStatus(mentorId, status) {
-            const sectorInput = document.getElementById(`mentor_sector_${mentorId}`);
-            const sector = sectorInput ? sectorInput.value.trim() : '';
+            var sectorInput = document.getElementById('mentor_sector_' + mentorId);
+            var sector = sectorInput ? sectorInput.value.trim() : '';
 
             if (status === 'approved' && !sector) {
                 alert('⚠️ Please assign a sector before approving this mentor.');
                 return;
             }
 
-            let rejectionReason = '';
+            var rejectionReason = '';
             if (status === 'rejected') {
                 rejectionReason = prompt('Reason for rejection (optional):') || 'Does not meet our current requirements';
             }
 
-            if (!confirm(`Are you sure you want to ${status === 'approved' ? 'APPROVE' : 'REJECT'} this mentor?`)) {
+            if (!confirm('Are you sure you want to ' + (status === 'approved' ? 'APPROVE' : 'REJECT') + ' this mentor?')) {
                 return;
             }
 
-            const btn = event.target;
+            var btn = event.target;
             btn.disabled = true;
-            const originalText = btn.textContent;
+            var originalText = btn.textContent;
             btn.textContent = '...';
 
             fetch('/admin/update-mentor-status', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mentorId, status, sector, rejectionReason })
+                body: JSON.stringify({ mentorId: mentorId, status: status, sector: sector, rejectionReason: rejectionReason })
             })
-                .then(r => r.json())
-                .then(data => {
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
                     if (data.success) {
-                        alert(`✓ Mentor ${status} successfully!`);
+                        alert('✓ Mentor ' + status + ' successfully!');
                         location.reload();
                     } else {
                         btn.disabled = false;
@@ -801,65 +862,74 @@
                         alert('Failed: ' + (data.message || 'Unknown error'));
                     }
                 })
-                .catch(err => {
+                .catch(function (err) {
                     console.error(err);
                     btn.disabled = false;
                     btn.textContent = originalText;
                     alert('Failed to update');
                 });
         }
+
+        // ===== UPDATE SCHOOL STATUS =====
         function updateSchoolStatus(id, status) {
             fetch('/admin/update-school-status', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ schoolId: id, status })
-            }).then(() => location.reload());
+                body: JSON.stringify({ schoolId: id, status: status })
+            })
+                .then(function () { location.reload(); })
+                .catch(function (err) { console.error(err); });
         }
 
         // ===== LECTURE STATS CHART =====
-        <% if (lectureStats && lectureStats.length > 0) { %>
-        const ctx = document.getElementById('lectureChart').getContext('2d');
-        const lectureChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: <%= JSON.stringify(lectureStats.map(stat => stat.lectureId)) %>,
-                datasets: [{
-                    label: 'Average Attempts per Lecture',
-                    data: <%= JSON.stringify(lectureStats.map(stat => stat.averageAttempts)) %>,
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Average Attempts'
-                        }
+        <% if (locals.lectureStats && lectureStats.length > 0) { %>
+            window.addEventListener('DOMContentLoaded', function () {
+                var ctx = document.getElementById('lectureChart');
+                if (!ctx) return;
+                new Chart(ctx.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: <% - JSON.stringify(lectureStats.map(function (s) { return s.lectureId; })) %>,
+                        datasets: [{
+                            label: 'Average Attempts per Lecture',
+                            data: <% - JSON.stringify(lectureStats.map(function (s) { return s.averageAttempts; })) %>,
+                            backgroundColor: 'rgba(232, 84, 26, 0.4)',
+                            borderColor: '#E8541A',
+                            borderWidth: 2,
+                            borderRadius: 6
+                        }]
                     },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Lecture ID'
-                        }
-                    }
-                },
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return 'Average Attempts: ' + context.parsed.y;
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#aaa', font: { family: 'Inter' } }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        return 'Avg Attempts: ' + context.parsed.y;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { color: '#888' },
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                title: { display: true, text: 'Average Attempts', color: '#888' }
+                            },
+                            x: {
+                                ticks: { color: '#888' },
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                title: { display: true, text: 'Lecture ID', color: '#888' }
                             }
                         }
                     }
-                }
-            }
-        });
+                });
+            });
         <% } %>
     </script>
 </body>
