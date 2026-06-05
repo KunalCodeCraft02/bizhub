@@ -10,7 +10,7 @@ const { isLoggedIn, isGuest, isMentor } = require('./middleware/auth');
 const database = require("./config/database");
 const schoolModel = require("./models/School");
 const mentorModel = require("./models/mentor");
-const nodemailer = require("nodemailer");
+const { Resend } = require('resend');
 const multer = require('multer');
 const fs = require('fs');
 
@@ -291,13 +291,7 @@ app.post("/admin/save-marks", isAdmin, async (req, res) => {
 // =========================
 const otpStorage = {};
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // =========================
 // AUTH PAGES
@@ -666,8 +660,8 @@ app.post("/signup", async (req, res) => {
       expires: Date.now() + 5 * 60 * 1000
     };
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    await resend.emails.send({
+      from: "BizHub <noreply@bemybot.in>",
       to: email,
       subject: "Your OTP Verification",
       html: `<h2>Email Verification</h2><p>Your OTP is:</p><h1>${otp}</h1><p>Valid for 5 minutes</p>`
