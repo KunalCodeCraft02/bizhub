@@ -16,6 +16,7 @@ const fs = require('fs');
 
 process.on('uncaughtException', err => {
   console.log("UNCAUGHT ERROR:", err);
+  process.exit(1);
 });
 
 process.on('unhandledRejection', err => {
