@@ -4,7 +4,7 @@
   "description": "BizHub EJS Version",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node app.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

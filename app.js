@@ -1217,7 +1217,8 @@ app.post("/save-test-score", isLoggedIn, async (req, res) => {
   }
 });
 
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`BizHub server running on http://localhost:${PORT}`);
 });
