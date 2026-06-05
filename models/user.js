@@ -18,7 +18,20 @@ const userSchema = new mongoose.Schema({
         submittedAt: Date
     },
     completedLectures: { type: [String], default: [] },
-    testAttempts: { type: mongoose.Schema.Types.Mixed, default: {} },
+    testAttempts: {
+        type: Map,
+        of: {
+            attemptNumber: {
+                type: Number,
+                default: 0
+            },
+            timeTaken: Number,
+            totalScore: Number,
+            timestamp: Date,
+            passed: Boolean
+        },
+        default: {}
+    },
     totalTestScore: { type: Number, default: 0 },
 
     // ✅ SUBMISSION FIELDS

@@ -1481,7 +1481,9 @@
             let allCorrect = true;
 
             questions.forEach((q, idx) => {
-                if (currentSelectedAnswers[idx] !== q.answer) allCorrect = false;
+                if (currentSelectedAnswers[idx] !== q.answer) {
+                    allCorrect = false;
+                }
             });
 
             document.getElementById("submitTestBtn").disabled = true;
@@ -1489,105 +1491,213 @@
             questions.forEach((q, qIdx) => {
                 const selected = currentSelectedAnswers[qIdx];
                 const correct = q.answer;
-                const selEl = testArea.querySelector(`.option[data-q="${qIdx}"][data-o="${selected}"]`);
-                if (selEl) selEl.classList.add(selected === correct ? "correct" : "incorrect");
-                if (selected !== correct) {
-                    const corrEl = testArea.querySelector(`.option[data-q="${qIdx}"][data-o="${correct}"]`);
-                    if (corrEl) corrEl.classList.add("correct");
+
+                const selEl = testArea.querySelector(
+                    `.option[data-q="${qIdx}"][data-o="${selected}"]`
+                );
+
+                if (selEl) {
+                    selEl.classList.add(
+                        selected === correct ? "correct" : "incorrect"
+                    );
                 }
-                testArea.querySelectorAll(`.option[data-q="${qIdx}"]`).forEach(o => o.classList.add("disabled"));
+
+                if (selected !== correct) {
+                    const corrEl = testArea.querySelector(
+                        `.option[data-q="${qIdx}"][data-o="${correct}"]`
+                    );
+
+                    if (corrEl) {
+                        corrEl.classList.add("correct");
+                    }
+                }
+
+                testArea
+                    .querySelectorAll(`.option[data-q="${qIdx}"]`)
+                    .forEach(o => o.classList.add("disabled"));
             });
 
             if (allCorrect) {
-                const timeTaken = Math.round((Date.now() - testStartTime) / 1000);
-                currentAttemptCount[videoId] = (currentAttemptCount[videoId] || 0) + 1;
-                const attemptNumber = currentAttemptCount[videoId];
+
+                const timeTaken = Math.round(
+                    (Date.now() - testStartTime) / 1000
+                );
 
                 fetch('/save-test-score', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ videoId, timeTaken, attemptNumber })
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        videoId,
+                        timeTaken
+                    })
                 })
                     .then(response => response.json())
                     .then(data => {
+
                         if (data.success) {
-                            // ✅ FIX: Mark this video as passed BEFORE updating UI
+
                             testResults[videoId] = {
                                 passed: true,
                                 timestamp: Date.now(),
                                 score: data.totalScore,
-                                attemptNumber,
+                                attemptNumber: data.attemptNumber,
                                 timeTaken
                             };
+
                             saveProgress();
 
-                            // ✅ FIX: Re-render lessons to update unlock status
                             renderLessons();
                             updateOverallProgress();
 
-                            // Show success message
                             document.getElementById("successNotice").style.display = "block";
-                            const notice = document.getElementById("successNotice");
-                            notice.innerHTML = `
-                        ✅ All correct! Well done — the next lecture is now unlocked.
-                        <br><br>
-                        <small>Score: ${data.totalScore} pts (${data.attemptScore} for attempt #${attemptNumber} + ${data.timeBonus} time bonus)</small>
-                    `;
 
-                            // ✅ FIX: Enable next button AND check if next video exists
+                            const notice = document.getElementById("successNotice");
+
+                            notice.innerHTML = `
+                    ✅ All correct! Well done — the next lecture is now unlocked.
+                    <br><br>
+                    <small>
+                        Score: ${data.totalScore} pts
+                        (${data.attemptScore} for attempt #${data.attemptNumber}
+                        + ${data.timeBonus} time bonus)
+                    </small>
+                `;
+
                             nextLectureBtn.disabled = false;
+
                             const nextIdx = currentVideoIndex + 1;
-                            if (nextIdx < allVideos.length && isUnlocked(nextIdx)) {
+
+                            if (
+                                nextIdx < allVideos.length &&
+                                isUnlocked(nextIdx)
+                            ) {
                                 nextLectureBtn.disabled = false;
-                                console.log("✅ Next lecture unlocked:", allVideos[nextIdx].title);
+
+                                console.log(
+                                    "✅ Next lecture unlocked:",
+                                    allVideos[nextIdx].title
+                                );
                             } else {
-                                console.log("⚠️ Next lecture not available or locked");
+                                console.log(
+                                    "⚠️ Next lecture not available or locked"
+                                );
                             }
 
-                            document.getElementById("successNotice").scrollIntoView({ behavior: "smooth", block: "center" });
+                            document
+                                .getElementById("successNotice")
+                                .scrollIntoView({
+                                    behavior: "smooth",
+                                    block: "center"
+                                });
                         }
                     })
                     .catch(error => {
+
                         console.error('Error saving score:', error);
-                        // Fallback: still mark as passed locally
-                        testResults[videoId] = { passed: true, timestamp: Date.now() };
+
+                        testResults[videoId] = {
+                            passed: true,
+                            timestamp: Date.now()
+                        };
+
                         saveProgress();
                         renderLessons();
                         updateOverallProgress();
-                        document.getElementById("successNotice").style.display = "block";
+
+                        document.getElementById(
+                            "successNotice"
+                        ).style.display = "block";
+
                         nextLectureBtn.disabled = false;
                     });
+
             } else {
+
+                const timeTaken = Math.round(
+                    (Date.now() - testStartTime) / 1000
+                );
+
+                // Save failed attempt for analytics/research
+                fetch('/save-failed-attempt', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        videoId,
+                        timeTaken
+                    })
+                })
+                    .catch(err => {
+                        console.log(
+                            "Failed attempt tracking error:",
+                            err
+                        );
+                    });
+
                 const wrongQuestions = [];
+
                 questions.forEach((q, idx) => {
-                    if (currentSelectedAnswers[idx] !== q.answer) wrongQuestions.push(q);
+                    if (
+                        currentSelectedAnswers[idx] !== q.answer
+                    ) {
+                        wrongQuestions.push(q);
+                    }
                 });
-                wrongQuestions.sort((a, b) => a.startTime - b.startTime);
+
+                wrongQuestions.sort(
+                    (a, b) => a.startTime - b.startTime
+                );
+
                 const targetQ = wrongQuestions[0];
-                const notice = document.getElementById("rewindNotice");
-                const details = document.getElementById("rewindDetails");
+
+                const notice =
+                    document.getElementById("rewindNotice");
+
+                const details =
+                    document.getElementById("rewindDetails");
+
                 notice.style.display = "block";
+
                 details.innerHTML = `
             <br>You must review the concept from
-            <b>${formatTime(targetQ.startTime)}</b> to <b>${formatTime(targetQ.endTime)}</b>.
+            <b>${formatTime(targetQ.startTime)}</b>
+            to
+            <b>${formatTime(targetQ.endTime)}</b>.
             <br>The video will resume automatically at the correct section.
         `;
+
                 saveProgress();
+
                 setTimeout(() => {
+
                     testArea.innerHTML = "";
+
                     showingTest = false;
+
                     currentSelectedAnswers = [];
+
                     isReviewMode = true;
+
                     reviewEndTime = targetQ.endTime;
+
                     videoPlayer.style.display = "block";
-                    videoPlayer.currentTime = targetQ.startTime;
-                    maxAllowedTime = targetQ.startTime;
+
+                    videoPlayer.currentTime =
+                        targetQ.startTime;
+
+                    maxAllowedTime =
+                        targetQ.startTime;
+
                     lastTick = null;
+
                     videoPlayer.play();
+
                 }, 3000);
             }
         }
-
         // ===== BOOT =====
         loadVideo(levelStartIndex);
     </script>

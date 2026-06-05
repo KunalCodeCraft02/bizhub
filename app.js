@@ -148,12 +148,12 @@ app.get("/admin", isAdmin, async (req, res) => {
     }).lean();
 
     const allMentors = await mentorModel.find().lean();
-    const allSchools = await schoolModel.find().lean(); 
+    const allSchools = await schoolModel.find().lean();
 
     res.render('admin', {
       submissions: usersWithSubmissions,
       mentors: allMentors,
-      schools: allSchools  
+      schools: allSchools
     });
   } catch (error) {
     console.log(error);
@@ -270,7 +270,7 @@ app.post("/admin/save-marks", isAdmin, async (req, res) => {
 
     let testScore = 0;
     if (user.testAttempts) {
-      testScore = Object.values(user.testAttempts)
+      testScore = Array.from(user.testAttempts.values())
         .reduce((sum, attempt) => sum + (attempt.totalScore || 0), 0);
     }
 
@@ -517,7 +517,9 @@ app.get("/leaderboard", isLoggedIn, async (req, res) => {
     }).lean();
 
     let entries = allUsers.map(u => {
-      const attempts = u.testAttempts ? Object.values(u.testAttempts) : [];
+      const attempts = u.testAttempts
+        ? Array.from(u.testAttempts.values())
+        : [];
       const totalAttempts = attempts
         .filter(a => a && a.passed)
         .reduce((sum, a) => sum + (a.attemptNumber || 1), 0);
@@ -750,8 +752,8 @@ app.post("/schoolsignup", async (req, res) => {
       { expiresIn: "1h" }
     );
 
-   res.cookie("schoolToken", token, { httpOnly: true, maxAge: 60 * 60 * 1000 });
-res.redirect("/track-performance");
+    res.cookie("schoolToken", token, { httpOnly: true, maxAge: 60 * 60 * 1000 });
+    res.redirect("/track-performance");
   } catch (e) {
     console.error("School Registration Error:", e);
     return res.redirect("/schoolsignup?error=Internal server error. Please try again.");
@@ -835,12 +837,21 @@ app.get("/track-performance", isSchoolAdmin, async (req, res) => {
   const friction = { "M1": 0, "M2": 0, "M3": 0 };
   students.forEach(s => {
     if (s.testAttempts) {
-      // Simplified logic: sum attempts per module
-      for (let id in s.testAttempts) {
-        if (id.startsWith('m1')) friction["M1"] += (s.testAttempts[id].attemptNumber || 1);
-        if (id.startsWith('m2')) friction["M2"] += (s.testAttempts[id].attemptNumber || 1);
-        if (id.startsWith('m3')) friction["M3"] += (s.testAttempts[id].attemptNumber || 1);
-      }
+
+      const attempts = Array.from(s.testAttempts.entries());
+
+      attempts.forEach(([id, data]) => {
+
+        if (id.startsWith('m1'))
+          friction["M1"] += (data.attemptNumber || 1);
+
+        if (id.startsWith('m2'))
+          friction["M2"] += (data.attemptNumber || 1);
+
+        if (id.startsWith('m3'))
+          friction["M3"] += (data.attemptNumber || 1);
+
+      });
     }
   });
 
@@ -955,9 +966,9 @@ app.get("/admin/lecture-stats-view", isAdmin, async (req, res) => {
 });
 
 app.post("/admin/update-school-status", isAdmin, async (req, res) => {
-    const { schoolId, status } = req.body;
-    await schoolModel.findByIdAndUpdate(schoolId, { status });
-    res.json({ success: true });
+  const { schoolId, status } = req.body;
+  await schoolModel.findByIdAndUpdate(schoolId, { status });
+  res.json({ success: true });
 });
 
 
@@ -1163,58 +1174,122 @@ app.post("/save-level", isLoggedIn, async (req, res) => {
 
 app.post("/save-test-score", isLoggedIn, async (req, res) => {
   try {
-    const { videoId, timeTaken, attemptNumber } = req.body;
 
-    if (!videoId || !timeTaken || !attemptNumber) {
-      return res.status(400).json({ success: false, message: "Missing required parameters" });
+    const { videoId, timeTaken } = req.body;
+
+    if (!videoId) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing videoId"
+      });
     }
 
-    let attemptScore = 0;
-    if (attemptNumber === 1) attemptScore = 25;
-    else if (attemptNumber === 2) attemptScore = 20;
-    else if (attemptNumber === 3) attemptScore = 15;
-    else if (attemptNumber === 4) attemptScore = 10;
-    else attemptScore = 5;
-
-    let timeBonus = 0;
-    if (timeTaken < 15) timeBonus = 10;
-    else if (timeTaken <= 60) timeBonus = 7;
-    else if (timeTaken <= 300) timeBonus = 5;
-    else if (timeTaken <= 420) timeBonus = 4;
-    else timeBonus = 3;
-
-    const totalScore = attemptScore + timeBonus;
     const user = await userModel.findById(req.user.userid);
 
-    if (!user.testAttempts) user.testAttempts = {};
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
 
-    user.testAttempts[videoId] = {
+    const existing = user.testAttempts.get(videoId);
+
+    const attemptNumber = existing
+      ? existing.attemptNumber + 1
+      : 1;
+
+    const attemptScore =
+      attemptNumber === 1 ? 25 :
+        attemptNumber === 2 ? 20 :
+          attemptNumber === 3 ? 15 :
+            attemptNumber === 4 ? 10 :
+              5;
+
+    const timeBonus =
+      timeTaken < 15 ? 10 :
+        timeTaken <= 60 ? 7 :
+          timeTaken <= 300 ? 5 :
+            timeTaken <= 420 ? 4 :
+              3;
+
+    const totalScore = attemptScore + timeBonus;
+
+    user.testAttempts.set(videoId, {
       attemptNumber,
       timeTaken,
       totalScore,
       timestamp: new Date(),
       passed: true
-    };
+    });
 
     if (!user.completedLectures.includes(videoId)) {
       user.completedLectures.push(videoId);
     }
 
-    const allScores = Object.values(user.testAttempts).map(attempt => attempt.totalScore);
-    user.totalTestScore = allScores.reduce((sum, score) => sum + score, 0);
+    user.totalTestScore = Array.from(
+      user.testAttempts.values()
+    ).reduce((sum, attempt) => {
+      return sum + (attempt.totalScore || 0);
+    }, 0);
 
     await user.save();
 
     return res.json({
       success: true,
       totalScore,
+      attemptNumber,
       attemptScore,
-      timeBonus,
-      completedLectures: user.completedLectures.length
+      timeBonus
     });
+
   } catch (error) {
-    console.log("Save test score error:", error);
-    return res.status(500).json({ success: false, message: "Internal server error" });
+
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server Error"
+    });
+  }
+});
+
+
+app.post("/save-failed-attempt", isLoggedIn, async (req, res) => {
+  try {
+    const { videoId } = req.body;
+
+    const user = await userModel.findById(req.user.userid);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+ if (!user.testAttempts) {
+    user.testAttempts = new Map();
+}
+    const existing = user.testAttempts.get(videoId);
+
+    user.testAttempts.set(videoId, {
+      attemptNumber: existing ? existing.attemptNumber + 1 : 1,
+      passed: false,
+      timestamp: new Date()
+    });
+
+    await user.save();
+
+    res.json({
+      success: true
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false
+    });
   }
 });
 
