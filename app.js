@@ -290,9 +290,9 @@ app.post("/admin/save-marks", isAdmin, async (req, res) => {
 // =========================
 // USER AUTH ROUTES
 // =========================
-const otpStorage = {};
+// const otpStorage = {};
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// const resend = new Resend(process.env.RESEND_API_KEY);
 
 // =========================
 // AUTH PAGES
@@ -309,12 +309,12 @@ app.get('/about', (req, res) => {
   res.render('about', { query: req.query });
 });
 
-app.get("/verify-otp", (req, res) => {
-  res.render("verifyotp", {
-    email: req.query.email,
-    query: req.query
-  });
-});
+// app.get("/verify-otp", (req, res) => {
+//   res.render("verifyotp", {
+//     email: req.query.email,
+//     query: req.query
+//   });
+// });
 
 app.get('/courseplayer', isLoggedIn, async (req, res) => {
   try {
@@ -580,50 +580,50 @@ app.get('/logout', (req, res) => {
 // =========================
 // POST ROUTES
 // =========================
-app.post("/verify-otp", async (req, res) => {
-  const { email, otp } = req.body;
+// app.post("/verify-otp", async (req, res) => {
+//   const { email, otp } = req.body;
 
-  try {
-    const storedData = otpStorage[email];
-    if (!storedData) {
-      return res.redirect("/signup?error=OTP expired");
-    }
+//   try {
+//     const storedData = otpStorage[email];
+//     if (!storedData) {
+//       return res.redirect("/signup?error=OTP expired");
+//     }
 
-    if (storedData.expires < Date.now()) {
-      delete otpStorage[email];
-      return res.redirect("/signup?error=OTP expired");
-    }
+//     if (storedData.expires < Date.now()) {
+//       delete otpStorage[email];
+//       return res.redirect("/signup?error=OTP expired");
+//     }
 
-    if (storedData.otp != otp) {
-      return res.redirect(`/verify-otp?email=${email}&error=Invalid OTP`);
-    }
+//     if (storedData.otp != otp) {
+//       return res.redirect(`/verify-otp?email=${email}&error=Invalid OTP`);
+//     }
 
-    const hashpassword = await bcrypt.hash(String(storedData.password), 12);
-    const createdUser = await userModel.create({
-      firstName: storedData.firstName,
-      lastName: storedData.lastName,
-      email,
-      mobileNumber: storedData.mobileNumber,
-      year: storedData.year,
-      collegeName: storedData.collegeName,
-      password: hashpassword,
-    });
+//     const hashpassword = await bcrypt.hash(String(storedData.password), 12);
+//     const createdUser = await userModel.create({
+//       firstName: storedData.firstName,
+//       lastName: storedData.lastName,
+//       email,
+//       mobileNumber: storedData.mobileNumber,
+//       year: storedData.year,
+//       collegeName: storedData.collegeName,
+//       password: hashpassword,
+//     });
 
-    delete otpStorage[email];
+//     delete otpStorage[email];
 
-    let token = jwt.sign(
-      { email: email, userid: createdUser._id },
-      "thenameiskunalkailasbodkhe",
-      { expiresIn: "1h" }
-    );
+//     let token = jwt.sign(
+//       { email: email, userid: createdUser._id },
+//       "thenameiskunalkailasbodkhe",
+//       { expiresIn: "1h" }
+//     );
 
-    res.cookie("token", token);
-    res.redirect("/home");
-  } catch (err) {
-    console.log(err);
-    res.redirect(`/verify-otp?email=${email}&error=Verification failed`);
-  }
-});
+//     res.cookie("token", token);
+//     res.redirect("/home");
+//   } catch (err) {
+//     console.log(err);
+//     res.redirect(`/verify-otp?email=${email}&error=Verification failed`);
+//   }
+// });
 
 app.post("/signup", async (req, res) => {
   const { email, firstName, lastName, password, cpassword, collegeName, mobileNumber, year } = req.body;
@@ -651,29 +651,28 @@ app.post("/signup", async (req, res) => {
       return res.redirect("/signup?error=Email already exists");
     }
 
-    const otp = Math.floor(100000 + Math.random() * 900000);
-    otpStorage[email] = {
-      otp,
-      firstName,
-      lastName,
-      password,
-      collegeName,
-      mobileNumber,
-      year,
-      expires: Date.now() + 5 * 60 * 1000
-    };
-
-    await resend.emails.send({
-      from: "BizHub <noreply@bemybot.in>",
-      to: email,
-      subject: "Your OTP Verification",
-      html: `<h2>Email Verification</h2><p>Your OTP is:</p><h1>${otp}</h1><p>Valid for 5 minutes</p>`
+    const hashpassword = await bcrypt.hash(password, 12);
+    const createdUser = await userModel.create({
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      mobileNumber: mobileNumber,
+      year: year,
+      collegeName: collegeName,
+      password: hashpassword,
     });
 
-    res.redirect(`/verify-otp?email=${email}`);
+    let token = jwt.sign(
+      { email: email, userid: createdUser._id },
+      "thenameiskunalkailasbodkhe",
+      { expiresIn: "1h" }
+    );
+
+    res.cookie("token", token);
+    res.redirect("/home");
   } catch (err) {
     console.log(err);
-    res.redirect("/signup?error=Failed to send OTP");
+    res.redirect("/signup?error=Registration failed");
   }
 });
 

@@ -1,100 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <title>Verify OTP</title>
-
-  <style>
-    body {
-      background: #0a0a0a;
-      color: white;
-      font-family: Arial;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .card {
-      background: #111;
-      padding: 40px;
-      border-radius: 12px;
-      width: 350px;
-    }
-
-    input {
-      width: 100%;
-      padding: 14px;
-      margin-top: 15px;
-      border-radius: 8px;
-      border: 1px solid #333;
-      background: #1a1a1a;
-      color: white;
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 20px;
-      border: none;
-      border-radius: 8px;
-      background: #E8541A;
-      color: white;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    h2 {
-      text-align: center;
-    }
-
-    p {
-      color: #aaa;
-      text-align: center;
-    }
-  </style>
-</head>
-
-<body>
-
-  <div class="card">
-
-    <h2>Verify OTP</h2>
-
-    <p>
-      OTP sent to:
-      <%= email %>
-    </p>
-
-    <% if (query.error) { %>
-      <script>
-        alert("<%= query.error %>")
-      </script>
-    <% } %>
-
-    <form action="/verify-otp" method="POST">
-
-      <input
-        type="hidden"
-        name="email"
-        value="<%= email %>"
-      >
-
-      <input
-        type="text"
-        name="otp"
-        placeholder="Enter 6-digit OTP"
-        required
-      >
-
-      <button type="submit">
-        Verify OTP
-      </button>
-
-    </form>
-
-  </div>
-
-</body>
-</html>
+<!-- // <!DOCTYPE html>
+// <html lang="en">
+//
+// <head>
+//   <meta charset="UTF-8" />
+//   <title>Verify OTP</title>
+//
+//   <style>
+//     body {
+//       background: #0a0a0a;
+//       color: white;
+//       font-family: Arial;
+//       display: flex;
+//       justify-content: center;
+//       align-items: center;
+//       height: 100vh;
+//     }
+//
+//     .card {
+//       background: #111;
+//       padding: 40px;
+//       border-radius: 12px;
+//       width: 350px;
+//     }
+//
+//     input {
+//       width: 100%;
+//       padding: 14px;
+//       margin-top: 15px;
+//       border-radius: 8px;
+//       border: 1px solid #333;
+//       background: #1a1a1a;
+//       color: white;
+//     }
+//
+//     button {
+//       width: 100%;
+//       padding: 14px;
+//       margin-top: 20px;
+//       border: none;
+//       border-radius: 8px;
+//       background: #E8541A;
+//       color: white;
+//       cursor: pointer;
+//       font-size: 16px;
+//     }
+//
+//     h2 {
+//       text-align: center;
+//     }
+//
+//     p {
+//       color: #aaa;
+//       text-align: center;
+//     }
+//   </style>
+// </head>
+//
+// <body>
+//
+//   <div class="card">
+//
+//     <h2>Verify OTP</h2>
+//
+//     <p>
+//       OTP sent to:
+//       <%= email %>
+//     </p>
+//
+//     <% if (query.error) { %>
+//       <script>
+//         alert("<%= query.error %>")
+//       </script>
+//     <% } %>
+//
+//     <form action="/verify-otp" method="POST">
+//
+//       <input
+//         type="hidden"
+//         name="email"
+//         value="<%= email %>"
+//       >
+//
+//       <input
+//         type="text"
+//         name="otp"
+//         placeholder="Enter 6-digit OTP"
+//         required
+//       >
+//
+//       <button type="submit">
+//         Verify OTP
+//       </button>
+//
+//     </form>
+//
+//   </div>
+//
+// </body>
+// </html> -->
